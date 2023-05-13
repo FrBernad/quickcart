@@ -54,8 +54,6 @@ build-api:
     - job: preparation
       artifacts: true
 
-stages:
-- test
 sast:
   stage: test
 include:
