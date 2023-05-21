@@ -36,7 +36,7 @@ build-api:
   tags:
     - dev
   script:
-    - docker build -t ${API_PROD_IMAGE_NAME} -f Dockerfile.prod users-api
+    - docker build -t ${API_PROD_IMAGE_NAME} -f users-api/Dockerfile.prod users-api
     # - docker build users-api -f users-api/Dockerfile.test --build-arg "BASE_IMAGE=$API_PROD_IMAGE_NAME" -t ${API_TEST_IMAGE_NAME}
 
     - docker login -u $CI_REGISTRY_USER --password $CI_JOB_TOKEN $CI_REGISTRY
