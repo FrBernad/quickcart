@@ -6,9 +6,9 @@ stages:
   - deploy
 
 default:
-  image: docker:latest
+  image: docker:24.0.1
   services:
-    - docker:latest-dind
+    - docker:24.0.1-dind
 
 variables:
   IMAGE_BASE: "$CI_REGISTRY/$CI_PROJECT_NAMESPACE/$CI_PROJECT_NAME"
