@@ -7,13 +7,10 @@ stages:
 
 default:
   image: docker:24.0.1
-  services:
-    - docker:24.0.1-dind
 
 variables:
   IMAGE_BASE: "$CI_REGISTRY/$CI_PROJECT_NAMESPACE/$CI_PROJECT_NAME"
   PROJECY_NAME: "quickcart"
-  DOCKER_TLS_CERTDIR: "/certs"
 
 preparation:
   stage: prep
