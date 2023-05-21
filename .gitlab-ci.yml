@@ -1,18 +1,19 @@
-default:
-  image: docker:latest
-  services:
-    - docker:latest-dind
-  variables:
-    IMAGE_BASE: "$CI_REGISTRY/$CI_PROJECT_NAMESPACE/$CI_PROJECT_NAME"
-    PROJECY_NAME: "quickcart"
-    DOCKER_TLS_CERTDIR: "/certs"
-
 stages:
   - prep
   - build
   - test
   - deliver
   - deploy
+
+default:
+  image: docker:latest
+  services:
+    - docker:latest-dind
+
+variables:
+  IMAGE_BASE: "$CI_REGISTRY/$CI_PROJECT_NAMESPACE/$CI_PROJECT_NAME"
+  PROJECY_NAME: "quickcart"
+  DOCKER_TLS_CERTDIR: "/certs"
 
 preparation:
   stage: prep
@@ -48,7 +49,6 @@ build-api:
   needs:
     - job: preparation
       artifacts: true
-
 # test-api:
 #   stage: test
 #   tags:
@@ -87,15 +87,15 @@ build-api:
 
 #     - export API_IMAGE=$API_TEST_IMAGE_NAME
 #     - export CLIENT_IMAGE=$CLIENT_TEST_IMAGE_NAME
-#     - export TEST_TARGET=INTEGRATION 
+#     - export TEST_TARGET=INTEGRATION
 #     - docker compose -f docker-compose.yml --env-file .env.dev --profile all pull
 #     - docker compose -f docker-compose.yml --env-file .env.dev --profile all up --abort-on-container-exit
 #   needs:
 #     - job: test-api
 #     - job: build-client
 #     - job: preparation
-#       artifacts: true  
-    
+#       artifacts: true
+
 # deliver-dockerhub:
 #   stage: deliver
 #   tags:
@@ -114,11 +114,11 @@ build-api:
 #   needs:
 #     - job: test-integration
 #     - job: preparation
-#       artifacts: true  
+#       artifacts: true
 
 # deploy-prod:
 #   stage: deploy
-#   tags: 
+#   tags:
 #     - prod
 #   script:
 #     - export $(cat context.env | xargs)
