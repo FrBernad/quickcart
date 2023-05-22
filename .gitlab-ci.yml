@@ -110,6 +110,8 @@ deliver-dockerhub:
     # - job: test-integration
     - job: preparation
       artifacts: true
+    - job: build-api
+      artifacts: true
 
 # deploy-prod:
 #   stage: deploy
