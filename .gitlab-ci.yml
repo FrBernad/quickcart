@@ -10,7 +10,7 @@ default:
 
 variables:
   IMAGE_BASE: "$CI_REGISTRY/$CI_PROJECT_NAMESPACE/$CI_PROJECT_NAME"
-  PROJECY_NAME: "quickcart"
+  PROJECT_NAME: "quickcart"
 
 preparation:
   stage: prep
@@ -25,8 +25,8 @@ preparation:
     # - echo "CLIENT_PROD_IMAGE_NAME=${IMAGE_BASE}/client:prod-${BUILD_ID}" >> context.env
     # - echo "CLIENT_TEST_IMAGE_NAME=${IMAGE_BASE}/client:test-${BUILD_ID}" >> context.env
 
-    - echo "DOCKER_HUB_API_IMAGE=$DOCKER_HUB_USER/${PROJECY_NAME}-api:${BUILD_ID}"         >> context.env
-    # - echo "DOCKER_HUB_CLIENT_IMAGE=$DOCKER_HUB_USER/${PROJECY_NAME}-client:${BUILD_ID}"   >> context.env
+    - echo "DOCKER_HUB_API_IMAGE=${DOCKER_HUB_USER}/${PROJECT_NAME}-api:${BUILD_ID}"         >> context.env
+    # - echo "DOCKER_HUB_CLIENT_IMAGE=$DOCKER_HUB_USER/${PROJECT_NAME}-client:${BUILD_ID}"   >> context.env
   artifacts:
     reports:
       dotenv: context.env
@@ -46,6 +46,7 @@ build-api:
   needs:
     - job: preparation
       artifacts: true
+
 # test-api:
 #   stage: test
 #   tags:
@@ -93,25 +94,22 @@ build-api:
 #     - job: preparation
 #       artifacts: true
 
-# deliver-dockerhub:
-#   stage: deliver
-#   tags:
-#     - dev
-#   script:
-#     - export $(cat context.env | xargs)
+deliver-dockerhub:
+  stage: deliver
+  tags:
+    - dev
+  script:
+    - docker login -u $CI_REGISTRY_USER --password $CI_JOB_TOKEN $CI_REGISTRY
+    - docker login -u $DOCKER_HUB_USER --password $DOCKER_HUB_PASS
 
-#     - docker login -u $CI_REGISTRY_USER --password $CI_JOB_TOKEN $CI_REGISTRY
-#     - docker login -u $DOCKER_HUB_USER --password $DOCKER_HUB_PASS
-
-#     - docker tag $API_PROD_IMAGE_NAME $DOCKER_HUB_API_IMAGE
-#     - docker tag $CLIENT_PROD_IMAGE_NAME $DOCKER_HUB_CLIENT_IMAGE
-
-#     - docker push $DOCKER_HUB_API_IMAGE
+    - docker tag $API_PROD_IMAGE_NAME $DOCKER_HUB_API_IMAGE
+    - docker tag $CLIENT_PROD_IMAGE_NAME $DOCKER_HUB_CLIENT_IMAGE
+    - docker push $DOCKER_HUB_API_IMAGE
 #     - docker push $DOCKER_HUB_CLIENT_IMAGE
-#   needs:
-#     - job: test-integration
-#     - job: preparation
-#       artifacts: true
+  needs:
+    # - job: test-integration
+    - job: preparation
+      artifacts: true
 
 # deploy-prod:
 #   stage: deploy
