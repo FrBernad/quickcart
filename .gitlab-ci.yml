@@ -105,7 +105,7 @@ deliver-dockerhub:
     - docker tag $API_PROD_IMAGE_NAME $DOCKER_HUB_API_IMAGE
     # - docker tag $CLIENT_PROD_IMAGE_NAME $DOCKER_HUB_CLIENT_IMAGE
     - docker push $DOCKER_HUB_API_IMAGE
-#     - docker push $DOCKER_HUB_CLIENT_IMAGE
+  #     - docker push $DOCKER_HUB_CLIENT_IMAGE
   needs:
     # - job: test-integration
     - job: preparation
@@ -113,23 +113,21 @@ deliver-dockerhub:
     - job: build-api
       artifacts: true
 
-# deploy-prod:
-#   stage: deploy
-#   tags:
-#     - prod
-#   script:
-#     - export $(cat context.env | xargs)
+deploy-prod:
+  stage: deploy
+  tags:
+    - prod
+  script:
+    - export API_IMAGE=$DOCKER_HUB_API_IMAGE
+    # - export CLIENT_IMAGE=$DOCKER_HUB_CLIENT_IMAGE
 
-#     - export API_IMAGE=$DOCKER_HUB_API_IMAGE
-#     - export CLIENT_IMAGE=$DOCKER_HUB_CLIENT_IMAGE
+    - docker login -u $DOCKER_HUB_USER --password $DOCKER_HUB_PASS
 
-#     - docker login -u $DOCKER_HUB_USER --password $DOCKER_HUB_PASS
-
-#     - docker compose -f docker-compose.yml --profile all --env-file .env.prod stop
-#     - docker compose -f docker-compose.yml --profile all --env-file .env.prod rm
-#     - docker compose -f docker-compose.yml --profile all --env-file .env.prod pull
-#     - docker compose -f docker-compose.yml --profile all --env-file .env.prod up -d
-#   needs:
-#     - job: deliver-dockerhub
-#     - job: preparation
-#       artifacts: true
+    - docker compose -f docker-compose.yml stop
+    - docker compose -f docker-compose.yml rm
+    - docker compose -f docker-compose.yml pull
+    - docker compose -f docker-compose.yml up -d
+  needs:
+    - job: deliver-dockerhub
+    - job: preparation
+      artifacts: true
