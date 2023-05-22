@@ -9,8 +9,16 @@ default:
   image: docker:24.0.1
 
 variables:
-  IMAGE_BASE: "$CI_REGISTRY/$CI_PROJECT_NAMESPACE/$CI_PROJECT_NAME"
-  PROJECT_NAME: "quickcart"
+  GITLAB_IMAGE_BASE: "$CI_REGISTRY/$CI_PROJECT_NAMESPACE/$CI_PROJECT_NAME"
+  DOCKER_IMAGE_BASE: "$DOCKER_HUB_USER/$CI_PROJECT_NAME"
+
+.login-to-gitlab-registry:
+  script:
+    - docker login -u $CI_REGISTRY_USER --password $CI_JOB_TOKEN $CI_REGISTRY
+
+.login-to-dockerhub-registry:
+  script:
+    - docker login -u $DOCKER_HUB_USER --password $DOCKER_HUB_PASS
 
 preparation:
   stage: prep
@@ -20,10 +28,10 @@ preparation:
     - export BUILD_ID=$(date +%Y%m%d%H%M)
     - echo "BUILD_ID=${BUILD_ID}" > context.env
 
-    - echo "API_PROD_IMAGE_NAME=${IMAGE_BASE}/api:prod-${BUILD_ID}"       >> context.env
-    - echo "API_TEST_IMAGE_NAME=${IMAGE_BASE}/api:test-${BUILD_ID}"       >> context.env
-    # - echo "CLIENT_PROD_IMAGE_NAME=${IMAGE_BASE}/client:prod-${BUILD_ID}" >> context.env
-    # - echo "CLIENT_TEST_IMAGE_NAME=${IMAGE_BASE}/client:test-${BUILD_ID}" >> context.env
+    - echo "API_PROD_IMAGE_NAME=${GITLAB_IMAGE_BASE}/api:prod-${BUILD_ID}"       >> context.env
+    - echo "API_TEST_IMAGE_NAME=${GITLAB_IMAGE_BASE}/api:test-${BUILD_ID}"       >> context.env
+    # - echo "CLIENT_PROD_IMAGE_NAME=${GITLAB_IMAGE_BASE}/client:prod-${BUILD_ID}" >> context.env
+    # - echo "CLIENT_TEST_IMAGE_NAME=${GITLAB_IMAGE_BASE}/client:test-${BUILD_ID}" >> context.env
 
     - echo "DOCKER_HUB_API_IMAGE=${DOCKER_HUB_USER}/${PROJECT_NAME}-api:${BUILD_ID}"         >> context.env
     # - echo "DOCKER_HUB_CLIENT_IMAGE=$DOCKER_HUB_USER/${PROJECT_NAME}-client:${BUILD_ID}"   >> context.env
@@ -38,8 +46,6 @@ build-api:
   script:
     - docker build -t ${API_PROD_IMAGE_NAME} -f users-api/Dockerfile.prod users-api
     # - docker build users-api -f users-api/Dockerfile.test --build-arg "BASE_IMAGE=$API_PROD_IMAGE_NAME" -t ${API_TEST_IMAGE_NAME}
-
-    - docker login -u $CI_REGISTRY_USER --password $CI_JOB_TOKEN $CI_REGISTRY
 
     - docker push ${API_PROD_IMAGE_NAME}
     # - docker push ${API_TEST_IMAGE_NAME}
