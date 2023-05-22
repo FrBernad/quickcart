@@ -1,7 +1,7 @@
 version: "3.3"
 services:
   users-api:
-    container_name: users-api
+    # container_name: users-api
     image: ${API_IMAGE}
     expose:
     - 5000
