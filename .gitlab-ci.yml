@@ -103,7 +103,7 @@ deliver-dockerhub:
     - docker login -u $DOCKER_HUB_USER --password $DOCKER_HUB_PASS
 
     - docker tag $API_PROD_IMAGE_NAME $DOCKER_HUB_API_IMAGE
-    - docker tag $CLIENT_PROD_IMAGE_NAME $DOCKER_HUB_CLIENT_IMAGE
+    # - docker tag $CLIENT_PROD_IMAGE_NAME $DOCKER_HUB_CLIENT_IMAGE
     - docker push $DOCKER_HUB_API_IMAGE
 #     - docker push $DOCKER_HUB_CLIENT_IMAGE
   needs:
