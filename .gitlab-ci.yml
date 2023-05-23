@@ -35,6 +35,7 @@ preparation:
   - echo "GITLAB_${SERVICE_NAME}_PROD_IMAGE=${GITLAB_IMAGE_BASE}/${SERVICE_NAME}:prod-${BUILD_ID}" >> context.env
   - export DOCKER_HUB_${SERVICE_NAME}_PROD_IMAGE=${DOCKER_IMAGE_BASE}/${SERVICE_NAME}:prod-${BUILD_ID}
   - echo "DOCKER_HUB_${SERVICE_NAME}_PROD_IMAGE=${DOCKER_IMAGE_BASE}/${SERVICE_NAME}:prod-${BUILD_ID}" >> context.env
+  - eval "PROD_IMAGE=\${GITLAB_${SERVICE_NAME}_PROD_IMAGE}"
 # .export-env-variables: &export-env-variables
 #   reports:
 #         dotenv: context.env
@@ -47,12 +48,10 @@ build_user_service:
     SERVICE_PATH: "services/users_service"
   before_script:
     - *create_and_export_service_images_variables
-    - eval "PROD_IMAGE=\${GITLAB_${SERVICE_NAME}_PROD_IMAGE}"
   script:
-    - echo "${PROD_IMAGE}"
-    # - docker build -t ${!VAR} -f ${SERVICE_PATH}/users_api/Dockerfile.prod ${SERVICE_PATH}/users_api
-    # - *login_to_gitlab_registry
-    # - docker push ${!VAR}
+    - docker build -t ${PROD_IMAGE} -f ${SERVICE_PATH}/users_api/Dockerfile.prod ${SERVICE_PATH}/users_api
+    - *login_to_gitlab_registry
+    - docker push ${PROD_IMAGE}
   # artifacts:
   #   reports:
   #     dotenv: context.env
