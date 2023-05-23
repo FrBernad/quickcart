@@ -12,13 +12,11 @@ variables:
   GITLAB_IMAGE_BASE: "$CI_REGISTRY/$CI_PROJECT_NAMESPACE/$CI_PROJECT_NAME"
   DOCKER_IMAGE_BASE: "$DOCKER_HUB_USER/$CI_PROJECT_NAME"
 
-.login-to-gitlab-registry:
-  script:
-    - docker login -u $CI_REGISTRY_USER --password $CI_JOB_TOKEN $CI_REGISTRY
+.login-to-gitlab-registry: &login-to-gitlab-registry
+  - docker login -u $CI_REGISTRY_USER --password $CI_JOB_TOKEN $CI_REGISTRY
 
-.login-to-dockerhub-registry:
-  script:
-    - docker login -u $DOCKER_HUB_USER --password $DOCKER_HUB_PASS
+.login-to-dockerhub-registry: &login-to-dockerhub-registry
+  - docker login -u $DOCKER_HUB_USER --password $DOCKER_HUB_PASS
 
 preparation:
   stage: prep
@@ -27,32 +25,36 @@ preparation:
   script:
     - export BUILD_ID=$(date +%Y%m%d%H%M)
     - echo "BUILD_ID=${BUILD_ID}" > context.env
-
-    - echo "API_PROD_IMAGE_NAME=${GITLAB_IMAGE_BASE}/api:prod-${BUILD_ID}"       >> context.env
-    - echo "API_TEST_IMAGE_NAME=${GITLAB_IMAGE_BASE}/api:test-${BUILD_ID}"       >> context.env
-    # - echo "CLIENT_PROD_IMAGE_NAME=${GITLAB_IMAGE_BASE}/client:prod-${BUILD_ID}" >> context.env
-    # - echo "CLIENT_TEST_IMAGE_NAME=${GITLAB_IMAGE_BASE}/client:test-${BUILD_ID}" >> context.env
-
-    - echo "DOCKER_HUB_API_IMAGE=${DOCKER_HUB_USER}/${PROJECT_NAME}-api:${BUILD_ID}"         >> context.env
-    # - echo "DOCKER_HUB_CLIENT_IMAGE=$DOCKER_HUB_USER/${PROJECT_NAME}-client:${BUILD_ID}"   >> context.env
   artifacts:
     reports:
       dotenv: context.env
 
-build-api:
+.create-and-export-service-images-variables:
+  &create-and-export-service-images-variables
+  - export GITLAB_${SERVICE_NAME}_PROD_IMAGE=${GITLAB_IMAGE_BASE}/${SERVICE_NAME}:prod-${BUILD_ID}
+  - echo "GITLAB_${SERVICE_NAME}_PROD_IMAGE=${GITLAB_IMAGE_BASE}/${SERVICE_NAME}:prod-${BUILD_ID}" >> context.env
+  - export DOCKER_HUB_${SERVICE_NAME}_PROD_IMAGE=${DOCKER_IMAGE_BASE}/${SERVICE_NAME}:prod-${BUILD_ID}
+  - echo "DOCKER_HUB_${SERVICE_NAME}_PROD_IMAGE=${DOCKER_IMAGE_BASE}/${SERVICE_NAME}:prod-${BUILD_ID}" >> context.env
+
+# .export-env-variables: &export-env-variables
+#   reports:
+#         dotenv: context.env
+build-user-service:
   stage: build
   tags:
     - dev
+  variables:
+    SERVICE_NAME: "users_api"
+    SERVICE_PATH: "services/users_service"
+  before-script:
+    - *create-and-export-service-images-variables
   script:
-    - docker build -t ${API_PROD_IMAGE_NAME} -f users-api/Dockerfile.prod users-api
-    # - docker build users-api -f users-api/Dockerfile.test --build-arg "BASE_IMAGE=$API_PROD_IMAGE_NAME" -t ${API_TEST_IMAGE_NAME}
-
-    - docker push ${API_PROD_IMAGE_NAME}
-    # - docker push ${API_TEST_IMAGE_NAME}
+    - docker build -t GITLAB_${SERVICE_NAME}_PROD_IMAGE -f ${SERVICE_PATH}/users_api/Dockerfile.prod ${SERVICE_PATH}/users_api
+    - *login-to-gitlab-registry
+    - docker push GITLAB_${SERVICE_NAME}_PROD_IMAGE
   needs:
     - job: preparation
       artifacts: true
-
 # test-api:
 #   stage: test
 #   tags:
@@ -100,40 +102,40 @@ build-api:
 #     - job: preparation
 #       artifacts: true
 
-deliver-dockerhub:
-  stage: deliver
-  tags:
-    - dev
-  script:
-    - docker login -u $CI_REGISTRY_USER --password $CI_JOB_TOKEN $CI_REGISTRY
-    - docker login -u $DOCKER_HUB_USER --password $DOCKER_HUB_PASS
+# deliver-dockerhub:
+#   stage: deliver
+#   tags:
+#     - dev
+#   script:
+#     - docker login -u $CI_REGISTRY_USER --password $CI_JOB_TOKEN $CI_REGISTRY
+#     - docker login -u $DOCKER_HUB_USER --password $DOCKER_HUB_PASS
 
-    - docker tag $API_PROD_IMAGE_NAME $DOCKER_HUB_API_IMAGE
-    # - docker tag $CLIENT_PROD_IMAGE_NAME $DOCKER_HUB_CLIENT_IMAGE
-    - docker push $DOCKER_HUB_API_IMAGE
-  #     - docker push $DOCKER_HUB_CLIENT_IMAGE
-  needs:
-    # - job: test-integration
-    - job: preparation
-      artifacts: true
-    - job: build-api
-      artifacts: true
+#     - docker tag $API_PROD_IMAGE_NAME $DOCKER_HUB_API_IMAGE
+#     # - docker tag $CLIENT_PROD_IMAGE_NAME $DOCKER_HUB_CLIENT_IMAGE
+#     - docker push $DOCKER_HUB_API_IMAGE
+#   #     - docker push $DOCKER_HUB_CLIENT_IMAGE
+#   needs:
+#     # - job: test-integration
+#     - job: preparation
+#       artifacts: true
+#     - job: build-api
+#       artifacts: true
 
-deploy-prod:
-  stage: deploy
-  tags:
-    - prod
-  script:
-    - export API_IMAGE=$DOCKER_HUB_API_IMAGE
-    # - export CLIENT_IMAGE=$DOCKER_HUB_CLIENT_IMAGE
+# deploy-prod:
+#   stage: deploy
+#   tags:
+#     - prod
+#   script:
+#     - export API_IMAGE=$DOCKER_HUB_API_IMAGE
+#     # - export CLIENT_IMAGE=$DOCKER_HUB_CLIENT_IMAGE
 
-    - docker login -u $DOCKER_HUB_USER --password $DOCKER_HUB_PASS
+#     - docker login -u $DOCKER_HUB_USER --password $DOCKER_HUB_PASS
 
-    - docker compose -f docker-compose.yml stop
-    - docker compose -f docker-compose.yml rm
-    - docker compose -f docker-compose.yml pull
-    - docker compose -f docker-compose.yml up -d
-  needs:
-    - job: deliver-dockerhub
-    - job: preparation
-      artifacts: true
+#     - docker compose -f docker-compose.yml stop
+#     - docker compose -f docker-compose.yml rm
+#     - docker compose -f docker-compose.yml pull
+#     - docker compose -f docker-compose.yml up -d
+#   needs:
+#     - job: deliver-dockerhub
+#     - job: preparation
+#       artifacts: true

@@ -15,7 +15,7 @@ ENV PIP_NO_CACHE_DIR=off
 WORKDIR /app
 
 # Copy the Python code and requirements file to the container
-COPY --chown=python:python main.py /app/main.py
+COPY --chown=python:python auth_api.py /app/auth_api.py
 COPY --chown=python:python requirements.txt /app/requirements.txt
 
 # Install Requirements
@@ -32,4 +32,4 @@ USER python
 EXPOSE 5000
 
 # Start the Flask app
-CMD ["python", "main.py"]
+CMD ["python", "auth_api.py"]
