@@ -25,7 +25,7 @@ preparation:
 
 include:
   - "/.utils_ci.yml"
-  - "services/*_service/*ci.yml"
+  - "services/*_service/*_ci.yml"
 
 
 # .export-env-variables: &export-env-variables
