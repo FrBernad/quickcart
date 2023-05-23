@@ -12,10 +12,10 @@ variables:
   GITLAB_IMAGE_BASE: "$CI_REGISTRY/$CI_PROJECT_NAMESPACE/$CI_PROJECT_NAME"
   DOCKER_IMAGE_BASE: "$DOCKER_HUB_USER/$CI_PROJECT_NAME"
 
-.login-to-gitlab-registry: &login-to-gitlab-registry
+.login_to_gitlab_registry: &login_to_gitlab_registry
   - docker login -u $CI_REGISTRY_USER --password $CI_JOB_TOKEN $CI_REGISTRY
 
-.login-to-dockerhub-registry: &login-to-dockerhub-registry
+.login_to_dockerhub_registry: &login_to_dockerhub_registry
   - docker login -u $DOCKER_HUB_USER --password $DOCKER_HUB_PASS
 
 preparation:
@@ -29,8 +29,8 @@ preparation:
     reports:
       dotenv: context.env
 
-.create-and-export-service-images-variables:
-  &create-and-export-service-images-variables
+.create_and_export_service_images_variables:
+  &create_and_export_service_images_variables
   - export GITLAB_${SERVICE_NAME}_PROD_IMAGE=${GITLAB_IMAGE_BASE}/${SERVICE_NAME}:prod-${BUILD_ID}
   - echo "GITLAB_${SERVICE_NAME}_PROD_IMAGE=${GITLAB_IMAGE_BASE}/${SERVICE_NAME}:prod-${BUILD_ID}" >> context.env
   - export DOCKER_HUB_${SERVICE_NAME}_PROD_IMAGE=${DOCKER_IMAGE_BASE}/${SERVICE_NAME}:prod-${BUILD_ID}
@@ -39,18 +39,18 @@ preparation:
 # .export-env-variables: &export-env-variables
 #   reports:
 #         dotenv: context.env
-build-user-service:
+build_user_service:
   stage: build
   tags:
     - dev
   variables:
     SERVICE_NAME: "users_api"
     SERVICE_PATH: "services/users_service"
-  before-script:
-    - *create-and-export-service-images-variables
+  before_script:
+    - *create_and_export_service_images_variables
   script:
     - docker build -t GITLAB_${SERVICE_NAME}_PROD_IMAGE -f ${SERVICE_PATH}/users_api/Dockerfile.prod ${SERVICE_PATH}/users_api
-    - *login-to-gitlab-registry
+    - *login_to_gitlab_registry
     - docker push GITLAB_${SERVICE_NAME}_PROD_IMAGE
   needs:
     - job: preparation
