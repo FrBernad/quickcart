@@ -1,6 +1,3 @@
-include:
-  - "/.utils-ci.yml"
-
 build_user_service:
   stage: build
   tags:
