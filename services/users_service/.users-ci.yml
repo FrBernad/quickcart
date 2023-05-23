@@ -16,3 +16,4 @@ build_user_service:
   #     dotenv: context.env
   needs:
     - job: preparation
+      artifacts: true

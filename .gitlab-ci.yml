@@ -42,8 +42,6 @@ include:
 # .export-env-variables: &export-env-variables
 #   reports:
 #         dotenv: context.env
-
-      artifacts: true
 # test-api:
 #   stage: test
 #   tags:
