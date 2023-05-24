@@ -4,7 +4,7 @@
 
 .set_images_names: &set_images_names
   - eval "GITLAB_PROD_IMAGE=\${GITLAB_${SERVICE_NAME}_PROD_IMAGE}"
-  - eval "DOCKER_HUB_PROD_IMAGE=\${GITLAB_${SERVICE_NAME}_PROD_IMAGE}"
+  - eval "DOCKER_HUB_PROD_IMAGE=\${DOCKER_HUB_${SERVICE_NAME}_PROD_IMAGE}"
 
 build_auth_service:
   stage: build
