@@ -22,8 +22,6 @@ COPY --chown=python:python requirements.txt /app/requirements.txt
 RUN pip install --upgrade pip && \
     pip install -r requirements.txt
 
-RUN echo test
-
 # Set the ownership and permissions of the app folder to the non-root user
 RUN chown -R python:python /app && chmod -R 755 /app
 

@@ -17,4 +17,4 @@
       when: on_success #default
       changes:
         paths:
-          - $SERVICE_PATH/**
+          - $SERVICE_PATH/**/*
