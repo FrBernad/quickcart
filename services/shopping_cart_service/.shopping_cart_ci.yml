@@ -9,3 +9,6 @@ build_shopping_cart_service:
 deliver_shopping_cart_dockerhub:
   extends: .deliver_dockerhub
   variables: *shopping_cart_service_variables
+  needs:
+    - job: build_shopping_cart_service
+      artifacts: true

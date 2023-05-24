@@ -9,3 +9,6 @@ build_tags_service:
 deliver_tags_dockerhub:
   extends: .deliver_dockerhub
   variables: *tags_service_variables
+  needs:
+    - job: build_tags_service
+      artifacts: true

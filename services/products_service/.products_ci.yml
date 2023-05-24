@@ -9,3 +9,6 @@ build_products_service:
 deliver_products_dockerhub:
   extends: .deliver_dockerhub
   variables: *products_service_variables
+  needs:
+    - job: build_products_service
+      artifacts: true

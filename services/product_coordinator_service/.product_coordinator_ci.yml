@@ -9,3 +9,6 @@ build_product_coordinator_service:
 deliver_product_coordinator_dockerhub:
   extends: .deliver_dockerhub
   variables: *product_coordinator_service_variables
+  needs:
+    - job: build_product_coordinator_service
+      artifacts: true

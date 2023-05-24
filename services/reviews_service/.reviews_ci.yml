@@ -9,3 +9,6 @@ build_reviews_service:
 deliver_reviews_dockerhub:
   extends: .deliver_dockerhub
   variables: *reviews_service_variables
+  needs:
+    - job: build_reviews_service
+      artifacts: true

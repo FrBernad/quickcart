@@ -9,3 +9,6 @@ build_category_service:
 deliver_category_dockerhub:
   extends: .deliver_dockerhub
   variables: *category_service_variables
+  needs:
+    - job: build_category_service
+      artifacts: true

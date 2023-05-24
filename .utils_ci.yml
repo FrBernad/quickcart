@@ -67,5 +67,3 @@
   needs:
     - job: preparation
       artifacts: true
-    - job: build_auth_service
-      artifacts: true
