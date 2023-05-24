@@ -3,7 +3,6 @@
   - echo "GITLAB_${SERVICE_NAME}_PROD_IMAGE=${GITLAB_IMAGE_BASE}/${SERVICE_NAME}:prod-${BUILD_ID}" >> context.env
   - export DOCKER_HUB_${SERVICE_NAME}_PROD_IMAGE=${DOCKER_IMAGE_BASE}/${SERVICE_NAME}:prod-${BUILD_ID}
   - echo "DOCKER_HUB_${SERVICE_NAME}_PROD_IMAGE=${DOCKER_IMAGE_BASE}/${SERVICE_NAME}:prod-${BUILD_ID}" >> context.env
-  - eval "PROD_IMAGE=\${GITLAB_${SERVICE_NAME}_PROD_IMAGE}"
 
 .login_to_gitlab_registry:
   - docker login -u $CI_REGISTRY_USER --password $CI_JOB_TOKEN $CI_REGISTRY

@@ -76,24 +76,7 @@ include:
 #     - job: preparation
 #       artifacts: true
 
-# deliver-dockerhub:
-#   stage: deliver
-#   tags:
-#     - dev
-#   script:
-#     - docker login -u $CI_REGISTRY_USER --password $CI_JOB_TOKEN $CI_REGISTRY
-#     - docker login -u $DOCKER_HUB_USER --password $DOCKER_HUB_PASS
 
-#     - docker tag $API_PROD_IMAGE_NAME $DOCKER_HUB_API_IMAGE
-#     # - docker tag $CLIENT_PROD_IMAGE_NAME $DOCKER_HUB_CLIENT_IMAGE
-#     - docker push $DOCKER_HUB_API_IMAGE
-#   #     - docker push $DOCKER_HUB_CLIENT_IMAGE
-#   needs:
-#     # - job: test-integration
-#     - job: preparation
-#       artifacts: true
-#     - job: build-api
-#       artifacts: true
 
 # deploy-prod:
 #   stage: deploy
