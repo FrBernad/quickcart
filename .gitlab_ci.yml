@@ -26,7 +26,6 @@ preparation:
 include:
   - "/.utils_ci.yml"
   - "services/*_service/*_ci.yml"
-  
 # .export-env-variables: &export-env-variables
 #   reports:
 #         dotenv: context.env
