@@ -10,7 +10,7 @@ default:
 
 variables:
   GITLAB_IMAGE_BASE: "$CI_REGISTRY/$CI_PROJECT_NAMESPACE/$CI_PROJECT_NAME"
-  DOCKER_IMAGE_BASE: "$DOCKER_HUB_USER"
+  DOCKER_IMAGE_BASE: "$DOCKERHUB_USER"
 
 preparation:
   stage: prep
@@ -83,10 +83,10 @@ include:
 #   tags:
 #     - prod
 #   script:
-#     - export API_IMAGE=$DOCKER_HUB_API_IMAGE
-#     # - export CLIENT_IMAGE=$DOCKER_HUB_CLIENT_IMAGE
+#     - export API_IMAGE=$DOCKERHUB_API_IMAGE
+#     # - export CLIENT_IMAGE=$DOCKERHUB_CLIENT_IMAGE
 
-#     - docker login -u $DOCKER_HUB_USER --password $DOCKER_HUB_PASS
+#     - docker login -u $DOCKERHUB_USER --password $DOCKERHUB_PASS
 
 #     - docker compose -f docker-compose.yml stop
 #     - docker compose -f docker-compose.yml rm

@@ -1,14 +1,28 @@
 .create_and_export_service_images_variables:
   - export GITLAB_${SERVICE_NAME}_PROD_IMAGE=${GITLAB_IMAGE_BASE}/${SERVICE_NAME}:prod-${BUILD_ID}
   - echo "GITLAB_${SERVICE_NAME}_PROD_IMAGE=${GITLAB_IMAGE_BASE}/${SERVICE_NAME}:prod-${BUILD_ID}" >> context.env
-  - export DOCKER_HUB_${SERVICE_NAME}_PROD_IMAGE=${DOCKER_IMAGE_BASE}/${SERVICE_NAME}:prod-${BUILD_ID}
-  - echo "DOCKER_HUB_${SERVICE_NAME}_PROD_IMAGE=${DOCKER_IMAGE_BASE}/${SERVICE_NAME}:prod-${BUILD_ID}" >> context.env
+  - export DOCKERHUB_${SERVICE_NAME}_PROD_IMAGE=${DOCKER_IMAGE_BASE}/${SERVICE_NAME}:prod-${BUILD_ID}
+  - echo "DOCKERHUB_${SERVICE_NAME}_PROD_IMAGE=${DOCKER_IMAGE_BASE}/${SERVICE_NAME}:prod-${BUILD_ID}" >> context.env
 
 .login_to_gitlab_registry:
   - docker login -u $CI_REGISTRY_USER --password $CI_JOB_TOKEN $CI_REGISTRY
 
 .login_to_dockerhub_registry:
-  - docker login -u $DOCKER_HUB_USER --password $DOCKER_HUB_PASS
+  - docker login -u $DOCKERHUB_USER --password $DOCKERHUB_PASS
+
+.build_gitlab_prod_image:
+  - docker build -t ${GITLAB_PROD_IMAGE} -f ${SERVICE_PATH}/${SERVICE_NAME}/Dockerfile.prod ${SERVICE_PATH}/${SERVICE_NAME}
+
+.push_gitlab_prod_image:
+  - docker push ${GITLAB_PROD_IMAGE}
+
+.tag_and_push_dockerhub_prod_image:
+  - docker tag $GITLAB_PROD_IMAGE $DOCKERHUB_PROD_IMAGE
+  - docker push $DOCKERHUB_PROD_IMAGE
+
+.set_images_names:
+  - eval "GITLAB_PROD_IMAGE=\${GITLAB_${SERVICE_NAME}_PROD_IMAGE}"
+  - eval "DOCKERHUB_PROD_IMAGE=\${DOCKERHUB_${SERVICE_NAME}_PROD_IMAGE}"
 
 .rule_run_if_new_changes:
   rules:
@@ -17,3 +31,41 @@
       changes:
         paths:
           - $SERVICE_PATH/**/*
+
+.build_service:
+  stage: build
+  tags:
+    - dev
+  rules:
+    - !reference [.rule_run_if_new_changes, rules]
+  before_script:
+    - !reference [.create_and_export_service_images_variables]
+    - !reference [set_images_names]
+  script:
+    - !reference [.build_gitlab_prod_image]
+    - !reference [.login_to_gitlab_registry]
+    - !reference [.push_to_gitlab_registry]
+  artifacts:
+    reports:
+      dotenv: context.env
+  needs:
+    - job: preparation
+      artifacts: true
+
+.deliver_dockerhub:
+  stage: deliver
+  tags:
+    - dev
+  rules:
+    - !reference [.rule_run_if_new_changes, rules]
+  before_script:
+    - !reference [set_images_names]
+  script:
+    - !reference [.login_to_gitlab_registry]
+    - !reference [.login_to_dockerhub_registry]
+    - !reference [.tag_and_push_dockerhub_prod_image]
+  needs:
+    - job: preparation
+      artifacts: true
+    - job: build_auth_service
+      artifacts: true
