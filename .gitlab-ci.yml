@@ -26,16 +26,7 @@ preparation:
 include:
   - "/.utils_ci.yml"
   - "services/*_service/*_ci.yml"
-  # - "/services/category_service/.category_ci.yml"
-  # - "/services/product_coordinator_service/.product_coordinator_ci.yml"
-  # - "/services/products_service/.products_ci.yml"
-  # - "/services/pruchase_orders_service/.pruchase_orders_ci.yml"
-  # - "/services/reviews_service/.reviews_ci.yml"
-  # - "/services/shopping_cart_service/.shopping_cart_ci.yml"
-  # - "/services/tags_service/.tags_ci.yml"
-  # - "/services/users_service/.users_ci.yml"
-
-
+  
 # .export-env-variables: &export-env-variables
 #   reports:
 #         dotenv: context.env

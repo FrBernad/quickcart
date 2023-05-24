@@ -5,6 +5,8 @@ build_users_service:
   variables:
     SERVICE_NAME: "users_api"
     SERVICE_PATH: "services/users_service"
+  rules:
+    - !reference [.rule_run_if_push_changes, rules]  
   before_script:
     - !reference [.create_and_export_service_images_variables]
   script:

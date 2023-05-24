@@ -5,6 +5,8 @@ build_tags_service:
   variables:
     SERVICE_NAME: "tags_api"
     SERVICE_PATH: "services/tags_service"
+  rules:
+    - !reference [.rule_run_if_push_changes, rules]  
   before_script:
     - !reference [.create_and_export_service_images_variables]
   script:

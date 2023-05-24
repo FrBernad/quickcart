@@ -5,6 +5,8 @@ build_category_service:
   variables:
     SERVICE_NAME: "category_api"
     SERVICE_PATH: "services/category_service"
+  rules:
+    - !reference [.rule_run_if_push_changes, rules]
   before_script:
     - !reference [.create_and_export_service_images_variables]
   script:
