@@ -44,7 +44,7 @@
   script:
     - !reference [.build_gitlab_prod_image]
     - !reference [.login_to_gitlab_registry]
-    - !reference [.push_to_gitlab_registry]
+    - !reference [.push_gitlab_prod_image]
   artifacts:
     reports:
       dotenv: context.env
