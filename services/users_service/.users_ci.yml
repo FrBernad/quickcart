@@ -1,21 +1,11 @@
+.users_service_variables: &users_service_variables
+  SERVICE_NAME: "users_api"
+  SERVICE_PATH: "services/users_service"
+
 build_users_service:
-  stage: build
-  tags:
-    - dev
-  variables:
-    SERVICE_NAME: "users_api"
-    SERVICE_PATH: "services/users_service"
-  rules:
-    - !reference [.rule_run_if_new_changes, rules]  
-  before_script:
-    - !reference [.create_and_export_service_images_variables]
-  script:
-    - docker build -t ${PROD_IMAGE} -f ${SERVICE_PATH}/users_api/Dockerfile.prod ${SERVICE_PATH}/users_api
-    - !reference [.login_to_gitlab_registry]
-    - docker push ${PROD_IMAGE}
-  # artifacts:
-  #   reports:
-  #     dotenv: context.env
-  needs:
-    - job: preparation
-      artifacts: true
+  extends: .build_service
+  variables: *users_service_variables
+
+deliver_users_dockerhub:
+  extends: .deliver_dockerhub
+  variables: *users_service_variables

@@ -1,18 +1,11 @@
+.reviews_service_variables: &reviews_service_variables
+  SERVICE_NAME: "reviews_api"
+  SERVICE_PATH: "services/reviews_service"
+
 build_reviews_service:
-  stage: build
-  tags:
-    - dev
-  variables:
-    SERVICE_NAME: "reviews_api"
-    SERVICE_PATH: "services/reviews_service"
-  rules:
-    - !reference [.rule_run_if_new_changes, rules]  
-  before_script:
-    - !reference [.create_and_export_service_images_variables]
-  script:
-    - docker build -t ${PROD_IMAGE} -f ${SERVICE_PATH}/reviews_api/Dockerfile.prod ${SERVICE_PATH}/reviews_api
-    - !reference [.login_to_gitlab_registry]
-    - docker push ${PROD_IMAGE}
-  needs:
-    - job: preparation
-      artifacts: true
+  extends: .build_service
+  variables: *reviews_service_variables
+
+deliver_reviews_dockerhub:
+  extends: .deliver_dockerhub
+  variables: *reviews_service_variables
