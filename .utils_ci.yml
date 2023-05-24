@@ -15,6 +15,6 @@
   - rules:
       - if: $CI_PIPELINE_SOURCE == "push" #default
         when: on_success #default
-        changes:
-          paths:
-            - $SERVICE_PATH/**
+        # changes:
+          # paths:
+            # - $SERVICE_PATH/**
