@@ -19,6 +19,9 @@ COPY --chown=python:python auth_api.py /app/auth_api.py
 COPY --chown=python:python requirements.txt /app/requirements.txt
 
 # Install Requirements
+# Install Requirements
+# Install Requirements
+# Install Requirements
 RUN pip install --upgrade pip && \
     pip install -r requirements.txt
 

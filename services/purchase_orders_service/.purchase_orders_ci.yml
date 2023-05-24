@@ -6,7 +6,7 @@ build_purchase_orders_service:
     SERVICE_NAME: "purchase_orders_api"
     SERVICE_PATH: "services/purchase_orders_service"
   rules:
-    - !reference [.rule_run_if_push_changes, rules]  
+    - !reference [.rule_run_if_new_changes, rules]  
   before_script:
     - !reference [.create_and_export_service_images_variables]
   script:

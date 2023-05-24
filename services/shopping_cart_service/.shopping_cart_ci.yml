@@ -6,7 +6,7 @@ build_shopping_cart_service:
     SERVICE_NAME: "shopping_cart_api"
     SERVICE_PATH: "services/shopping_cart_service"
   rules:
-    - !reference [.rule_run_if_push_changes, rules]  
+    - !reference [.rule_run_if_new_changes, rules]  
   before_script:
     - !reference [.create_and_export_service_images_variables]
   script:

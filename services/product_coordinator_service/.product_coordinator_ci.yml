@@ -6,7 +6,7 @@ build_product_coordinator_service:
     SERVICE_NAME: "product_coordinator_api"
     SERVICE_PATH: "services/product_coordinator_service"
   rules:
-    - !reference [.rule_run_if_push_changes, rules] 
+    - !reference [.rule_run_if_new_changes, rules] 
   before_script:
     - !reference [.create_and_export_service_images_variables]
   script:
