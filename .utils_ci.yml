@@ -12,9 +12,9 @@
   - docker login -u $DOCKER_HUB_USER --password $DOCKER_HUB_PASS
 
 .rule_run_if_push_changes:
-  - rules:
-      - if: $CI_PIPELINE_SOURCE == "push" #default
-        when: on_success #default
-        # changes:
-          # paths:
-            # - $SERVICE_PATH/**
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "push" #default
+      when: on_success #default
+      changes:
+        paths:
+          - $SERVICE_PATH/**
