@@ -2,7 +2,6 @@
   SERVICE_NAME: "auth_api"
   SERVICE_PATH: "services/auth_service"
 
-
 build_auth_service:
   extends: .build_service
   variables: *auth_service_variables
