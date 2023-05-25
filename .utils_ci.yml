@@ -31,6 +31,7 @@
       changes:
         paths:
           - $SERVICE_PATH/**/*
+          - .utils_ci.yml
 
 .build_service:
   stage: build
