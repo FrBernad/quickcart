@@ -1,7 +1,7 @@
 stages:
   - prep
   - build
-  - test
+  # - test
   - deliver
   - deploy
 
@@ -26,21 +26,4 @@ preparation:
 include:
   - "/.utils_ci.yml"
   - "services/*_service/*_ci.yml"
-# deploy-prod:
-#   stage: deploy
-#   tags:
-#     - prod
-#   script:
-#     - export API_IMAGE=$DOCKERHUB_API_IMAGE
-#     # - export CLIENT_IMAGE=$DOCKERHUB_CLIENT_IMAGE
-
-#     - docker login -u $DOCKERHUB_USER --password $DOCKERHUB_PASS
-
-#     - docker compose -f docker-compose.yml stop
-#     - docker compose -f docker-compose.yml rm
-#     - docker compose -f docker-compose.yml pull
-#     - docker compose -f docker-compose.yml up -d
-#   needs:
-#     - job: deliver-dockerhub
-#     - job: preparation
-#       artifacts: true
+  

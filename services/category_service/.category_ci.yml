@@ -12,3 +12,12 @@ deliver_category_dockerhub:
   needs:
     - job: build_category_service
       artifacts: true
+
+deploy_category_prod:
+  extends: .deploy_prod
+  variables: *category_service_variables
+  needs:
+    - job: deliver_category_dockerhub
+      artifacts: false
+    - job: build_category_service
+      artifacts: true

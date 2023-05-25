@@ -12,3 +12,12 @@ deliver_users_dockerhub:
   needs:
     - job: build_users_service
       artifacts: true
+
+deploy_users_prod:
+  extends: .deploy_prod
+  variables: *users_service_variables
+  needs:
+    - job: deliver_users_dockerhub
+      artifacts: false
+    - job: build_users_service
+      artifacts: true

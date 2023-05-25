@@ -12,3 +12,12 @@ deliver_auth_dockerhub:
   needs:
     - job: build_auth_service
       artifacts: true
+
+deploy_auth_prod:
+  extends: .deploy_prod
+  variables: *auth_service_variables
+  needs:
+    - job: deliver_auth_dockerhub
+      artifacts: false
+    - job: build_auth_service
+      artifacts: true

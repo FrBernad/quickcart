@@ -12,3 +12,12 @@ deliver_shopping_cart_dockerhub:
   needs:
     - job: build_shopping_cart_service
       artifacts: true
+  
+deploy_shopping_cart_prod:
+  extends: .deploy_prod
+  variables: *shopping_cart_service_variables
+  needs:
+    - job: deliver_shopping_cart_dockerhub
+      artifacts: false
+    - job: build_shopping_cart_service
+      artifacts: true
