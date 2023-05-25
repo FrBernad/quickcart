@@ -17,8 +17,8 @@
   - docker push ${GITLAB_PROD_IMAGE}
 
 .set_images_names:
-  - eval "GITLAB_PROD_IMAGE=\${GITLAB_${SERVICE_NAME}_PROD_IMAGE}"
-  - eval "DOCKERHUB_PROD_IMAGE=\${DOCKERHUB_${SERVICE_NAME}_PROD_IMAGE}"
+  - eval "export GITLAB_PROD_IMAGE=\${GITLAB_${SERVICE_NAME}_PROD_IMAGE}"
+  - eval "export DOCKERHUB_PROD_IMAGE=\${DOCKERHUB_${SERVICE_NAME}_PROD_IMAGE}"
 
 .tag_and_push_dockerhub_prod_image:
   - docker tag $GITLAB_PROD_IMAGE $DOCKERHUB_PROD_IMAGE
