@@ -1,6 +1,6 @@
 .users_service_variables: &users_service_variables
   SERVICE_NAME: "users_api"
-  SERVICE_PATH: "services/users_service"
+  SERVICE_PATH: "users/users_service"
 
 build_users_service:
   extends: .build_service

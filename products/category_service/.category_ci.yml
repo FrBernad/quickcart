@@ -1,6 +1,6 @@
 .category_service_variables: &category_service_variables
   SERVICE_NAME: "category_api"
-  SERVICE_PATH: "services/category_service"
+  SERVICE_PATH: "products/category_service"
 
 build_category_service:
   extends: .build_service

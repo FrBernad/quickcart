@@ -1,6 +1,6 @@
 .products_service_variables: &products_service_variables
   SERVICE_NAME: "products_api"
-  SERVICE_PATH: "services/products_service"
+  SERVICE_PATH: "products/products_service"
 
 build_products_service:
   extends: .build_service

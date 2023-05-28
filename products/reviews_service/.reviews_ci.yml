@@ -1,6 +1,6 @@
 .reviews_service_variables: &reviews_service_variables
   SERVICE_NAME: "reviews_api"
-  SERVICE_PATH: "services/reviews_service"
+  SERVICE_PATH: "products/reviews_service"
 
 build_reviews_service:
   extends: .build_service

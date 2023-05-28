@@ -1,6 +1,6 @@
 .purchase_orders_service_variables: &purchase_orders_service_variables
   SERVICE_NAME: "purchase_orders_api"
-  SERVICE_PATH: "services/purchase_orders_service"
+  SERVICE_PATH: "sales/purchase_orders_service"
 
 build_purchase_orders_service:
   extends: .build_service
