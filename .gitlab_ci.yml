@@ -22,8 +22,10 @@ preparation:
   artifacts:
     reports:
       dotenv: context.env
+    paths:
+      - context.env
 
 include:
   - "/.utils_ci.yml"
-  - "*/*_service/*_ci.yml"
+  - "*/**/*_ci.yml"
   
