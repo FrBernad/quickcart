@@ -19,11 +19,14 @@ preparation:
   script:
     - export BUILD_ID=$(date +%Y%m%d%H%M)
     - echo "BUILD_ID=${BUILD_ID}" > context.env
+    - echo "BUILD_ID2=${BUILD_ID}" > context.env
+    - curl -L "https://gitlab.com/api/v4/projects/45992281/jobs/artifacts/main/raw/context.env?job=preparation" --output file.out
   artifacts:
     reports:
       dotenv: context.env
     paths:
       - context.env
+      - file.out
 
 include:
   - "/.utils_ci.yml"
