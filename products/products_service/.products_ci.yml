@@ -18,6 +18,8 @@ deliver_products_dockerhub:
   needs:
     - job: build_products_service
       artifacts: true
+    - job: test_products_service
+      artifacts: false
 
 deploy_products_prod:
   extends: .deploy_prod

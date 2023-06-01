@@ -18,6 +18,8 @@ deliver_product_coordinator_dockerhub:
   needs:
     - job: build_product_coordinator_service
       artifacts: true
+    - job: test_product_coordinator_service
+      artifacts: false
 
 deploy_product_coordinator_prod:
   extends: .deploy_prod

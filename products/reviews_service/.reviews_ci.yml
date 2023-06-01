@@ -18,6 +18,8 @@ deliver_reviews_dockerhub:
   needs:
     - job: build_reviews_service
       artifacts: true
+    - job: test_reviews_service
+      artifacts: false
 
 deploy_reviews_prod:
   extends: .deploy_prod

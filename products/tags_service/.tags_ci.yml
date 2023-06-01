@@ -18,6 +18,8 @@ deliver_tags_dockerhub:
   needs:
     - job: build_tags_service
       artifacts: true
+    - job: test_tags_service
+      artifacts: false
 
 deploy_tags_prod:
   extends: .deploy_prod

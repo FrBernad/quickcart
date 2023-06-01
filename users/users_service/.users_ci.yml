@@ -18,6 +18,8 @@ deliver_users_dockerhub:
   needs:
     - job: build_users_service
       artifacts: true
+    - job: test_users_service
+      artifacts: false
 
 deploy_users_prod:
   extends: .deploy_prod

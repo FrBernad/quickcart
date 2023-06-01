@@ -18,6 +18,8 @@ deliver_auth_dockerhub:
   needs:
     - job: build_auth_service
       artifacts: true
+    - job: test_auth_service
+      artifacts: false
 
 deploy_auth_prod:
   extends: .deploy_prod
