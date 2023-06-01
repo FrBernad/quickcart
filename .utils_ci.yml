@@ -23,7 +23,7 @@
 
 .build_gitlab_prod_image:
   - docker build -t ${GITLAB_PROD_IMAGE} -f ${SERVICE_PATH}/Dockerfile.prod ${SERVICE_PATH}
-  - docker tag -t ${GITLAB_PROD_IMAGE} ${GITLAB_PROD_IMAGE_LATEST}
+  - docker tag ${GITLAB_PROD_IMAGE} ${GITLAB_PROD_IMAGE_LATEST}
 
 .build_gitlab_test_image:
   - docker build -t ${GITLAB_TEST_IMAGE} -f ${SERVICE_PATH}/Dockerfile.test ${SERVICE_PATH}
