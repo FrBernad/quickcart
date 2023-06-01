@@ -6,6 +6,12 @@ build_purchase_orders_service:
   extends: .build_service
   variables: *purchase_orders_service_variables
 
+test_purchase_orders_service:
+  extends: .test_service
+  needs:
+    - job: build_purchase_orders_service
+      artifacts: true
+
 deliver_purchase_orders_dockerhub:
   extends: .deliver_dockerhub
   variables: *purchase_orders_service_variables

@@ -6,13 +6,19 @@ build_shopping_cart_service:
   extends: .build_service
   variables: *shopping_cart_service_variables
 
+test_shopping_cart_service:
+  extends: .test_service
+  needs:
+    - job: build_shopping_cart_service
+      artifacts: true
+
 deliver_shopping_cart_dockerhub:
   extends: .deliver_dockerhub
   variables: *shopping_cart_service_variables
   needs:
     - job: build_shopping_cart_service
       artifacts: true
-  
+
 deploy_shopping_cart_prod:
   extends: .deploy_prod
   variables: *shopping_cart_service_variables

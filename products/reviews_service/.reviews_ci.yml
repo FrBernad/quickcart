@@ -6,6 +6,12 @@ build_reviews_service:
   extends: .build_service
   variables: *reviews_service_variables
 
+test_reviews_service:
+  extends: .test_service
+  needs:
+    - job: build_reviews_service
+      artifacts: true
+
 deliver_reviews_dockerhub:
   extends: .deliver_dockerhub
   variables: *reviews_service_variables

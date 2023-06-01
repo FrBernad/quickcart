@@ -3,5 +3,5 @@ services:
   api:
     image: ${DOCKERHUB_PROD_IMAGE}
     ports:
-    - "5009:5000"
+    - "5006:5000"
     restart: always

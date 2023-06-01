@@ -6,6 +6,12 @@ build_auth_service:
   extends: .build_service
   variables: *auth_service_variables
 
+test_auth_service:
+  extends: .test_service
+  needs:
+    - job: build_auth_service
+      artifacts: true
+
 deliver_auth_dockerhub:
   extends: .deliver_dockerhub
   variables: *auth_service_variables

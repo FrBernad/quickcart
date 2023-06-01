@@ -6,6 +6,12 @@ build_users_service:
   extends: .build_service
   variables: *users_service_variables
 
+test_users_service:
+  extends: .test_service
+  needs:
+    - job: build_users_service
+      artifacts: true
+
 deliver_users_dockerhub:
   extends: .deliver_dockerhub
   variables: *users_service_variables

@@ -6,6 +6,12 @@ build_products_service:
   extends: .build_service
   variables: *products_service_variables
 
+test_products_service:
+  extends: .test_service
+  needs:
+    - job: build_products_service
+      artifacts: true
+
 deliver_products_dockerhub:
   extends: .deliver_dockerhub
   variables: *products_service_variables
