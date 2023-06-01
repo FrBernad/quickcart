@@ -45,6 +45,7 @@
   - eval "export GITLAB_TEST_IMAGE=\${GITLAB_${SERVICE_NAME}_TEST_IMAGE}"
   - eval "export DOCKERHUB_PROD_IMAGE=\${DOCKERHUB_${SERVICE_NAME}_PROD_IMAGE}"
 
+
 .rule_run_if_new_changes:
   rules:
     - if: $CI_COMMIT_BRANCH #default
