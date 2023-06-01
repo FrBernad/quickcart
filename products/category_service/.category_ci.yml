@@ -18,6 +18,8 @@ deliver_category_dockerhub:
   needs:
     - job: build_category_service
       artifacts: true
+    - job: test_category_service
+      artifacts: false
 
 deploy_category_prod:
   extends: .deploy_prod
