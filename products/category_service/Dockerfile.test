@@ -1,0 +1,20 @@
+# pull official base image
+ARG BASE_IMAGE
+FROM ${BASE_IMAGE}
+
+ENV FLASK_DEBUG=1
+ENV FLASK_ENV=development
+
+# add and install requirements
+COPY --chown=python:python ./requirements.test.txt .
+RUN python -m pip install -r requirements.test.txt
+
+# add app
+COPY --chown=python:python src/test src/test
+
+# new
+# add entrypoint.sh
+COPY --chown=python:python src/.cicd/test.sh .
+RUN chmod +x /usr/src/app/test.sh
+
+CMD ["/usr/src/app/test.sh"]

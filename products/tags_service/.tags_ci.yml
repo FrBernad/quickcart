@@ -17,7 +17,7 @@ deploy_tags_prod:
   extends: .deploy_prod
   variables: *tags_service_variables
   needs:
-    - job: deliver_tags_dockerhub
-      artifacts: false
     - job: build_tags_service
       artifacts: true
+    - job: deliver_tags_dockerhub
+      artifacts: false

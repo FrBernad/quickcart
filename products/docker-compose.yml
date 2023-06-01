@@ -1,0 +1,27 @@
+version: "3.3"
+services:
+  category_api:
+    image: ${DOCKERHUB_category_api_PROD_IMAGE}
+    ports:
+    - "5000:5000"
+    restart: always
+  product_coordinator_api:
+    image: ${DOCKERHUB_product_coordinator_api_PROD_IMAGE}
+    ports:
+    - "5001:5000"
+    restart: always
+  products_api:
+    image: ${DOCKERHUB_products_api_PROD_IMAGE}
+    ports:
+    - "5002:5000"
+    restart: always
+  reviews_api:
+    image: ${DOCKERHUB_reviews_api_PROD_IMAGE}
+    ports:
+    - "5003:5000"
+    restart: always
+  tags_api:
+    image: ${DOCKERHUB_tags_api_PROD_IMAGE}
+    ports:
+    - "5004:5000"
+    restart: always

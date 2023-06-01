@@ -1,8 +1,19 @@
 .create_and_export_service_images_variables:
+  # GITLAB PROD IMAGE 
   - export GITLAB_${SERVICE_NAME}_PROD_IMAGE=${GITLAB_IMAGE_BASE}/${SERVICE_NAME}:prod-${BUILD_ID}
   - echo "GITLAB_${SERVICE_NAME}_PROD_IMAGE=${GITLAB_IMAGE_BASE}/${SERVICE_NAME}:prod-${BUILD_ID}" >> context.env
+  # GITLAB PROD IMAGE TAG LATEST
+  - export "GITLAB_${SERVICE_NAME}_PROD_IMAGE_LATEST=${GITLAB_IMAGE_BASE}/${SERVICE_NAME}:prod-latest"
+  - echo "GITLAB_${SERVICE_NAME}_PROD_IMAGE_LATEST=${GITLAB_IMAGE_BASE}/${SERVICE_NAME}:prod-latest" >> context.env
+  # GITLAB TEST IMAGE 
+  - export GITLAB_${SERVICE_NAME}_TEST_IMAGE=${GITLAB_IMAGE_BASE}/${SERVICE_NAME}:test-${BUILD_ID}
+  - echo "GITLAB_${SERVICE_NAME}_TEST_IMAGE=${GITLAB_IMAGE_BASE}/${SERVICE_NAME}:test-${BUILD_ID}" >> context.env
+  # DOCKERHUB PROD IMAGE 
   - export DOCKERHUB_${SERVICE_NAME}_PROD_IMAGE=${DOCKERHUB_IMAGE_BASE}/${SERVICE_NAME}:prod-${BUILD_ID}
   - echo "DOCKERHUB_${SERVICE_NAME}_PROD_IMAGE=${DOCKERHUB_IMAGE_BASE}/${SERVICE_NAME}:prod-${BUILD_ID}" >> context.env
+  # DOCKERHUB PROD IMAGE TAG LATEST
+  - export DOCKERHUB_${SERVICE_NAME}_PROD_IMAGE_LATEST=${DOCKERHUB_IMAGE_BASE}/${SERVICE_NAME}:prod-latest
+  - echo "DOCKERHUB_${SERVICE_NAME}_PROD_IMAGE_LATEST=${DOCKERHUB_IMAGE_BASE}/${SERVICE_NAME}:prod-latest" >> context.env
 
 .login_to_gitlab_registry:
   - docker login -u $CI_REGISTRY_USER --password $CI_JOB_TOKEN $CI_REGISTRY
@@ -11,18 +22,28 @@
   - docker login -u $DOCKERHUB_USER --password $DOCKERHUB_PASS
 
 .build_gitlab_prod_image:
-  - docker build -t ${GITLAB_PROD_IMAGE} -f ${SERVICE_PATH}/${SERVICE_NAME}/Dockerfile.prod ${SERVICE_PATH}/${SERVICE_NAME}
+  - docker build -t ${GITLAB_PROD_IMAGE} -f ${SERVICE_PATH}/Dockerfile.prod ${SERVICE_PATH}
+  - docker tag -t ${GITLAB_PROD_IMAGE} ${GITLAB_PROD_IMAGE_LATEST}
+
+.build_gitlab_test_image:
+  - docker build -t ${GITLAB_TEST_IMAGE} -f ${SERVICE_PATH}/Dockerfile.test ${SERVICE_PATH}
 
 .push_gitlab_prod_image:
   - docker push ${GITLAB_PROD_IMAGE}
+  - docker push ${GITLAB_PROD_IMAGE_LATEST}
 
-.set_images_names:
-  - eval "export GITLAB_PROD_IMAGE=\${GITLAB_${SERVICE_NAME}_PROD_IMAGE}"
-  - eval "export DOCKERHUB_PROD_IMAGE=\${DOCKERHUB_${SERVICE_NAME}_PROD_IMAGE}"
+.push_gitlab_test_image:
+  - docker push ${GITLAB_TEST_IMAGE}
 
 .tag_and_push_dockerhub_prod_image:
   - docker tag $GITLAB_PROD_IMAGE $DOCKERHUB_PROD_IMAGE
   - docker push $DOCKERHUB_PROD_IMAGE
+
+.set_images_names:
+  - eval "export GITLAB_PROD_IMAGE=\${GITLAB_${SERVICE_NAME}_PROD_IMAGE}"
+  - eval "export GITLAB_PROD_IMAGE_LATEST=\${GITLAB_${SERVICE_NAME}_PROD_IMAGE_LATEST}"
+  - eval "export GITLAB_TEST_IMAGE=\${GITLAB_${SERVICE_NAME}_TEST_IMAGE}"
+  - eval "export DOCKERHUB_PROD_IMAGE=\${DOCKERHUB_${SERVICE_NAME}_PROD_IMAGE}"
 
 .rule_run_if_new_changes:
   rules:
@@ -44,13 +65,28 @@
     - !reference [.set_images_names]
   script:
     - !reference [.build_gitlab_prod_image]
+    - !reference [.build_gitlab_test_image]
     - !reference [.login_to_gitlab_registry]
     - !reference [.push_gitlab_prod_image]
+    - !reference [.push_gitlab_test_image]
   artifacts:
     reports:
       dotenv: context.env
   needs:
     - job: preparation
+      artifacts: true
+
+.test_service:
+  stage: test
+  tags:
+    - dev
+  before_script:
+    - !reference [.set_images_names]
+  script:
+    - !reference [.login_to_gitlab_registry]
+    - echo testing $SERVICE_NAME
+  needs:
+    - job: build_category_service
       artifacts: true
 
 .deliver_dockerhub:

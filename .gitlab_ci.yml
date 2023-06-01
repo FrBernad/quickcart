@@ -1,7 +1,7 @@
 stages:
   - prep
   - build
-  # - test
+  - test
   - deliver
   - deploy
 
