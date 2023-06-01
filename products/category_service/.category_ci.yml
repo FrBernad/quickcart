@@ -11,6 +11,7 @@ test_category_service:
   needs:
     - job: build_category_service
       artifacts: true
+      
 
 deliver_category_dockerhub:
   extends: .deliver_dockerhub
