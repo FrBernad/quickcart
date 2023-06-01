@@ -6,14 +6,14 @@ ENV FLASK_DEBUG=1
 ENV FLASK_ENV=development
 
 # Add and install requirements
-COPY --chown=python:python ./requirements.test.txt .
+COPY --chown=python:python requirements.test.txt .
 RUN python -m pip install -r requirements.test.txt
 
 # Add app
-COPY --chown=python:python src/test src/test
+COPY --chown=python:python src/tests ./test
 
 # Add entrypoint.sh
 COPY --chown=python:python src/.cicd/test.sh .
-RUN chmod +x /usr/src/app/test.sh
+RUN chmod +x /usr/app/test.sh
 
-CMD ["/usr/src/app/test.sh"]
+CMD ["/usr/app/test.sh"]
