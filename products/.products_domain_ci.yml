@@ -5,15 +5,15 @@ deploy_prod_products_domain:
   extends: .deploy_prod
   variables: *products_domain_variables
   needs:
-    - job: test_category_service
+    - job: deliver_category_service_dockerhub
       optional: true
       artifacts: false
-    - job: test_product_coordinator_service
+    - job: deliver_product_coordinator_service_dockerhub
       optional: true
       artifacts: false
-    - job: test_products_service
+    - job: deliver_products_service_dockerhub
       optional: true
       artifacts: false
-    - job: test_tags_service
+    - job: deliver_tags_service_dockerhub
       optional: true
       artifacts: false
