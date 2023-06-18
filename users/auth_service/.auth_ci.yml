@@ -7,7 +7,7 @@ build_auth_service:
   variables: *auth_service_variables
   script:
     - echo Trying wget
-    - wget -O tags_env --header="PRIVATE-TOKEN: ${PRIVATE_TOKEN}" "https://gitlab.com/api/v4/projects/${CI_PROJECT_ID}/jobs/artifacts/main/download?job=build_tags_service"
+    - wget -O tags_env "https://gitlab.com/api/v4/projects/${CI_PROJECT_ID}/jobs/artifacts/main/download?job=build_tags_service"
     - cat tags_env
 # test_auth_service:
 #   extends: .test_service
