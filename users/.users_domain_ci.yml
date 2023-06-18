@@ -5,12 +5,12 @@ deploy_prod_users_domain:
   extends: .deploy_prod
   variables: *users_domain_variables
   needs:
-    - job: deliver_auth_service_dockerhub
+    - job: deliver_auth_dockerhub
       optional: true
       artifacts: false
-    - job: deliver_shopping_cart_service_dockerhub
+    - job: deliver_shopping_cart_dockerhub
       optional: true
       artifacts: false
-    - job: deliver_users_service_dockerhub
+    - job: deliver_users_dockerhub
       optional: true
       artifacts: false
