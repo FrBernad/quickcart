@@ -1,0 +1,18 @@
+version: "3.3"
+services:
+  auth_api:
+    image: ${AUTH_SERVICE_IMAGE}
+    ports:
+    - "5006:5000"
+    restart: always
+  shopping_cart_api:
+    image: ${SHOPPING_CART_SERVICE_IMAGE}
+    ports:
+    - "5007:5000"
+    restart: always
+  users_api:
+    image: ${USERS_SERVICE_IMAGE}
+    ports:
+    - "5008:5000"
+    restart: always
+    

@@ -20,12 +20,3 @@ deliver_reviews_dockerhub:
       artifacts: true
     - job: test_reviews_service
       artifacts: false
-
-deploy_reviews_prod:
-  extends: .deploy_prod
-  variables: *reviews_service_variables
-  needs:
-    - job: deliver_reviews_dockerhub
-      artifacts: false
-    - job: build_reviews_service
-      artifacts: true

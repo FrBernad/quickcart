@@ -1,0 +1,19 @@
+.products_domain_variables: &products_domain_variables
+  DOMAIN_PATH: "products"
+
+deploy_prod_products_domain:
+  extends: .deploy_prod
+  variables: *products_domain_variables
+  needs:
+    - job: test_category_service
+      needs: optional
+      artifacts: false
+    - job: test_product_coordinator_service
+      needs: optional
+      artifacts: false
+    - job: test_products_service
+      needs: optional
+      artifacts: false
+    - job: test_tags_service
+      needs: optional
+      artifacts: false

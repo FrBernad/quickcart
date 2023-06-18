@@ -1,0 +1,16 @@
+.users_domain_variables: &users_domain_variables
+  DOMAIN_PATH: "users"
+
+deploy_prod_sales_domain:
+  extends: .deploy_prod
+  variables: *users_domain_variables
+  needs:
+    - job: test_auth_service
+      needs: optional
+      artifacts: false
+    - job: test_shopping_cart_service
+      needs: optional
+      artifacts: false
+    - job: test_users_service
+      needs: optional
+      artifacts: false

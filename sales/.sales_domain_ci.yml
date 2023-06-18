@@ -1,0 +1,10 @@
+.sales_domain_variables: &sales_domain_variables
+  DOMAIN_PATH: "sales"
+
+deploy_prod_sales_domain:
+  extends: .deploy_prod
+  variables: *sales_domain_variables
+  needs:
+    - job: test_purchase_order_service
+      needs: optional
+      artifacts: false

@@ -20,12 +20,3 @@ deliver_category_dockerhub:
       artifacts: true
     - job: test_category_service
       artifacts: false
-
-deploy_category_prod:
-  extends: .deploy_prod
-  variables: *category_service_variables
-  needs:
-    - job: deliver_category_dockerhub
-      artifacts: false
-    - job: build_category_service
-      artifacts: true
