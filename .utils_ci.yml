@@ -103,6 +103,7 @@
     - job: build_category_service
       artifacts: true
 
+
 .deliver_dockerhub:
   stage: deliver
   tags:
