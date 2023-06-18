@@ -1,7 +1,7 @@
 .users_domain_variables: &users_domain_variables
   DOMAIN_PATH: "users"
 
-deploy_prod_sales_domain:
+deploy_prod_users_domain:
   extends: .deploy_prod
   variables: *users_domain_variables
   needs:
