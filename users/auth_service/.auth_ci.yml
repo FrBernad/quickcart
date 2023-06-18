@@ -7,7 +7,7 @@ build_auth_service:
   variables: *auth_service_variables
   script:
     - echo Trying wget
-    # - wget -O tags_env ${GITLAB_JOB_ARTIFACTS_BASE}/context.env?job=build_tags_service&job_token=$CI_JOB_TOKEN"
+    - wget -O tags_env ${GITLAB_JOB_ARTIFACTS_BASE}/context.env?job=build_tags_service&job_token=$CI_JOB_TOKEN"
     # - cat tags_env
 
 # test_auth_service:
