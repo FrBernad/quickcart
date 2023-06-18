@@ -1,14 +1,14 @@
 .create_and_export_service_images_variables:
-  # GITLAB PROD IMAGE 
+  # GITLAB PROD IMAGE
   - export GITLAB_${SERVICE_NAME}_PROD_IMAGE=${GITLAB_IMAGE_BASE}/${SERVICE_NAME}:prod-${BUILD_ID}
   - echo "GITLAB_${SERVICE_NAME}_PROD_IMAGE=${GITLAB_IMAGE_BASE}/${SERVICE_NAME}:prod-${BUILD_ID}" >> context.env
   # GITLAB PROD IMAGE TAG LATEST
   - export "GITLAB_${SERVICE_NAME}_PROD_IMAGE_LATEST=${GITLAB_IMAGE_BASE}/${SERVICE_NAME}:prod-latest"
   - echo "GITLAB_${SERVICE_NAME}_PROD_IMAGE_LATEST=${GITLAB_IMAGE_BASE}/${SERVICE_NAME}:prod-latest" >> context.env
-  # GITLAB TEST IMAGE 
+  # GITLAB TEST IMAGE
   - export GITLAB_${SERVICE_NAME}_TEST_IMAGE=${GITLAB_IMAGE_BASE}/${SERVICE_NAME}:test-${BUILD_ID}
   - echo "GITLAB_${SERVICE_NAME}_TEST_IMAGE=${GITLAB_IMAGE_BASE}/${SERVICE_NAME}:test-${BUILD_ID}" >> context.env
-  # DOCKERHUB PROD IMAGE 
+  # DOCKERHUB PROD IMAGE
   - export DOCKERHUB_${SERVICE_NAME}_PROD_IMAGE=${DOCKERHUB_IMAGE_BASE}/${SERVICE_NAME}:prod-${BUILD_ID}
   - echo "DOCKERHUB_${SERVICE_NAME}_PROD_IMAGE=${DOCKERHUB_IMAGE_BASE}/${SERVICE_NAME}:prod-${BUILD_ID}" >> context.env
   # DOCKERHUB PROD IMAGE TAG LATEST
@@ -72,6 +72,8 @@
   artifacts:
     reports:
       dotenv: context.env
+    paths:
+      - context.env
   needs:
     - job: preparation
       artifacts: true
