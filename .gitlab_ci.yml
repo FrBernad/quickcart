@@ -25,4 +25,5 @@ preparation:
       dotenv: context.env
 
 include:
+  - "/.utils_ci.yml"
   - "*/**/*_ci.yml"
