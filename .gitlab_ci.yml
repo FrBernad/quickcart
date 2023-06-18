@@ -10,6 +10,7 @@ default:
 
 variables:
   GITLAB_IMAGE_BASE: "$CI_REGISTRY/$CI_PROJECT_NAMESPACE/$CI_PROJECT_NAME"
+  GITLAB_JOB_ARTIFACTS_BASE: "https://gitlab.com/api/v4/projects/$CI_PROJECT_ID/jobs/artifacts/main/raw"
   DOCKERHUB_IMAGE_BASE: "$DOCKERHUB_USER"
 
 preparation:
@@ -26,4 +27,3 @@ preparation:
 include:
   - "/.utils_ci.yml"
   - "*/**/*_ci.yml"
-  
