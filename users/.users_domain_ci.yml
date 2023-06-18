@@ -6,11 +6,11 @@ deploy_prod_sales_domain:
   variables: *users_domain_variables
   needs:
     - job: test_auth_service
-      needs: optional
+      optional: true
       artifacts: false
     - job: test_shopping_cart_service
-      needs: optional
+      optional: true
       artifacts: false
     - job: test_users_service
-      needs: optional
+      optional: true
       artifacts: false

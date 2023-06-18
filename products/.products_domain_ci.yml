@@ -6,14 +6,14 @@ deploy_prod_products_domain:
   variables: *products_domain_variables
   needs:
     - job: test_category_service
-      needs: optional
+      optional: true
       artifacts: false
     - job: test_product_coordinator_service
-      needs: optional
+      optional: true
       artifacts: false
     - job: test_products_service
-      needs: optional
+      optional: true
       artifacts: false
     - job: test_tags_service
-      needs: optional
+      optional: true
       artifacts: false

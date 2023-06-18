@@ -6,5 +6,5 @@ deploy_prod_sales_domain:
   variables: *sales_domain_variables
   needs:
     - job: test_purchase_order_service
-      needs: optional
+      optional: true
       artifacts: false
