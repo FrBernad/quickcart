@@ -1,7 +1,7 @@
 version: "3.3"
 services:
   purchase_order_api:
-    image: ${PURCHASE_ORDER_SERVICE_IMAGE}
+    image: ${PURCHASE_ORDERS_SERVICE_IMAGE}
     ports:
     - "5005:5000"
     restart: always

@@ -119,7 +119,6 @@
   needs:
     - job: preparation
 
-
 .deploy_prod:
   stage: deploy
   tags:
