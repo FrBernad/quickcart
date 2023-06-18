@@ -5,31 +5,27 @@
 build_auth_service:
   extends: .build_service
   variables: *auth_service_variables
-  script:
-    - echo Trying wget
-    - echo $PRIVATE_TOKEN
-    - 'wget -O tags_env --header="PRIVATE-TOKEN: $PRIVATE_TOKEN" "https://gitlab.com/api/v4/projects/${CI_PROJECT_ID}/jobs/artifacts/main/download?job=build_tags_service"'
-    - cat tags_env
-# test_auth_service:
-#   extends: .test_service
-#   needs:
-#     - job: build_auth_service
-#       artifacts: true
 
-# deliver_auth_dockerhub:
-#   extends: .deliver_dockerhub
-#   variables: *auth_service_variables
-#   needs:
-#     - job: build_auth_service
-#       artifacts: true
-#     - job: test_auth_service
-#       artifacts: false
+test_auth_service:
+  extends: .test_service
+  needs:
+    - job: build_auth_service
+      artifacts: true
 
-# deploy_auth_prod:
-#   extends: .deploy_prod
-#   variables: *auth_service_variables
-#   needs:
-#     - job: deliver_auth_dockerhub
-#       artifacts: false
-#     - job: build_auth_service
-#       artifacts: true
+deliver_auth_dockerhub:
+  extends: .deliver_dockerhub
+  variables: *auth_service_variables
+  needs:
+    - job: build_auth_service
+      artifacts: true
+    - job: test_auth_service
+      artifacts: false
+
+deploy_auth_prod:
+  extends: .deploy_prod
+  variables: *auth_service_variables
+  needs:
+    - job: deliver_auth_dockerhub
+      artifacts: false
+    - job: build_auth_service
+      artifacts: true
