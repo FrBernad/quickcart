@@ -8,6 +8,7 @@ build_auth_service:
   script:
     - echo Trying wget
     - wget www.google.com
+    - curl www.google.com
 # test_auth_service:
 #   extends: .test_service
 #   needs:
