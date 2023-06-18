@@ -39,7 +39,7 @@
   - docker tag $GITLAB_PROD_IMAGE $DOCKERHUB_PROD_IMAGE
   - docker tag $GITLAB_PROD_IMAGE $DOCKERHUB_PROD_IMAGE_LATEST
   - docker push $DOCKERHUB_PROD_IMAGE
-  - docker push $DOCKERHUB_PROD_LATEST
+  - docker push $DOCKERHUB_PROD_IMAGE_LATEST
 
 .set_images_names:
   - eval "export GITLAB_PROD_IMAGE=\${GITLAB_${SERVICE_NAME}_PROD_IMAGE}"
