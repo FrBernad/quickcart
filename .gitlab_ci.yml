@@ -26,4 +26,4 @@ preparation:
 
 include:
   - "/.utils_ci.yml"
-  - "*/**/*_ci.yml"
+  - "**/*_ci.yml"
