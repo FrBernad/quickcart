@@ -8,6 +8,9 @@
   # GITLAB TEST IMAGE
   - export GITLAB_${SERVICE_NAME}_TEST_IMAGE=${GITLAB_IMAGE_BASE}/${SERVICE_NAME}:test-${BUILD_ID}
   - echo "GITLAB_${SERVICE_NAME}_TEST_IMAGE=${GITLAB_IMAGE_BASE}/${SERVICE_NAME}:test-${BUILD_ID}" >> context.env
+  # GITLAB TEST IMAGE LATEST
+  - export GITLAB_${SERVICE_NAME}_TEST_IMAGE_LATEST=${GITLAB_IMAGE_BASE}/${SERVICE_NAME}:test-latest
+  - echo "GITLAB_${SERVICE_NAME}_TEST_IMAGE_LATEST=${GITLAB_IMAGE_BASE}/${SERVICE_NAME}:test-latest" >> context.env
   # DOCKERHUB PROD IMAGE
   - export DOCKERHUB_${SERVICE_NAME}_PROD_IMAGE=${DOCKERHUB_IMAGE_BASE}/${SERVICE_NAME}:prod-${BUILD_ID}
   - echo "DOCKERHUB_${SERVICE_NAME}_PROD_IMAGE=${DOCKERHUB_IMAGE_BASE}/${SERVICE_NAME}:prod-${BUILD_ID}" >> context.env
@@ -18,22 +21,24 @@
 .login_to_gitlab_registry:
   - docker login -u $CI_REGISTRY_USER --password $CI_JOB_TOKEN $CI_REGISTRY
 
-.login_to_dockerhub_registry:
-  - docker login -u $DOCKERHUB_USER --password $DOCKERHUB_PASS
-
 .build_gitlab_prod_image:
   - docker build -t ${GITLAB_PROD_IMAGE} -f ${SERVICE_PATH}/Dockerfile.prod ${SERVICE_PATH}
   - docker tag ${GITLAB_PROD_IMAGE} ${GITLAB_PROD_IMAGE_LATEST}
-
-.build_gitlab_test_image:
-  - docker build -t ${GITLAB_TEST_IMAGE} -f ${SERVICE_PATH}/Dockerfile.test --build-arg "BASE_IMAGE=$GITLAB_PROD_IMAGE" ${SERVICE_PATH}
 
 .push_gitlab_prod_image:
   - docker push ${GITLAB_PROD_IMAGE}
   - docker push ${GITLAB_PROD_IMAGE_LATEST}
 
+.build_gitlab_test_image:
+  - docker build -t ${GITLAB_TEST_IMAGE} -f ${SERVICE_PATH}/Dockerfile.test --build-arg "BASE_IMAGE=$GITLAB_PROD_IMAGE" ${SERVICE_PATH}
+  - docker tag ${GITLAB_TEST_IMAGE} ${GITLAB_TEST_IMAGE_LATEST}
+
 .push_gitlab_test_image:
   - docker push ${GITLAB_TEST_IMAGE}
+  - docker push ${GITLAB_TEST_IMAGE_LATEST}
+
+.login_to_dockerhub_registry:
+  - docker login -u $DOCKERHUB_USER --password $DOCKERHUB_PASS
 
 .tag_and_push_dockerhub_prod_image:
   - docker tag $GITLAB_PROD_IMAGE $DOCKERHUB_PROD_IMAGE
@@ -99,10 +104,6 @@
   script:
     - !reference [.login_to_gitlab_registry]
     - echo testing $SERVICE_NAME
-  needs:
-    - job: build_category_service
-      artifacts: true
-
 
 .deliver_dockerhub:
   stage: deliver
@@ -118,7 +119,6 @@
     - !reference [.tag_and_push_dockerhub_prod_image]
   needs:
     - job: preparation
-
 
 .deploy_prod:
   stage: deploy
