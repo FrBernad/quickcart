@@ -9,6 +9,7 @@ build_products_service:
 
 test_products_service:
   extends: .test_service
+  variables: *products_service_variables
   needs:
     - job: build_products_service
       artifacts: true

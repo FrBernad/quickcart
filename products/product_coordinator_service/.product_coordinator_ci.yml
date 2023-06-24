@@ -9,6 +9,7 @@ build_product_coordinator_service:
 
 test_product_coordinator_service:
   extends: .test_service
+  variables: *product_coordinator_service_variables
   needs:
     - job: build_product_coordinator_service
       artifacts: true

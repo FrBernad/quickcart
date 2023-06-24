@@ -9,6 +9,7 @@ build_category_service:
 
 test_category_service:
   extends: .test_service
+  variables: *category_service_variables
   needs:
     - job: build_category_service
       artifacts: true

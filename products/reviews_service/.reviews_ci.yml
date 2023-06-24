@@ -9,6 +9,7 @@ build_reviews_service:
 
 test_reviews_service:
   extends: .test_service
+  variables: *reviews_service_variables
   needs:
     - job: build_reviews_service
       artifacts: true

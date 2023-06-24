@@ -9,6 +9,7 @@ build_shopping_cart_service:
 
 test_shopping_cart_service:
   extends: .test_service
+  variables: *shopping_cart_service_variables
   needs:
     - job: build_shopping_cart_service
       artifacts: true
