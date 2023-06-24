@@ -9,6 +9,7 @@ build_purchase_orders_service:
 
 test_purchase_orders_service:
   extends: .test_service
+  variables: *purchase_orders_service_variables
   needs:
     - job: build_purchase_orders_service
       artifacts: true
