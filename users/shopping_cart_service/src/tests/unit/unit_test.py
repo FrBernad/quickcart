@@ -1,5 +1,5 @@
 import pytest
 
-def unit_test():
+def test_unit():
     print("Unit test passed!")
     assert True

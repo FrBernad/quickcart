@@ -7,18 +7,13 @@ if [ "${TEST_TARGET:-}" = "INTEGRATION" ]; then
 else
     ## pytest
     echo "Running tests for ${SERVICE_NAME} service"
-    python -m pytest "/usr/app/tests" --junitxml=report.xml
+    python -m pytest "./tests" --junitxml=report.xml
 
     ## Coverage
     echo "Running coverage for ${SERVICE_NAME} service"
-    python -m pytest "/usr/app/tests" -p no:warnings --cov="." --cov-report xml
+    python -m pytest "./tests" -p no:warnings --cov="." --cov-report xml
 
     ## Linting
     echo "Running linter for ${SERVICE_NAME} service"
     flake8 . --extend-ignore E221
-    # black src --check
-    # isort src --check
-
-    ## Security
-    # bandit -c .bandit.yml -r .
 fi

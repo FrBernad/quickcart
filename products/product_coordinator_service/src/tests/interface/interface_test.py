@@ -1,5 +1,5 @@
 import pytest
 
-def interface_test():
+def test_interface():
     print("Interface test passed!")
     assert True
