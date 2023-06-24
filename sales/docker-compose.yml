@@ -9,3 +9,5 @@ services:
     ports:
     - "5005:5000"
     restart: always
+    environment:
+      - SERVICE_NAME=purchase_order_api

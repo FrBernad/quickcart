@@ -9,6 +9,8 @@ services:
     ports:
     - "5006:5000"
     restart: always
+    environment:
+      - SERVICE_NAME=auth_api
   shopping_cart_api:
     container_name: shopping_cart_api_${ENV}
     image: ${SHOPPING_CART_SERVICE_IMAGE}
@@ -18,6 +20,8 @@ services:
     ports:
     - "5007:5000"
     restart: always
+    environment:
+      - SERVICE_NAME=shopping_cart_api
   users_api:
     container_name: users_api_${ENV}
     image: ${USERS_SERVICE_IMAGE}
@@ -27,4 +31,6 @@ services:
     ports:
     - "5008:5000"
     restart: always
+    environment:
+      - SERVICE_NAME=users_api
     
