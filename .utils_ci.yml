@@ -1,4 +1,4 @@
-# Rerun: add/remove space 
+# Rerun: add/remove space
 
 .create_and_export_service_images_variables:
   # GITLAB PROD IMAGE
@@ -23,14 +23,30 @@
 .login_to_gitlab_registry:
   - docker login -u $CI_REGISTRY_USER --password $CI_JOB_TOKEN $CI_REGISTRY
 
-.setup_multi_os_build:
-  - docker buildx create --name multi-os-driver --driver docker-container --bootstrap --use
+# .setup_multi_os_build:
+#   - docker buildx create --name multi-os-driver --driver docker-container --bootstrap --use
   
-.build_and_push_gitlab_prod_image:
-  - docker buildx build --platform linux/amd64,linux/arm64 -t ${GITLAB_PROD_IMAGE} -t ${GITLAB_PROD_IMAGE_LATEST} -f ${SERVICE_PATH}/Dockerfile.prod ${SERVICE_PATH} --push 
+# .build_and_push_gitlab_prod_image:
+#   - docker buildx build --platform linux/arm64,linux/amd64 -t ${GITLAB_PROD_IMAGE} -t ${GITLAB_PROD_IMAGE_LATEST} -f ${SERVICE_PATH}/Dockerfile.prod ${SERVICE_PATH} --push 
 
-.build_and_push_gitlab_test_image:
-  - docker buildx build --platform linux/amd64,linux/arm64 -t ${GITLAB_TEST_IMAGE} -t ${GITLAB_TEST_IMAGE_LATEST} -f ${SERVICE_PATH}/Dockerfile.test --build-arg "BASE_IMAGE=$GITLAB_PROD_IMAGE" ${SERVICE_PATH} --push 
+# .build_and_push_gitlab_test_image:
+#   - docker buildx build --platform linux/arm64,linux/amd64 -t ${GITLAB_TEST_IMAGE} -t ${GITLAB_TEST_IMAGE_LATEST} -f ${SERVICE_PATH}/Dockerfile.test --build-arg "BASE_IMAGE=$GITLAB_PROD_IMAGE" ${SERVICE_PATH} --push 
+
+.build_gitlab_prod_image:
+  - docker build -t ${GITLAB_PROD_IMAGE} -f ${SERVICE_PATH}/Dockerfile.prod ${SERVICE_PATH}
+  - docker tag ${GITLAB_PROD_IMAGE} ${GITLAB_PROD_IMAGE_LATEST}
+
+.push_gitlab_prod_image:
+  - docker push ${GITLAB_PROD_IMAGE}
+  - docker push ${GITLAB_PROD_IMAGE_LATEST}
+
+.build_gitlab_test_image:
+  - docker build -t ${GITLAB_TEST_IMAGE} -f ${SERVICE_PATH}/Dockerfile.test --build-arg "BASE_IMAGE=$GITLAB_PROD_IMAGE" ${SERVICE_PATH}
+  - docker tag ${GITLAB_TEST_IMAGE} ${GITLAB_TEST_IMAGE_LATEST}
+
+.push_gitlab_test_image:
+  - docker push ${GITLAB_TEST_IMAGE}
+  - docker push ${GITLAB_TEST_IMAGE_LATEST}
 
 .login_to_dockerhub_registry:
   - docker login -u $DOCKERHUB_USER --password $DOCKERHUB_PASS
@@ -77,10 +93,15 @@
     - !reference [.create_and_export_service_images_variables]
     - !reference [.set_images_names]
   script:
-    - !reference [.setup_multi_os_build]
+    # - !reference [.setup_multi_os_build]
+    # - !reference [.login_to_gitlab_registry]
+    # - !reference [.build_and_push_gitlab_prod_image]
+    # - !reference [.build_and_push_gitlab_test_image]
+    - !reference [.build_gitlab_prod_image]
+    - !reference [.build_gitlab_test_image]
     - !reference [.login_to_gitlab_registry]
-    - !reference [.build_and_push_gitlab_prod_image]
-    - !reference [.build_and_push_gitlab_test_image]
+    - !reference [.push_gitlab_prod_image]
+    - !reference [.push_gitlab_test_image]
   artifacts:
     reports:
       dotenv: context.env
