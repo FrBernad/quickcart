@@ -1,5 +1,6 @@
 version: "3.3"
 services:
+
   auth_api:
     container_name: auth_api_${ENV}
     image: ${AUTH_SERVICE_IMAGE}
@@ -11,6 +12,7 @@ services:
     restart: always
     environment:
       - SERVICE_NAME=auth_api
+
   shopping_cart_api:
     container_name: shopping_cart_api_${ENV}
     image: ${SHOPPING_CART_SERVICE_IMAGE}
@@ -22,6 +24,7 @@ services:
     restart: always
     environment:
       - SERVICE_NAME=shopping_cart_api
+
   users_api:
     container_name: users_api_${ENV}
     image: ${USERS_SERVICE_IMAGE}
@@ -33,4 +36,28 @@ services:
     restart: always
     environment:
       - SERVICE_NAME=users_api
-    
+      - POSTGRES_USER=${USERS_DB_USER}
+      - POSTGRES_PASSWORD=${USERS_DB_PASSWORD}
+      - POSTGRES_DB=${USERS_DB}   
+      - POSTGRES_SERVICE=users_db
+
+  users_db:
+    container_name: users_db_${ENV}
+    image: postgres:15
+    profiles:
+      - users_api
+      - all
+    restart: always
+    environment:
+      - POSTGRES_USER=${USERS_DB_USER}
+      - POSTGRES_PASSWORD=${USERS_DB_PASSWORD}
+      - POSTGRES_DB=${USERS_DB}
+      - PGDATA=/var/lib/postgresql/data/pgdata
+    volumes:
+      - type: volume
+        source: users_db_vol
+        target: /var/lib/postgresql/data 
+
+volumes:
+  users_db_vol:
+    name: users_db_vol
