@@ -8,6 +8,23 @@ build_users_service:
 
 test_users_service:
   extends: .test_service
+  variables: 
+    ENV: "test"
+  script:
+    - !reference [.login_to_gitlab_registry]
+    - docker compose -f docker-compose.yml --env-file ${SERVICE_PATH}/.env_files/.env.test --profile ${SERVICE_NAME} stop
+    - docker compose -f docker-compose.yml --env-file ${SERVICE_PATH}/.env_files/.env.test --profile ${SERVICE_NAME} rm
+    - docker compose -f docker-compose.yml --env-file ${SERVICE_PATH}/.env_files/.env.test --profile ${SERVICE_NAME} pull
+    - docker compose -f docker-compose.yml --env-file ${SERVICE_PATH}/.env_files/.env.test --profile ${SERVICE_NAME} up --abort-on-container-exit
+    - docker cp ${SERVICE_NAME}_${ENV}:/usr/src/app/coverage.xml .
+    - docker cp ${SERVICE_NAME}_${ENV}:/usr/src/app/report.xml .
+  artifacts:
+    when: always
+    paths:
+      - coverage.xml
+      - report.xml
+    reports:
+      junit: report.xml
   needs:
     - job: build_users_service
       artifacts: true

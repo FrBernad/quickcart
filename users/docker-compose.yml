@@ -1,17 +1,29 @@
 version: "3.3"
 services:
   auth_api:
+    container_name: auth_api_${ENV}
     image: ${AUTH_SERVICE_IMAGE}
+    profiles:
+      - auth_api
+      - all
     ports:
     - "5006:5000"
     restart: always
   shopping_cart_api:
+    container_name: shopping_cart_api_${ENV}
     image: ${SHOPPING_CART_SERVICE_IMAGE}
+    profiles:
+      - shopping_cart_api
+      - all
     ports:
     - "5007:5000"
     restart: always
   users_api:
+    container_name: users_api_${ENV}
     image: ${USERS_SERVICE_IMAGE}
+    profiles:
+      - users_api
+      - all
     ports:
     - "5008:5000"
     restart: always
