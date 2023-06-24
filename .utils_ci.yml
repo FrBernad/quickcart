@@ -145,9 +145,9 @@
     - !reference [.run_if_domain_changes, rules]
   script:
     - !reference [.login_to_dockerhub_registry]
-    - docker compose -f ${DOMAIN_PATH}/docker-compose.yml --env-file ${DOMAIN_PATH}/.env_files/.env.prod stop
-    - docker compose -f ${DOMAIN_PATH}/docker-compose.yml --env-file ${DOMAIN_PATH}/.env_files/.env.prod rm
-    - docker compose -f ${DOMAIN_PATH}/docker-compose.yml --env-file ${DOMAIN_PATH}/.env_files/.env.prod pull
-    - docker compose -f ${DOMAIN_PATH}/docker-compose.yml --env-file ${DOMAIN_PATH}/.env_files/.env.prod up -d
+    - docker compose -f ${DOMAIN_PATH}/docker-compose.yml --env-file ${DOMAIN_PATH}/.env_files/.env.prod --profile all stop
+    - docker compose -f ${DOMAIN_PATH}/docker-compose.yml --env-file ${DOMAIN_PATH}/.env_files/.env.prod --profile all rm
+    - docker compose -f ${DOMAIN_PATH}/docker-compose.yml --env-file ${DOMAIN_PATH}/.env_files/.env.prod --profile all pull
+    - docker compose -f ${DOMAIN_PATH}/docker-compose.yml --env-file ${DOMAIN_PATH}/.env_files/.env.prod --profile all up -d
   needs:
     - job: preparation
