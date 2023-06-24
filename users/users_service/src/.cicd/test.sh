@@ -5,6 +5,7 @@ if [ "${TEST_TARGET:-}" = "INTEGRATION" ]; then
     # Execute your command here
     /usr/app/.venv/bin/gunicorn manage:app
 else
+    ls
     ## pytest
     echo "Running tests for ${SERVICE_NAME} service"
     python -m pytest "/usr/app/tests" --junitxml=report.xml
