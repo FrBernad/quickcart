@@ -11,11 +11,11 @@ else
 
     ## Coverage
     echo "Running coverage for ${SERVICE_NAME} service"
-    python -m pytest "tests" -p no:warnings --cov="src" --cov-report xml
+    python -m pytest "tests" -p no:warnings --cov="." --cov-report xml
 
     ## Linting
     echo "Running linter for ${SERVICE_NAME} service"
-    flake8 src --extend-ignore E221
+    flake8 . --extend-ignore E221
     # black src --check
     # isort src --check
 

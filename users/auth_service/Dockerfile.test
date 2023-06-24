@@ -10,7 +10,10 @@ COPY --chown=python:python requirements.test.txt .
 RUN python -m pip install -r requirements.test.txt
 
 # Add app
-# COPY --chown=python:python src/tests .
+COPY --chown=python:python src/tests .
+
+# Add coveragerc
+COPY --chown=python:python .coveragerc .
 
 # Add entrypoint.sh
 COPY --chown=python:python src/.cicd/test.sh .

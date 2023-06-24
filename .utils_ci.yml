@@ -1,4 +1,4 @@
-# Rerun:
+# Rerun: add/remove space
 
 .create_and_export_service_images_variables:
   # GITLAB PROD IMAGE
@@ -112,8 +112,8 @@
     - docker compose -f ${DOMAIN_PATH}/docker-compose.yml --env-file ${DOMAIN_PATH}/.env_files/.env.test --profile ${SERVICE_NAME} rm
     - docker compose -f ${DOMAIN_PATH}/docker-compose.yml --env-file ${DOMAIN_PATH}/.env_files/.env.test --profile ${SERVICE_NAME} pull
     - docker compose -f ${DOMAIN_PATH}/docker-compose.yml --env-file ${DOMAIN_PATH}/.env_files/.env.test --profile ${SERVICE_NAME} up --abort-on-container-exit
-    - docker cp ${SERVICE_NAME}_${ENV}:/usr/src/app/coverage.xml .
-    - docker cp ${SERVICE_NAME}_${ENV}:/usr/src/app/report.xml .
+    - docker cp ${SERVICE_NAME}_${ENV}:/usr/app/coverage.xml .
+    - docker cp ${SERVICE_NAME}_${ENV}:/usr/app/report.xml .
   artifacts:
     when: always
     paths:
