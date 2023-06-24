@@ -26,6 +26,9 @@ services:
       - SERVICE_NAME=shopping_cart_api
 
   users_api:
+    # build:
+    #   context: ./users_service
+    #   dockerfile: Dockerfile.prod
     container_name: users_api_${ENV}
     image: ${USERS_SERVICE_IMAGE}
     profiles:
@@ -38,8 +41,9 @@ services:
       - SERVICE_NAME=users_api
       - POSTGRES_USER=${USERS_DB_USER}
       - POSTGRES_PASSWORD=${USERS_DB_PASSWORD}
-      - POSTGRES_DB=${USERS_DB}   
+      - POSTGRES_DB=${USERS_DB}
       - POSTGRES_SERVICE=users_db
+      - EXPOSED_INTERFACES=${EXPOSED_INTERFACES}
 
   users_db:
     container_name: users_db_${ENV}
@@ -57,6 +61,7 @@ services:
       - type: volume
         source: users_db_vol
         target: /var/lib/postgresql/data 
+      - ./users_service/db/init.sql:/docker-entrypoint-initdb.d/init.sql
 
 volumes:
   users_db_vol:
