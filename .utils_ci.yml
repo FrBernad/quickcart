@@ -27,10 +27,10 @@
   - docker buildx create --name multi-os-driver --driver docker-container --bootstrap --use
   
 .build_and_push_gitlab_prod_image:
-  - docker buildx build --platform linux/amd64,linux/arm64 -t ${GITLAB_PROD_IMAGE} -t ${GITLAB_PROD_IMAGE_LATEST} -f ${SERVICE_PATH}/Dockerfile.prod ${SERVICE_PATH} --push 
+  - docker buildx build --platform linux/arm64 -t ${GITLAB_PROD_IMAGE} -t ${GITLAB_PROD_IMAGE_LATEST} -f ${SERVICE_PATH}/Dockerfile.prod ${SERVICE_PATH} --push 
 
 .build_and_push_gitlab_test_image:
-  - docker buildx build --platform linux/amd64,linux/arm64 -t ${GITLAB_TEST_IMAGE} -t ${GITLAB_TEST_IMAGE_LATEST} -f ${SERVICE_PATH}/Dockerfile.test --build-arg "BASE_IMAGE=$GITLAB_PROD_IMAGE" ${SERVICE_PATH} --push 
+  - docker buildx build --platform linux/arm64 -t ${GITLAB_TEST_IMAGE} -t ${GITLAB_TEST_IMAGE_LATEST} -f ${SERVICE_PATH}/Dockerfile.test --build-arg "BASE_IMAGE=$GITLAB_PROD_IMAGE" ${SERVICE_PATH} --push 
 
 .login_to_dockerhub_registry:
   - docker login -u $DOCKERHUB_USER --password $DOCKERHUB_PASS
