@@ -8,6 +8,7 @@ build_users_service:
 
 test_users_service:
   extends: .test_service
+  variables: *users_service_variables
   needs:
     - job: build_users_service
       artifacts: true
