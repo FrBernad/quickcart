@@ -1,5 +1,5 @@
 import pytest
 
-def functional_test():
+def test_functional():
     print("Functional test passed!")
     assert True
