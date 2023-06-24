@@ -1,7 +1,11 @@
 version: "3.3"
 services:
   purchase_order_api:
+    container_name: purchase_order_api_${ENV}
     image: ${PURCHASE_ORDERS_SERVICE_IMAGE}
+    profiles:
+      - purchase_order_api
+      - all
     ports:
     - "5005:5000"
     restart: always

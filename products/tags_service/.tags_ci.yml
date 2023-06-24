@@ -1,6 +1,7 @@
 .tags_service_variables: &tags_service_variables
-  SERVICE_NAME: "tags_api"
+  DOMAIN_PATH: "products"
   SERVICE_PATH: "products/tags_service"
+  SERVICE_NAME: "tags_api"
 
 build_tags_service:
   extends: .build_service

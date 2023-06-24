@@ -1,27 +1,47 @@
 version: "3.3"
 services:
   category_api:
+    container_name: category_api_${ENV}
     image: ${CATEGORY_SERVICE_IMAGE}
+    profiles:
+      - category_api
+      - all
     ports:
     - "5000:5000"
     restart: always
   product_coordinator_api:
+    container_name: product_coordinator_api_${ENV}
     image: ${PRODUCT_COORDINATOR_SERVICE_IMAGE}
+    profiles:
+      - product_coordinator_api
+      - all
     ports:
     - "5001:5000"
     restart: always
   products_api:
+    container_name: products_api_${ENV}
     image: ${PRODUCTS_SERVICE_IMAGE}
+    profiles:
+      - products_api
+      - all
     ports:
     - "5002:5000"
     restart: always
   reviews_api:
+    container_name: reviews_api_${ENV}
     image: ${REVIEWS_SERVICE_IMAGE}
+    profiles:
+      - reviews_api
+      - all
     ports:
     - "5003:5000"
     restart: always
   tags_api:
+    container_name: tags_api_${ENV}
     image: ${TAGS_SERVICE_IMAGE}
+    profiles:
+      - tags_api
+      - all
     ports:
     - "5004:5000"
     restart: always

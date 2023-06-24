@@ -1,6 +1,7 @@
 .shopping_cart_service_variables: &shopping_cart_service_variables
-  SERVICE_NAME: "shopping_cart_api"
+  DOMAIN_PATH: "users"
   SERVICE_PATH: "users/shopping_cart_service"
+  SERVICE_NAME: "shopping_cart_api"
 
 build_shopping_cart_service:
   extends: .build_service

@@ -1,6 +1,7 @@
 .product_coordinator_service_variables: &product_coordinator_service_variables
-  SERVICE_NAME: "product_coordinator_api"
+  DOMAIN_PATH: "products"
   SERVICE_PATH: "products/product_coordinator_service"
+  SERVICE_NAME: "product_coordinator_api"
 
 build_product_coordinator_service:
   extends: .build_service

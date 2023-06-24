@@ -1,6 +1,7 @@
 .auth_service_variables: &auth_service_variables
-  SERVICE_NAME: "auth_api"
+  DOMAIN_PATH: "users"
   SERVICE_PATH: "users/auth_service"
+  SERVICE_NAME: "auth_api"
 
 build_auth_service:
   extends: .build_service
