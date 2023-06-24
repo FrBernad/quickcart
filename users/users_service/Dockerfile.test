@@ -12,6 +12,9 @@ RUN python -m pip install -r requirements.test.txt
 # Add app
 COPY --chown=python:python src/tests .
 
+# Add coveragerc
+COPY --chown=python:python src/.coveragerc .
+
 # Add entrypoint.sh
 COPY --chown=python:python src/.cicd/test.sh .
 RUN chmod +x /usr/app/test.sh
