@@ -12,8 +12,11 @@ RUN python -m pip install -r requirements.test.txt
 # Add app
 COPY --chown=python:python src/tests tests
 
-# Add coveragerc
-COPY --chown=python:python .coveragerc .
+# Add coveragerc config
+COPY --chown=python:python ./.coveragerc .
+
+# Add flake8 config
+COPY --chown=python:python ./.flake8 .
 
 # Add entrypoint.sh
 COPY --chown=python:python src/.cicd/test.sh .
