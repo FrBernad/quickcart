@@ -1,3 +1,5 @@
+# Rerun: 
+
 .create_and_export_service_images_variables:
   # GITLAB PROD IMAGE
   - export GITLAB_${SERVICE_NAME}_PROD_IMAGE=${GITLAB_IMAGE_BASE}/${SERVICE_NAME}:prod-${BUILD_ID}
