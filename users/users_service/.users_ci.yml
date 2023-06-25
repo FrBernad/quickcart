@@ -22,3 +22,4 @@ deliver_users_dockerhub:
       artifacts: true
     - job: test_users_service
       artifacts: false
+      
