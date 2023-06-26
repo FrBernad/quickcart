@@ -2,8 +2,8 @@ version: "3.3"
 services:
   users_api:
     # build:
-      # context: ./users_service
-      # dockerfile: Dockerfile.test
+    #   context: ./users_service
+    #   dockerfile: Dockerfile.test
     # container_name: users_api_${ENV}
     image: ${USERS_SERVICE_IMAGE}
     profiles:
