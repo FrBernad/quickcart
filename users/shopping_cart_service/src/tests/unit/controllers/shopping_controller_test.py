@@ -1,6 +1,5 @@
 import pytest
 import json
-from src.api.services.user_service_impl import UserService
 
 def test_shopping_cart_controller():
     print("test passed")
