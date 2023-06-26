@@ -2,7 +2,7 @@ import pytest
 import json
 from src.api.services.user_service_impl import UserService
 
-def test_user_controller():
+def test_shopping_cart_controller():
     print("test passed")
 
 # def test_create_user(test_client, monkeypatch):

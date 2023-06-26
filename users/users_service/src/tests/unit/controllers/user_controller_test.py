@@ -2,17 +2,15 @@ import pytest
 import json
 from src.api.services.user_service_impl import UserService
 
+def test_user_controller():
+    print("test passed")
 
-# def test_testing():
-    # pass
-
-
-def test_create_user(test_client, monkeypatch):
-    pass
+# def test_create_user(test_client, monkeypatch):
+#     pass
 
 
-def test_get_existing_user_by_id(test_client, monkeypatch):
-    pass
+# def test_get_existing_user_by_id(test_client, monkeypatch):
+#     pass
     # def mock_get_user_by_id(user_id):
     #     return {
     #         "id": 1,
