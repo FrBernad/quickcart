@@ -17,4 +17,6 @@ else
     ## Linting
     echo "Running linter for ${SERVICE_NAME} service"
     flake8 . --extend-ignore E221
+
+    
 fi

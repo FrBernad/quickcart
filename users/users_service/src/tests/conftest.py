@@ -1,9 +1,9 @@
-import pytest
-from src import create_app
+# import pytest
+# from src import create_app
 
-@pytest.fixture(scope="module")
-def test_client():
-    app = create_app()
-    # app.config.from_object("src.config.TestingConfig")
-    with app.app_context():
-        yield app.test_client()
+# @pytest.fixture(scope="module")
+# def test_client():
+#     app = create_app()
+#     # app.config.from_object("src.config.TestingConfig")
+#     with app.app_context():
+#         yield app.test_client()
