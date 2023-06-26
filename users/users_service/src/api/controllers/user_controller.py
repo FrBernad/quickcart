@@ -10,7 +10,7 @@ users_bp = Blueprint("users", __name__, url_prefix="/users")
 
 @inject
 @users_bp.route("", methods=["POST"])
-# @expects_json(create_user_schema)
+@expects_json(create_user_schema)
 def create_user(userService: UserService):
     data = request.get_json()
 
