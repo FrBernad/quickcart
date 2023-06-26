@@ -5,7 +5,7 @@ from injector import singleton
 import os
 
 from src.api.persistence.db import db
-from src.api.interfaces.service.user_service import UserService
+from src.api.interfaces.services.user_service import UserService
 from src.api.interfaces.persistence.user_dao import UserDao
 from src.api.services.user_service_impl import UserServiceImpl 
 from src.api.persistence.user_dao_impl import UserDaoImpl

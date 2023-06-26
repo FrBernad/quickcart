@@ -1,4 +1,4 @@
-from src.api.interfaces.service.user_service import UserService
+from src.api.interfaces.services.user_service import UserService
 from src.api.interfaces.persistence.user_dao import UserDao
 from injector import inject
 

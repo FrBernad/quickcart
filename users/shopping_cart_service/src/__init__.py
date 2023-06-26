@@ -5,9 +5,9 @@ from injector import singleton
 import os
 
 from src.api.persistence.db import db
-from src.api.interfaces.service.shopping_cart_service import ShoppingCartService
+from src.api.interfaces.services.shopping_cart_service import ShoppingCartService
 from src.api.interfaces.persistence.shopping_cart_dao import ShoppingCartDao
-from src.api.service.shopping_cart_service_impl import ShoppingCartServiceImpl 
+from src.api.services.shopping_cart_service_impl import ShoppingCartServiceImpl 
 from src.api.persistence.shopping_cart_dao_impl import ShoppingCartDaoImpl
 
 def configure(binder):

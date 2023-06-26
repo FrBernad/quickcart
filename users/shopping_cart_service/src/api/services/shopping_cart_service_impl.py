@@ -1,4 +1,4 @@
-from src.api.interfaces.service.shopping_cart_service import ShoppingCartService
+from src.api.interfaces.services.shopping_cart_service import ShoppingCartService
 from src.api.interfaces.persistence.shopping_cart_dao import ShoppingCartDao
 from injector import inject
 
