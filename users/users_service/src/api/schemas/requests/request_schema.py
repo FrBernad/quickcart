@@ -7,3 +7,11 @@ create_user_schema = {
     },
     'required': ['email', 'password','username']
 }
+
+update_user_schema = {
+    'type': 'object',
+    'properties': {
+        'username': {'type': 'string'},
+        'password': {'type': 'string'}
+    },
+}
