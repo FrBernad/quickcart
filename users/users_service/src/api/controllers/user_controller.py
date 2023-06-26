@@ -29,6 +29,7 @@ def create_user(userService: UserService):
         
     new_user = userService.create_user(username, email, password)
 
+
     return jsonify({}), 201
 
 
