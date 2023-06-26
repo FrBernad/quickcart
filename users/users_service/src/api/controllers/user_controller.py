@@ -42,7 +42,7 @@ def get_user(user_id,  userService: UserService):
 
 @inject
 @users_bp.route("/<user_id>", methods=["PUT"])
-def put(user_id,  userService: UserService):
+def update_user(user_id,  userService: UserService):
     data = request.get_json()
 
     username = data.get('username')
