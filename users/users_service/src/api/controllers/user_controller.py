@@ -5,6 +5,7 @@ from src.api.schemas.users_schema import user_schema
 from src.api.interfaces.services.user_service import UserService
 from src.api.schemas.requests.request_schema import create_user_schema
 from flask_expects_json import expects_json
+# from jsonschema import ValidationError
 
 users_bp = Blueprint("users", __name__, url_prefix="/users")
 
@@ -62,3 +63,13 @@ def update_user(user_id,  userService: UserService):
             
 
     return f"Update user with id ${user.id}", 200
+
+
+# @users_bp.errorhandler(ValidationError)
+# def handle_jsonschema_validation_error(error):
+#     response = jsonify({
+#         'message': 'Invalid JSON payload',
+#         'errors': error.message,
+#     })
+#     response.status_code = 400
+#     return response
