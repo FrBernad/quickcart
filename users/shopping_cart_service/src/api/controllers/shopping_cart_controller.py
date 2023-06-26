@@ -1,7 +1,7 @@
 
 from flask import jsonify, request, Blueprint
 from src.api.schemas.shopping_cart_schema import shopping_cart_schema
-from src.api.interfaces.service.shopping_cart_service import ShoppingCartService
+from src.api.interfaces.services.shopping_cart_service import ShoppingCartService
 from injector import inject
 
 shopping_cart_bp = Blueprint("shopping_cart", __name__, url_prefix="/users")

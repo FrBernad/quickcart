@@ -2,12 +2,15 @@
 from flask import jsonify, request, Blueprint
 from injector import inject
 from src.api.schemas.users_schema import user_schema
-from src.api.interfaces.service.user_service import UserService
+from src.api.interfaces.services.user_service import UserService
+from src.api.schemas.requests.request_schema import create_user_schema
+from flask_expects_json import expects_json
 
 users_bp = Blueprint("users", __name__, url_prefix="/users")
 
 @inject
 @users_bp.route("", methods=["POST"])
+# @expects_json(create_user_schema)
 def create_user(userService: UserService):
     data = request.get_json()
 
