@@ -15,18 +15,22 @@ ENV PIP_NO_CACHE_DIR=off
 WORKDIR /usr/app
 
 # Copy the Python code and requirements file to the container
-COPY --chown=python:python src/api/shopping_cart_api.py /usr/app/shopping_cart_api.py
-COPY --chown=python:python requirements.txt /usr/app/requirements.txt
+COPY --chown=python:python src/api ./src/api
+
+COPY --chown=python:python main.py ./main.py
+COPY --chown=python:python src/__init__.py ./src/__init__.py
+
+COPY --chown=python:python requirements.txt /usr/app/src/requirements.txt
 
 # Switch to the non-root user
 USER python
 
 # Install Requirements
 RUN pip install --upgrade pip && \
-    pip install -r requirements.txt
+    pip install -r ./src/requirements.txt
 
 # Expose port 5000 for the Flask app
 EXPOSE 5000
 
 # Start the Flask app
-CMD ["python", "shopping_cart_api.py"]
+CMD ["gunicorn", "-b", "0.0.0.0:5000", "main:app"]

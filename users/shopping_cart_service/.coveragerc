@@ -1,5 +1,5 @@
 [run]
 omit = 
-    ./tests/*
+    ./src/tests/*
     ./.venv
 branch = True

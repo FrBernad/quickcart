@@ -1,8 +1,8 @@
-from src.api.persistence.db import db
+from src import db
 from sqlalchemy.sql import func
 
-class User(db.Model):
-    __tablename__ = 'USERS'
+class ShoppingCarts(db.Model):
+    __tablename__ = 'SHOPPING_CARTS'
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     username = db.Column(db.String(128), nullable=False)
     email = db.Column(db.String(128), nullable=False)

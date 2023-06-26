@@ -134,8 +134,6 @@
       - report.xml
     reports:
       junit: report.xml
-  needs:
-    - job: preparation
 
 .deliver_dockerhub:
   stage: deliver
@@ -149,8 +147,6 @@
     - !reference [.login_to_gitlab_registry]
     - !reference [.login_to_dockerhub_registry]
     - !reference [.tag_and_push_dockerhub_prod_image]
-  needs:
-    - job: preparation
 
 .deploy_prod:
   stage: deploy
@@ -164,5 +160,3 @@
     - docker compose -f ${DOMAIN_PATH}/docker-compose.yml --env-file ${DOMAIN_PATH}/.env_files/.env.prod --profile all rm
     - docker compose -f ${DOMAIN_PATH}/docker-compose.yml --env-file ${DOMAIN_PATH}/.env_files/.env.prod --profile all pull
     - docker compose -f ${DOMAIN_PATH}/docker-compose.yml --env-file ${DOMAIN_PATH}/.env_files/.env.prod --profile all up -d
-  needs:
-    - job: preparation

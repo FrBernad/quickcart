@@ -4,7 +4,6 @@ from flask_restx import Namespace
 from src import create_app,db
 from src.api.models.users import User
 
-
 PACT_DIR = "src/tests/pacts"
 
 @pytest.fixture(scope="module")

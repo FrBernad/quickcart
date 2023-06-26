@@ -5,14 +5,14 @@ from injector import singleton
 import os
 
 from src.api.persistence.db import db
-from src.api.interfaces.service.user_service import UserService
-from src.api.interfaces.persistence.user_dao import UserDao
-from src.api.service.user_service_impl import UserServiceImpl 
-from src.api.persistence.user_dao_impl import UserDaoImpl
+from src.api.interfaces.service.shopping_cart_service import ShoppingCartService
+from src.api.interfaces.persistence.shopping_cart_dao import ShoppingCartDao
+from src.api.service.shopping_cart_service_impl import ShoppingCartServiceImpl 
+from src.api.persistence.shopping_cart_dao_impl import ShoppingCartDaoImpl
 
 def configure(binder):
-    binder.bind(UserService, to=UserServiceImpl, scope=singleton)
-    binder.bind(UserDao, to=UserDaoImpl, scope=singleton)
+    binder.bind(ShoppingCartService, to=ShoppingCartServiceImpl, scope=singleton)
+    binder.bind(ShoppingCartDao, to=ShoppingCartDaoImpl, scope=singleton)
     binder.bind(SQLAlchemy, to=db, scope=singleton)
     
 def create_app():
@@ -27,9 +27,9 @@ def create_app():
 
     db.init_app(app)
 
-    from src.api.controllers.user_controller import users_bp  
+    from src.api.controllers.shopping_cart_controller import shopping_cart_bp  
+    app.register_blueprint(shopping_cart_bp)
 
-    app.register_blueprint(users_bp)
 
     FlaskInjector(app=app, modules=[configure])
 

@@ -33,7 +33,6 @@ def delete_product_from_shopping_cart(user_id, product_id):
         200,
     )
 
-
 @shopping_cart_bp.route("/<string:user_id>/shopping-cart/checkout", methods=["POST"])
 def checkout_shopping_cart(user_id):
     return f"Checkout shopping cart from user with id {user_id}", 200

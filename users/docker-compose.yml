@@ -1,33 +1,9 @@
 version: "3.3"
 services:
-  auth_api:
-    container_name: auth_api_${ENV}
-    image: ${AUTH_SERVICE_IMAGE}
-    profiles:
-      - auth_api
-      - all
-    ports:
-      - "5006:5000"
-    restart: always
-    environment:
-      - SERVICE_NAME=auth_api
-
-  shopping_cart_api:
-    container_name: shopping_cart_api_${ENV}
-    image: ${SHOPPING_CART_SERVICE_IMAGE}
-    profiles:
-      - shopping_cart_api
-      - all
-    ports:
-      - "5007:5000"
-    restart: always
-    environment:
-      - SERVICE_NAME=shopping_cart_api
-
   users_api:
     # build:
     #   context: ./users_service
-    #   dockerfile: Dockerfile.prod
+    #   dockerfile: Dockerfile.test
     container_name: users_api_${ENV}
     image: ${USERS_SERVICE_IMAGE}
     profiles:
@@ -62,6 +38,46 @@ services:
         target: /var/lib/postgresql/data
       - ./users_service/db/init.sql:/docker-entrypoint-initdb.d/init.sql
 
+  shopping_cart_api:
+    container_name: shopping_cart_api_${ENV}
+    # build:
+    #   context: ./shopping_cart_service
+    #   dockerfile: Dockerfile.prod
+    image: ${SHOPPING_CART_SERVICE_IMAGE}
+    profiles:
+      - shopping_cart_api
+      - all
+    ports:
+      - "5007:5000"
+    restart: always
+    environment:
+      - SERVICE_NAME=shopping_cart_api
+      - POSTGRES_USER=${SHOPPING_CART_DB_USER}
+      - POSTGRES_PASSWORD=${SHOPPING_CART_PASSWORD}
+      - POSTGRES_DB=${SHOPPING_CART_DB}
+      - POSTGRES_SERVICE=shopping_cart_db
+      - EXPOSED_INTERFACES=${EXPOSED_INTERFACES}
+
+  shopping_cart_db:
+    container_name: shopping_cart_db_${ENV}
+    image: postgres:15
+    profiles:
+      - shopping_cart_api
+      - all
+    restart: always
+    environment:
+      - POSTGRES_USER=${SHOPPING_CART_DB_USER}
+      - POSTGRES_PASSWORD=${SHOPPING_CART_PASSWORD}
+      - POSTGRES_DB=${SHOPPING_CART_DB}
+      - PGDATA=/var/lib/postgresql/data/pgdata
+    volumes:
+      - type: volume
+        source: shopping_cart_db_vol
+        target: /var/lib/postgresql/data
+      - ./shopping_cart_service/db/init.sql:/docker-entrypoint-initdb.d/init.sql
+
 volumes:
   users_db_vol:
     name: users_db_vol
+  shopping_cart_db_vol:
+    name: shopping_cart_db_vol
