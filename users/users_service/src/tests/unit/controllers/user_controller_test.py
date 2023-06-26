@@ -3,8 +3,11 @@ import json
 from src.api.services.user_service_impl import UserService
 
 
-def test_create_user(test_client, monkeypatch):
+def test_testing():
     pass
+
+# def test_create_user(test_client, monkeypatch):
+#     pass
 
 
 # def test_get_existing_user(test_client, monkeypatch):
@@ -26,5 +29,5 @@ def test_create_user(test_client, monkeypatch):
     # assert "password" not in data
 
 
-def test_update_user(test_client, monkeypatch):
-    pass
+# def test_update_user(test_client, monkeypatch):
+#     pass
