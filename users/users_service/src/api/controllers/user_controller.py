@@ -7,6 +7,7 @@ from src.api.schemas.requests.request_schema import create_user_schema,update_us
 from flask_expects_json import expects_json
 from jsonschema import ValidationError
 
+
 users_bp = Blueprint("users", __name__, url_prefix="/users")
 
 @inject
