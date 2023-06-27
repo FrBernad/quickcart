@@ -78,6 +78,6 @@ services:
 
 volumes:
   users_db_vol:
-    name: users_db_vol
+    name: users_db_vol_${ENV}
   shopping_cart_db_vol:
-    name: shopping_cart_db_vol
+    name: shopping_cart_db_vol_${ENV}
