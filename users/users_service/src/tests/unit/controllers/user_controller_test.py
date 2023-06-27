@@ -9,7 +9,7 @@ def test_get_existing_user_by_id(test_client, monkeypatch):
     def mock_get_user_by_id(self, user_id):
         return {
             "id": "1",
-            "name": "test",
+            "username": "test",
             "email": "test@test.com",
         }
     
@@ -18,7 +18,7 @@ def test_get_existing_user_by_id(test_client, monkeypatch):
 
     data = json.loads(resp.data.decode())
     assert resp.status_code == 200
-    assert "1" == data["id"]
+    assert 1 == data["id"]
     assert "test" == data["username"]
     assert "test@test.com" == data["email"]
     assert "password" not in data
