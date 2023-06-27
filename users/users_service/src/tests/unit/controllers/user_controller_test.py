@@ -18,9 +18,9 @@ def test_get_existing_user_by_id(test_client, monkeypatch):
 
     data = json.loads(resp.data.decode())
     assert resp.status_code == 200
-    assert "1" in data["id"]
-    assert "test" in data["username"]
-    assert "test@test.com" in data["email"]
+    assert "1" == data["id"]
+    assert "test" == data["username"]
+    assert "test@test.com" == data["email"]
     assert "password" not in data
 
 
