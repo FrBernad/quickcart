@@ -17,8 +17,8 @@ class UserServiceImpl(UserService):
     def create_user(self, username, email,password):
         return self.userDao.create_user(username, email,password)
      
-    def update_user(self, user,username,email):
-        return self.userDao.update_user(user, username,email)
+    def update_user(self, user,username,password):
+        return self.userDao.update_user(user, username,password)
     
    
     

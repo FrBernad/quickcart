@@ -14,5 +14,5 @@ class UserDao(ABC):
         pass
     
     @abstractmethod
-    def update_user(self,user, username, email):
+    def update_user(self,user, username, password):
         pass

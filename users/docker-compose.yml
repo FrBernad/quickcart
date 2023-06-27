@@ -12,6 +12,9 @@ services:
     ports:
       - "5008:5000"
     restart: always
+    depends_on:
+      users_db:
+        condition: service_healthy
     environment:
       - SERVICE_NAME=users_api
       - POSTGRES_USER=${USERS_DB_USER}
@@ -36,7 +39,11 @@ services:
       - type: volume
         source: users_db_vol
         target: /var/lib/postgresql/data
-      - ./users_service/db/init.sql:/docker-entrypoint-initdb.d/init.sql
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -d $${USERS_DB} -U $${USERS_DB_USER}"]
+      interval: 4s
+      timeout: 5s
+      retries: 5
 
   shopping_cart_api:
     container_name: shopping_cart_api_${ENV}
@@ -50,6 +57,9 @@ services:
     ports:
       - "5007:5000"
     restart: always
+    depends_on:
+      shopping_cart_db:
+        condition: service_healthy
     environment:
       - SERVICE_NAME=shopping_cart_api
       - POSTGRES_USER=${SHOPPING_CART_DB_USER}
@@ -74,7 +84,11 @@ services:
       - type: volume
         source: shopping_cart_db_vol
         target: /var/lib/postgresql/data
-      - ./shopping_cart_service/db/init.sql:/docker-entrypoint-initdb.d/init.sql
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -d $${USERS_DB} -U $${USERS_DB_USER}"]
+      interval: 4s
+      timeout: 5s
+      retries: 5
 
 volumes:
   users_db_vol:

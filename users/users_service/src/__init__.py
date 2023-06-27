@@ -20,8 +20,8 @@ def create_app():
 
     user = os.getenv('POSTGRES_USER')
     passwd = os.getenv('POSTGRES_PASSWORD')
-    database = os.getenv('POSTGRES_DB')
     host = os.getenv('POSTGRES_SERVICE')
+    database = os.getenv('POSTGRES_DB')
 
     app.config['SQLALCHEMY_DATABASE_URI'] = f"postgresql://{user}:{passwd}@{host}:5432/{database}"
 

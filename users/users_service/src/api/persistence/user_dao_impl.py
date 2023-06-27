@@ -21,8 +21,8 @@ class UserDaoImpl(UserDao):
         self.db.session.commit()
         return user
 
-    def update_user(self,user, username, email):
+    def update_user(self,user, username, password):
         user.username = username
-        user.email = email
+        user.password = password
         self.db.session.commit()
         return user
