@@ -12,27 +12,27 @@ users_bp = Blueprint("users", __name__, url_prefix="/users")
 @inject
 @users_bp.route("", methods=["POST"])
 @expects_json(create_user_schema)
-def create_user(userService: UserService):
+def create_user(user_service: UserService):
     data = request.get_json()
 
     username = data.get('username')
     email = data.get('email')
     password = data.get('password')
 
-    user = userService.get_user_by_email(email)
+    user = user_service.get_user_by_email(email)
 
     if user:
         return jsonify({'message': f'The email is already in use'}), 400
 
-    new_user = userService.create_user(username, email, password)
+    new_user = user_service.create_user(username, email, password)
 
     return jsonify(user_schema.dump(new_user)), 201
 
 
 @inject
 @users_bp.route("/<user_id>", methods=["GET"])
-def get_user(user_id, userService: UserService):
-    user = userService.get_user_by_id(user_id)
+def get_user(user_id, user_service: UserService):
+    user = user_service.get_user_by_id(user_id)
     if not user:
         return jsonify({'message': f'User with id {user_id} not found'}), 404
 
@@ -42,17 +42,17 @@ def get_user(user_id, userService: UserService):
 @inject
 @expects_json(update_user_schema)
 @users_bp.route("/<user_id>", methods=["PUT"])
-def update_user(user_id, userService: UserService):
+def update_user(user_id, user_service: UserService):
     data = request.get_json()
     username = data.get('username')
     password = data.get('password')
 
-    user = userService.get_user_by_id(user_id)
+    user = user_service.get_user_by_id(user_id)
 
     if not user:
         return jsonify({'message': f'User with id {user_id} not found'}), 404
 
-    user = userService.update_user(user, username, password)
+    user = user_service.update_user(user, username, password)
 
     return jsonify({}), 204
 

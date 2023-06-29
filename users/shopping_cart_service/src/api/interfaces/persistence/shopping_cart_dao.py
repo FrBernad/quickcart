@@ -1,18 +1,20 @@
 from abc import ABC, abstractmethod
 
+
 class ShoppingCartDao(ABC):
-    
+
     @abstractmethod
-    def get_user_by_id(self,user_id):
+    def get_shopping_cart_by_user_id(self, user_id):
         pass
-        
+
     @abstractmethod
-    def get_user_by_email(self,email):
+    def add_product(self, user_id, product_id, quantity):
         pass
+
     @abstractmethod
-    def create_user(self,username, email, password):
+    def delete_product_from_shopping_cart(self, user_id, product_id):
         pass
-    
+
     @abstractmethod
-    def update_user(self,user, username, email):
+    def delete_shopping_cart(self, user_id):
         pass
