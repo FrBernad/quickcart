@@ -5,6 +5,7 @@ from src.api.models.users import User
 import datetime
 
 
+
 ## --------       CREATE USER     --------
 
 def test_create_user(test_client, monkeypatch):
