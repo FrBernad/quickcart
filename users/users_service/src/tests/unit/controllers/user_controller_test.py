@@ -5,8 +5,8 @@ from src.api.models.users import User
 import datetime
 
 
-
 ## --------       CREATE USER     --------
+
 
 def test_create_user(test_client, monkeypatch):
     user = User(username="test", email="test@test.com", password="12345678")
@@ -21,16 +21,17 @@ def test_create_user(test_client, monkeypatch):
     monkeypatch.setattr(UserServiceImpl, "get_user_by_email", mock_get_user_by_email)
     monkeypatch.setattr(UserServiceImpl, "create_user", mock_create_user)
 
-    resp = test_client.post("/users",
-                            data=json.dumps(
-                                {
-                                    "username": "test",
-                                    "email": "test@test.com",
-                                    "password": "12345678",
-                                }
-                            ),
-                            content_type="application/json",
-                            )
+    resp = test_client.post(
+        "/users",
+        data=json.dumps(
+            {
+                "username": "test",
+                "email": "test@test.com",
+                "password": "12345678",
+            }
+        ),
+        content_type="application/json",
+    )
 
     data = json.loads(resp.data)
     assert resp.status_code == 201
@@ -53,16 +54,17 @@ def test_create_user_with_email_already_register(test_client, monkeypatch):
     monkeypatch.setattr(UserServiceImpl, "get_user_by_email", mock_get_user_by_email)
     monkeypatch.setattr(UserServiceImpl, "create_user", mock_create_user)
 
-    resp = test_client.post("/users",
-                            data=json.dumps(
-                                {
-                                    "username": "test",
-                                    "email": "test@test.com",
-                                    "password": "12345678",
-                                }
-                            ),
-                            content_type="application/json",
-                            )
+    resp = test_client.post(
+        "/users",
+        data=json.dumps(
+            {
+                "username": "test",
+                "email": "test@test.com",
+                "password": "12345678",
+            }
+        ),
+        content_type="application/json",
+    )
 
     data = json.loads(resp.data.decode())
     assert resp.status_code == 400
@@ -79,15 +81,16 @@ def test_create_user_missing_username(test_client, monkeypatch):
     monkeypatch.setattr(UserServiceImpl, "get_user_by_email", mock_get_user_by_email)
     monkeypatch.setattr(UserServiceImpl, "create_user", mock_create_user)
 
-    resp = test_client.post("/users",
-                            data=json.dumps(
-                                {
-                                    "email": "test@test.com",
-                                    "password": "12345678",
-                                }
-                            ),
-                            content_type="application/json",
-                            )
+    resp = test_client.post(
+        "/users",
+        data=json.dumps(
+            {
+                "email": "test@test.com",
+                "password": "12345678",
+            }
+        ),
+        content_type="application/json",
+    )
 
     data = json.loads(resp.data.decode())
     assert resp.status_code == 400
@@ -104,15 +107,16 @@ def test_create_user_missing_password(test_client, monkeypatch):
     monkeypatch.setattr(UserServiceImpl, "get_user_by_email", mock_get_user_by_email)
     monkeypatch.setattr(UserServiceImpl, "create_user", mock_create_user)
 
-    resp = test_client.post("/users",
-                            data=json.dumps(
-                                {
-                                    "username": "test",
-                                    "email": "test@test.com",
-                                }
-                            ),
-                            content_type="application/json",
-                            )
+    resp = test_client.post(
+        "/users",
+        data=json.dumps(
+            {
+                "username": "test",
+                "email": "test@test.com",
+            }
+        ),
+        content_type="application/json",
+    )
 
     data = json.loads(resp.data.decode())
     assert resp.status_code == 400
@@ -129,15 +133,16 @@ def test_create_user_missing_email(test_client, monkeypatch):
     monkeypatch.setattr(UserServiceImpl, "get_user_by_email", mock_get_user_by_email)
     monkeypatch.setattr(UserServiceImpl, "create_user", mock_create_user)
 
-    resp = test_client.post("/users",
-                            data=json.dumps(
-                                {
-                                    "username": "test",
-                                    "password": "12345678",
-                                }
-                            ),
-                            content_type="application/json",
-                            )
+    resp = test_client.post(
+        "/users",
+        data=json.dumps(
+            {
+                "username": "test",
+                "password": "12345678",
+            }
+        ),
+        content_type="application/json",
+    )
 
     data = json.loads(resp.data.decode())
     print(data)
@@ -146,6 +151,7 @@ def test_create_user_missing_email(test_client, monkeypatch):
 
 
 ## --------       GET USER     --------
+
 
 def test_get_existing_user_by_id(test_client, monkeypatch):
     user = User(username="test", email="test@test.com", password="12345678")
@@ -194,15 +200,16 @@ def test_update_user(test_client, monkeypatch):
     monkeypatch.setattr(UserServiceImpl, "get_user_by_id", mock_get_user_by_id)
     monkeypatch.setattr(UserServiceImpl, "update_user", mock_update_user)
 
-    resp = test_client.put("/users/1",
-                           data=json.dumps(
-                               {
-                                   "username": "test",
-                                   "password": "12345678",
-                               }
-                           ),
-                           content_type="application/json",
-                           )
+    resp = test_client.put(
+        "/users/1",
+        data=json.dumps(
+            {
+                "username": "test",
+                "password": "12345678",
+            }
+        ),
+        content_type="application/json",
+    )
 
     assert resp.status_code == 204
     assert not resp.data
@@ -221,15 +228,16 @@ def test_update_not_existing_user(test_client, monkeypatch):
     monkeypatch.setattr(UserServiceImpl, "get_user_by_id", mock_get_user_by_id)
     monkeypatch.setattr(UserServiceImpl, "update_user", mock_update_user)
 
-    resp = test_client.put("/users/1",
-                           data=json.dumps(
-                               {
-                                   "username": "test",
-                                   "email": "test@test.com",
-                                   "password": "12345678",
-                               }
-                           ),
-                           content_type="application/json",
-                           )
+    resp = test_client.put(
+        "/users/1",
+        data=json.dumps(
+            {
+                "username": "test",
+                "email": "test@test.com",
+                "password": "12345678",
+            }
+        ),
+        content_type="application/json",
+    )
 
     assert resp.status_code == 404
