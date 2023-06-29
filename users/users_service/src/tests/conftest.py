@@ -3,39 +3,41 @@ from src.api.persistence.db import db
 from src import create_app
 from unittest.mock import Mock
 from src.api.persistence.user_dao_impl import UserDaoImpl
+from flask_sqlalchemy import SQLAlchemy
 
 
 @pytest.fixture(scope="module")
 def test_client():
     app = create_app()
+    app.config["TESTING"] = True
     with app.app_context():
         yield app.test_client()
 
 
-@pytest.fixture
-def mock_user_dao(monkeypatch):
-    # Create a mock UserDAO object
-    user_dao_mock = Mock(spec=UserDaoImpl)
+@pytest.fixture(scope="module")
+def test_user_dao():
+    from src.api.persistence.user_dao_impl import UserDaoImpl
 
-    # Patch the UserDAO class with the mock object
-    monkeypatch.setattr(UserDaoImpl, '__new__', lambda cls: user_dao_mock)
-
-    # Return the mock UserDAO object
-    return user_dao_mock
-
-
-# @pytest.fixture(scope="module")
-# def test_dao(test_database):
-#     from src.api.persistence.user_dao_impl import UserDaoImpl
-#     service = UserDaoImpl(test_database)
-#     yield service
+    db_mock = Mock(spec=SQLAlchemy)
+    dao = UserDaoImpl(db_mock)
+    yield dao, db_mock
 
 
 @pytest.fixture(scope="module")
-def test_database(test_client):
+def test_user_service():
+    from src.api.services.user_service_impl import UserServiceImpl
+
+    user_dao_mock = Mock(spec=UserDaoImpl)
+    service = UserServiceImpl(user_dao_mock)
+    yield service, user_dao_mock
+
+
+@pytest.fixture(scope="function")
+def test_database():
     from src.api.models.users import User
+
     db.drop_all()
     db.create_all()
-    yield db  # testing happens here
+    yield db 
     db.session.remove()
     db.drop_all()

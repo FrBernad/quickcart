@@ -8,18 +8,9 @@ import datetime
 ## --------       CREATE USER     --------
 
 
-def test_create_user(test_client, monkeypatch):
+def test_create_user(test_client, test_database):
     user = User(username="test", email="test@test.com", password="12345678")
     user.id = 1
-
-    def mock_get_user_by_email(self, email):
-        return None
-
-    def mock_create_user(self, username, email, password):
-        return user
-
-    monkeypatch.setattr(UserServiceImpl, "get_user_by_email", mock_get_user_by_email)
-    monkeypatch.setattr(UserServiceImpl, "create_user", mock_create_user)
 
     resp = test_client.post(
         "/users",
@@ -41,18 +32,10 @@ def test_create_user(test_client, monkeypatch):
     assert "password" not in data
 
 
-def test_create_user_with_email_already_register(test_client, monkeypatch):
+def test_create_user_with_email_already_register(test_client, test_database):
     user = User(username="test", email="test@test.com", password="12345678")
-    user.id = 1
-
-    def mock_get_user_by_email(self, email):
-        return user
-
-    def mock_create_user(self, username, email, password):
-        return None
-
-    monkeypatch.setattr(UserServiceImpl, "get_user_by_email", mock_get_user_by_email)
-    monkeypatch.setattr(UserServiceImpl, "create_user", mock_create_user)
+    test_database.session.add(user)
+    test_database.session.commit()
 
     resp = test_client.post(
         "/users",
@@ -71,16 +54,7 @@ def test_create_user_with_email_already_register(test_client, monkeypatch):
     assert f"The email is already in use" == data["message"]
 
 
-def test_create_user_missing_username(test_client, monkeypatch):
-    def mock_get_user_by_email(self, user_id):
-        return None
-
-    def mock_create_user(self, username, email, password):
-        return None
-
-    monkeypatch.setattr(UserServiceImpl, "get_user_by_email", mock_get_user_by_email)
-    monkeypatch.setattr(UserServiceImpl, "create_user", mock_create_user)
-
+def test_create_user_missing_username(test_client, test_database):
     resp = test_client.post(
         "/users",
         data=json.dumps(
@@ -97,16 +71,7 @@ def test_create_user_missing_username(test_client, monkeypatch):
     assert "Invalid input" == data["error"]
 
 
-def test_create_user_missing_password(test_client, monkeypatch):
-    def mock_get_user_by_email(self, user_id):
-        return None
-
-    def mock_create_user(self, username, email, password):
-        return None
-
-    monkeypatch.setattr(UserServiceImpl, "get_user_by_email", mock_get_user_by_email)
-    monkeypatch.setattr(UserServiceImpl, "create_user", mock_create_user)
-
+def test_create_user_missing_password(test_client, test_database):
     resp = test_client.post(
         "/users",
         data=json.dumps(
@@ -123,16 +88,7 @@ def test_create_user_missing_password(test_client, monkeypatch):
     assert "Invalid input" == data["error"]
 
 
-def test_create_user_missing_email(test_client, monkeypatch):
-    def mock_get_user_by_email(self, email):
-        return None
-
-    def mock_create_user(self, username, email, password):
-        return None
-
-    monkeypatch.setattr(UserServiceImpl, "get_user_by_email", mock_get_user_by_email)
-    monkeypatch.setattr(UserServiceImpl, "create_user", mock_create_user)
-
+def test_create_user_missing_email(test_client, test_database):
     resp = test_client.post(
         "/users",
         data=json.dumps(
@@ -153,14 +109,11 @@ def test_create_user_missing_email(test_client, monkeypatch):
 ## --------       GET USER     --------
 
 
-def test_get_existing_user_by_id(test_client, monkeypatch):
+def test_get_existing_user_by_id(test_client, test_database):
     user = User(username="test", email="test@test.com", password="12345678")
-    user.id = 1
+    test_database.session.add(user)
+    test_database.session.commit()
 
-    def mock_get_user_by_id(self, user_id):
-        return user
-
-    monkeypatch.setattr(UserServiceImpl, "get_user_by_id", mock_get_user_by_id)
     resp = test_client.get("/users/1")
 
     data = json.loads(resp.data.decode())
@@ -171,11 +124,7 @@ def test_get_existing_user_by_id(test_client, monkeypatch):
     assert "password" not in data
 
 
-def test_get_non_existing_user_by_id(test_client, monkeypatch):
-    def mock_get_user_by_id(self, user_id):
-        return None
-
-    monkeypatch.setattr(UserServiceImpl, "get_user_by_id", mock_get_user_by_id)
+def test_get_non_existing_user_by_id(test_client, test_database):
     resp = test_client.get("/users/1")
 
     data = json.loads(resp.data.decode())
@@ -185,20 +134,12 @@ def test_get_non_existing_user_by_id(test_client, monkeypatch):
 ## --------       UPDATE USER     --------
 
 
-def test_update_user(test_client, monkeypatch):
+def test_update_user(test_client, test_database):
     user = User(username="test", email="test@test.com", password="12345678")
-    user.id = 1
+    test_database.session.add(user)
+    test_database.session.commit()
+    
     user_updated = User(username="test2", email="test@test.com", password="123456789")
-    user_updated.id = 1
-
-    def mock_get_user_by_id(self, user_id):
-        return user
-
-    def mock_update_user(self, username, email, password):
-        return user_updated
-
-    monkeypatch.setattr(UserServiceImpl, "get_user_by_id", mock_get_user_by_id)
-    monkeypatch.setattr(UserServiceImpl, "update_user", mock_update_user)
 
     resp = test_client.put(
         "/users/1",
@@ -215,19 +156,7 @@ def test_update_user(test_client, monkeypatch):
     assert not resp.data
 
 
-def test_update_not_existing_user(test_client, monkeypatch):
-    user = User(username="test", email="test@test.com", password="12345678")
-    user.id = 1
-
-    def mock_get_user_by_id(self, user_id):
-        return None
-
-    def mock_update_user(self, username, email, password):
-        return user
-
-    monkeypatch.setattr(UserServiceImpl, "get_user_by_id", mock_get_user_by_id)
-    monkeypatch.setattr(UserServiceImpl, "update_user", mock_update_user)
-
+def test_update_not_existing_user(test_client, test_database):
     resp = test_client.put(
         "/users/1",
         data=json.dumps(
