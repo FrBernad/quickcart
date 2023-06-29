@@ -5,7 +5,7 @@ create_user_schema = {
         'email': {'type': 'string'},
         'password': {'type': 'string'}
     },
-    'required': ['email', 'password','username']
+    'required': ['email', 'password', 'username']
 }
 
 update_user_schema = {

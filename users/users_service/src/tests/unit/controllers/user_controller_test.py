@@ -1,23 +1,23 @@
 import pytest
 import json
 from src.api.services.user_service_impl import UserServiceImpl
+from src.api.models.users import User
+import datetime
 
 
 ## --------       CREATE USER     --------
 
 def test_create_user(test_client, monkeypatch):
+    user = User(username="test", email="test@test.com", password="12345678")
+    user.id = 1
 
-    def mock_get_user_by_id(self, user_id):
+    def mock_get_user_by_email(self, user_id):
         return None
 
     def mock_create_user(self, username, email, password):
-        return {
-            "id": "1",
-            "username": "test",
-            "email": "test@test.com",
-        }
+        return user
 
-    monkeypatch.setattr(UserServiceImpl, "get_user_by_email", mock_get_user_by_id)
+    monkeypatch.setattr(UserServiceImpl, "get_user_by_email", mock_get_user_by_email)
     monkeypatch.setattr(UserServiceImpl, "create_user", mock_create_user)
 
     resp = test_client.post("/users",
@@ -33,19 +33,18 @@ def test_create_user(test_client, monkeypatch):
 
     data = json.loads(resp.data)
     assert resp.status_code == 201
-    assert 1 == data["id"]
-    assert "test" == data["username"]
-    assert "test@test.com" == data["email"]
+    assert user.id == data["id"]
+    assert user.username == data["username"]
+    assert user.email == data["email"]
     assert "password" not in data
 
 
 def test_create_user_with_email_already_register(test_client, monkeypatch):
+    user = User(username="test", email="test@test.com", password="12345678")
+    user.id = 1
+
     def mock_get_user_by_email(self, email):
-        return {
-            "id": "1",
-            "username": "test",
-            "email": "test@test.com",
-        }
+        return user
 
     def mock_create_user(self, username, email, password):
         return None
@@ -121,11 +120,7 @@ def test_create_user_missing_password(test_client, monkeypatch):
 
 def test_create_user_missing_email(test_client, monkeypatch):
     def mock_get_user_by_email(self, email):
-        return {
-            "id": "1",
-            "username": "test",
-            "email": "test@test.com",
-        }
+        return None
 
     def mock_create_user(self, username, email, password):
         return None
@@ -152,12 +147,11 @@ def test_create_user_missing_email(test_client, monkeypatch):
 ## --------       GET USER     --------
 
 def test_get_existing_user_by_id(test_client, monkeypatch):
+    user = User(username="test", email="test@test.com", password="12345678")
+    user.id = 1
+
     def mock_get_user_by_id(self, user_id):
-        return {
-            "id": "1",
-            "username": "test",
-            "email": "test@test.com",
-        }
+        return user
 
     monkeypatch.setattr(UserServiceImpl, "get_user_by_id", mock_get_user_by_id)
     resp = test_client.get("/users/1")
@@ -185,19 +179,16 @@ def test_get_non_existing_user_by_id(test_client, monkeypatch):
 
 
 def test_update_user(test_client, monkeypatch):
+    user = User(username="test", email="test@test.com", password="12345678")
+    user.id = 1
+    user_updated = User(username="test2", email="test@test.com", password="123456789")
+    user_updated.id = 1
+
     def mock_get_user_by_id(self, user_id):
-        return {
-            "id": "1",
-            "username": "test",
-            "email": "test@test.com",
-        }
+        return user
 
     def mock_update_user(self, username, email, password):
-        return {
-            "id": "1",
-            "username": "test",
-            "email": "test@test.com",
-        }
+        return user_updated
 
     monkeypatch.setattr(UserServiceImpl, "get_user_by_id", mock_get_user_by_id)
     monkeypatch.setattr(UserServiceImpl, "update_user", mock_update_user)
@@ -217,15 +208,14 @@ def test_update_user(test_client, monkeypatch):
 
 
 def test_update_not_existing_user(test_client, monkeypatch):
+    user = User(username="test", email="test@test.com", password="12345678")
+    user.id = 1
+
     def mock_get_user_by_id(self, user_id):
         return None
 
     def mock_update_user(self, username, email, password):
-        return {
-            "id": "1",
-            "username": "test",
-            "email": "test@test.com",
-        }
+        return user
 
     monkeypatch.setattr(UserServiceImpl, "get_user_by_id", mock_get_user_by_id)
     monkeypatch.setattr(UserServiceImpl, "update_user", mock_update_user)

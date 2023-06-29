@@ -11,7 +11,7 @@ class UserDaoImpl(UserDao):
         self.db = db
 
     def get_user_by_id(self, user_id):
-        user = User.query.filter_by(id=user_id).first()
+        return User.query.filter_by(id=user_id).first()
 
     def get_user_by_email(self, email):
         return User.query.filter_by(email=email).first()
