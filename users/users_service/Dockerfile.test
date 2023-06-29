@@ -1,7 +1,7 @@
 # Pull base image
 ARG BASE_IMAGE
 FROM ${BASE_IMAGE}
-# FROM quickcart/users_api:prod-latest
+#FROM quickcart/users_api:prod-latest
 
 ENV FLASK_DEBUG=1
 ENV FLASK_ENV=development

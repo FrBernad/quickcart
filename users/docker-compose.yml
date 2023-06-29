@@ -40,16 +40,16 @@ services:
         source: users_db_vol
         target: /var/lib/postgresql/data
     healthcheck:
-      test: [ "CMD-SHELL", "pg_isready -d $${USERS_DB} -U $${USERS_DB_USER}"]
+      test: [ "CMD-SHELL", "pg_isready -d $${USERS_DB} -U $${USERS_DB_USER}" ]
       interval: 4s
       timeout: 5s
       retries: 5
 
   shopping_cart_api:
     container_name: shopping_cart_api_${ENV}
-    # build:
-    #   context: ./shopping_cart_service
-    #   dockerfile: Dockerfile.test
+    #    build:
+    #      context: ./shopping_cart_service
+    #      dockerfile: Dockerfile.test
     image: ${SHOPPING_CART_SERVICE_IMAGE}
     profiles:
       - shopping_cart_api
@@ -85,7 +85,7 @@ services:
         source: shopping_cart_db_vol
         target: /var/lib/postgresql/data
     healthcheck:
-      test: [ "CMD-SHELL", "pg_isready -d $${USERS_DB} -U $${USERS_DB_USER}"]
+      test: [ "CMD-SHELL", "pg_isready -d $${USERS_DB} -U $${USERS_DB_USER}" ]
       interval: 4s
       timeout: 5s
       retries: 5
