@@ -125,6 +125,8 @@
     - docker compose -f ${DOMAIN_PATH}/docker-compose.yml --env-file ${DOMAIN_PATH}/.env_files/.env.test --profile ${SERVICE_NAME} rm
     - docker compose -f ${DOMAIN_PATH}/docker-compose.yml --env-file ${DOMAIN_PATH}/.env_files/.env.test --profile ${SERVICE_NAME} pull
     - docker compose -f ${DOMAIN_PATH}/docker-compose.yml --env-file ${DOMAIN_PATH}/.env_files/.env.test --profile ${SERVICE_NAME} up --abort-on-container-exit
+    - docker compose -f ${DOMAIN_PATH}/docker-compose.yml --env-file ${DOMAIN_PATH}/.env_files/.env.test --profile ${SERVICE_NAME} rm
+
     - docker cp ${SERVICE_NAME}_${ENV}:/usr/app/coverage.xml .
     - docker cp ${SERVICE_NAME}_${ENV}:/usr/app/report.xml .
   artifacts:
@@ -134,6 +136,31 @@
       - report.xml
     reports:
       junit: report.xml
+
+
+.deploy_qa:
+  stage: qa
+  tags:
+    - dev
+  variables: 
+    ENV: "qa"
+  rules:
+    - !reference [.run_if_service_changes, rules]
+  before_script:
+    - !reference [.set_images_names]
+  script:
+    - !reference [.login_to_gitlab_registry]
+    - docker compose -f ${DOMAIN_PATH}/docker-compose.yml --env-file ${DOMAIN_PATH}/.env_files/.env.qa --profile ${SERVICE_NAME} pull
+    - docker compose -f ${DOMAIN_PATH}/docker-compose.yml --env-file ${DOMAIN_PATH}/.env_files/.env.qa --profile ${SERVICE_NAME} up
+    # - docker cp ${SERVICE_NAME}_${ENV}:/usr/app/coverage.xml .
+    # - docker cp ${SERVICE_NAME}_${ENV}:/usr/app/report.xml .
+  # artifacts:
+    # when: always
+    # paths:
+    #   - coverage.xml
+    #   - report.xml
+    # reports:
+    #   junit: report.xml
 
 .deliver_dockerhub:
   stage: deliver
@@ -156,7 +183,5 @@
     - !reference [.run_if_domain_changes, rules]
   script:
     - !reference [.login_to_dockerhub_registry]
-    - docker compose -f ${DOMAIN_PATH}/docker-compose.yml --env-file ${DOMAIN_PATH}/.env_files/.env.prod --profile all stop
-    - docker compose -f ${DOMAIN_PATH}/docker-compose.yml --env-file ${DOMAIN_PATH}/.env_files/.env.prod --profile all rm
     - docker compose -f ${DOMAIN_PATH}/docker-compose.yml --env-file ${DOMAIN_PATH}/.env_files/.env.prod --profile all pull
     - docker compose -f ${DOMAIN_PATH}/docker-compose.yml --env-file ${DOMAIN_PATH}/.env_files/.env.prod --profile all up -d

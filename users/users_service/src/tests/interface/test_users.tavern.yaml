@@ -1,0 +1,13 @@
+---
+test_name: Try to get non existing user. Create and get user. Then update it and get it again.
+
+includes:
+  - !include tavern_variables.yaml
+
+stages:
+  - name: Get non existing user
+    request:
+      url: "{users_base_url:s}/{user_id:d}"
+      method: GET
+    response:
+      status_code: 404

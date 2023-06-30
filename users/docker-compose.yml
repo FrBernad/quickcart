@@ -1,9 +1,6 @@
 version: "3.3"
 services:
   users_api:
-    build:
-      context: ./users_service
-      dockerfile: Dockerfile.test
     container_name: users_api_${ENV}
     image: ${USERS_SERVICE_IMAGE}
     profiles:
@@ -16,6 +13,7 @@ services:
       users_db:
         condition: service_healthy
     environment:
+      - ENV=${ENV}
       - SERVICE_NAME=users_api
       - POSTGRES_USER=${USERS_DB_USER}
       - POSTGRES_PASSWORD=${USERS_DB_PASSWORD}
@@ -47,9 +45,6 @@ services:
 
   shopping_cart_api:
     container_name: shopping_cart_api_${ENV}
-    # build:
-    #   context: ./shopping_cart_service
-    #   dockerfile: Dockerfile.test
     image: ${SHOPPING_CART_SERVICE_IMAGE}
     profiles:
       - shopping_cart_api
@@ -61,6 +56,7 @@ services:
       shopping_cart_db:
         condition: service_healthy
     environment:
+      - ENV=${ENV}
       - SERVICE_NAME=shopping_cart_api
       - POSTGRES_USER=${SHOPPING_CART_DB_USER}
       - POSTGRES_PASSWORD=${SHOPPING_CART_PASSWORD}
