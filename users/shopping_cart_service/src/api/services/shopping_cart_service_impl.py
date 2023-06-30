@@ -4,7 +4,6 @@ from injector import inject
 
 
 class ShoppingCartServiceImpl(ShoppingCartService):
-
     @inject
     def __init__(self, shopping_cart_dao: ShoppingCartDao):
         self.shopping_cart_dao = shopping_cart_dao

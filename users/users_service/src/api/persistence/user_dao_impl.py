@@ -5,7 +5,6 @@ from flask_sqlalchemy import SQLAlchemy
 
 
 class UserDaoImpl(UserDao):
-
     @inject
     def __init__(self, db: SQLAlchemy):
         self.db = db

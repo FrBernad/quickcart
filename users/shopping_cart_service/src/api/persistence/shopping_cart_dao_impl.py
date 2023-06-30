@@ -11,15 +11,22 @@ class ShoppingCartDaoImpl(ShoppingCartDao):
         self.db = db
 
     def get_shopping_cart_by_user_id(self, user_id):
+        # FIXME: arreglar
+
         return ShoppingCarts.query.filter_by(id=user_id).all()
 
     def add_product(self, user_id, product_id, quantity):
+        # FIXME: arreglar
+
         cart_product = ShoppingCarts(username=user_id, product_id=product_id, quantity=quantity)
 
     def delete_product_from_shopping_cart(self, user_id, product_id):
+        # FIXME: arreglar
+
         ShoppingCarts.filter_by(user_id=user_id, product_id=product_id).delete()
         self.db.session.commit()
 
     def delete_shopping_cart(self, user_id):
+        # FIXME: arreglar
         ShoppingCarts.query.filter_by(id=user_id).delete()
         self.db.session.commit()
