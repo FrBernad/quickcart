@@ -1,8 +1,0 @@
----
-name: Tavern test variables
-description: server A specific information
-
-variables:
-  users_base_url: http://localhost:5000/users
-  user_id: 1
-

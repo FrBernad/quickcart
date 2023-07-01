@@ -1,4 +1,4 @@
-# Rerun: add/remove space 
+# Rerun: add/remove space
 
 .create_and_export_service_images_variables:
   # GITLAB PROD IMAGE
@@ -25,12 +25,12 @@
 
 # .setup_multi_os_build:
 #   - docker buildx create --name multi-os-driver --driver docker-container --bootstrap --use
-  
+
 # .build_and_push_gitlab_prod_image:
-#   - docker buildx build --platform linux/arm64,linux/amd64 -t ${GITLAB_PROD_IMAGE} -t ${GITLAB_PROD_IMAGE_LATEST} -f ${SERVICE_PATH}/Dockerfile.prod ${SERVICE_PATH} --push 
+#   - docker buildx build --platform linux/arm64,linux/amd64 -t ${GITLAB_PROD_IMAGE} -t ${GITLAB_PROD_IMAGE_LATEST} -f ${SERVICE_PATH}/Dockerfile.prod ${SERVICE_PATH} --push
 
 # .build_and_push_gitlab_test_image:
-#   - docker buildx build --platform linux/arm64,linux/amd64 -t ${GITLAB_TEST_IMAGE} -t ${GITLAB_TEST_IMAGE_LATEST} -f ${SERVICE_PATH}/Dockerfile.test --build-arg "BASE_IMAGE=$GITLAB_PROD_IMAGE" ${SERVICE_PATH} --push 
+#   - docker buildx build --platform linux/arm64,linux/amd64 -t ${GITLAB_TEST_IMAGE} -t ${GITLAB_TEST_IMAGE_LATEST} -f ${SERVICE_PATH}/Dockerfile.test --build-arg "BASE_IMAGE=$GITLAB_PROD_IMAGE" ${SERVICE_PATH} --push
 
 .build_gitlab_prod_image:
   - docker build -t ${GITLAB_PROD_IMAGE} -f ${SERVICE_PATH}/Dockerfile.prod ${SERVICE_PATH}
@@ -113,7 +113,7 @@
   stage: test
   tags:
     - dev
-  variables: 
+  variables:
     ENV: "test"
   rules:
     - !reference [.run_if_service_changes, rules]
@@ -137,12 +137,11 @@
     reports:
       junit: report.xml
 
-
 .deploy_qa:
   stage: qa
   tags:
     - dev
-  variables: 
+  variables:
     ENV: "qa"
   rules:
     - !reference [.run_if_service_changes, rules]
@@ -152,15 +151,15 @@
     - !reference [.login_to_gitlab_registry]
     - docker compose -f ${DOMAIN_PATH}/docker-compose.yml --env-file ${DOMAIN_PATH}/.env_files/.env.qa --profile ${SERVICE_NAME} pull
     - docker compose -f ${DOMAIN_PATH}/docker-compose.yml --env-file ${DOMAIN_PATH}/.env_files/.env.qa --profile ${SERVICE_NAME} up
-    # - docker cp ${SERVICE_NAME}_${ENV}:/usr/app/coverage.xml .
-    # - docker cp ${SERVICE_NAME}_${ENV}:/usr/app/report.xml .
-  # artifacts:
-    # when: always
-    # paths:
-    #   - coverage.xml
-    #   - report.xml
-    # reports:
-    #   junit: report.xml
+    - docker cp ${SERVICE_NAME}_${ENV}:/usr/app/coverage.xml .
+    - docker cp ${SERVICE_NAME}_${ENV}:/usr/app/report.xml .
+  artifacts:
+    when: always
+    paths:
+      - coverage.xml
+      - report.xml
+    reports:
+      junit: report.xml
 
 .deliver_dockerhub:
   stage: deliver

@@ -18,11 +18,11 @@ if [ "${ENV:-}" = "qa" ]; then
 else
     
     ## Unit tests 
-    echo "Running unit tests and test coverage for ${SERVICE_NAME} service"
+    echo "Running unit tests and coverage for ${SERVICE_NAME} service"
     python -m pytest "./src/tests/unit" -p no:warnings --junitxml=report.xml --cov="." --cov-report xml
 
     ## Functional tests
-    echo "Running functional tests and test coverage for ${SERVICE_NAME} service"
+    echo "Running functional tests and coverage for ${SERVICE_NAME} service"
     python -m pytest "./src/tests/functional" -p no:warnings --junitxml=report.xml --cov="." --cov-report xml
 
     ## Linting TODO:   

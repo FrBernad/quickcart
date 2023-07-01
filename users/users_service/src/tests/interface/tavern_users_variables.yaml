@@ -1,0 +1,7 @@
+---
+name: User Variables
+description: Test variables for user service
+
+variables:
+  users_base_url: http://localhost:5000/users
+

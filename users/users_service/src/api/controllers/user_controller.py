@@ -36,7 +36,7 @@ def get_user(user_id, user_service: UserService):
     if not user:
         return jsonify({'message': f'User with id {user_id} not found'}), 404
 
-    return jsonify(user_schema.dump(user))
+    return jsonify(user_schema.dump(user)), 200
 
 
 @inject

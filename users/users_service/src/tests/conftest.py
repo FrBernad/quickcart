@@ -4,7 +4,7 @@ from src import create_app
 from unittest.mock import Mock
 from src.api.persistence.user_dao_impl import UserDaoImpl
 from flask_sqlalchemy import SQLAlchemy
-
+from unittest.mock import MagicMock
 
 @pytest.fixture(scope="module")
 def test_client():
@@ -18,7 +18,7 @@ def test_client():
 def test_user_dao():
     from src.api.persistence.user_dao_impl import UserDaoImpl
 
-    db_mock = Mock(spec=SQLAlchemy)
+    db_mock = Mock()
     dao = UserDaoImpl(db_mock)
     yield dao, db_mock
 

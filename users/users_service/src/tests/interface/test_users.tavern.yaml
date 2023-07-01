@@ -2,12 +2,73 @@
 test_name: Try to get non existing user. Create and get user. Then update it and get it again.
 
 includes:
-  - !include tavern_variables.yaml
+  - !include tavern_users_variables.yaml
+
+marks:
+  - usefixtures:
+      - test_client
+      - test_database
 
 stages:
   - name: Get non existing user
     request:
-      url: "{users_base_url:s}/{user_id:d}"
+      url: "{users_base_url:s}/"
       method: GET
     response:
       status_code: 404
+  - name: Create user
+    request:
+      url: "{users_base_url:s}"
+      method: POST
+      json: 
+        username: "new_user"
+        email: "new_user@test.com"
+        password: "secret_password"
+      headers:
+        content-type: application/json
+    response:
+      status_code: 201
+      json: 
+        id: !anyint
+        username: "new_user"
+        email: "new_user@test.com"
+      headers:
+        content-type: application/json
+      save:
+        json:
+          new_user_id: id
+  - name: Get created user
+    request:
+      url: "{users_base_url:s}/{new_user_id:d}"
+      method: GET
+    response:
+      status_code: 200
+      json: 
+        id: !int "{new_user_id:d}"
+        username: "new_user"
+        email: "new_user@test.com"
+      headers:
+        content-type: application/json
+  - name: Update created user
+    request:
+      url: "{users_base_url:s}/{new_user_id:d}"
+      method: PUT
+      json: 
+        username: "new_user_updated"
+        password: "secret_password_updated"
+      headers:
+        content-type: application/json
+    response:
+      status_code: 204
+  - name: Get updated user
+    request:
+      url: "{users_base_url:s}/{new_user_id:d}"
+      method: GET
+    response:
+      status_code: 200
+      json: 
+        id: !int "{new_user_id:d}"
+        username: "new_user_updated"
+        email: "new_user@test.com"
+      headers:
+        content-type: application/json
