@@ -32,8 +32,8 @@ def get_shopping_cart_products(user_id, shopping_cart_service: ShoppingCartServi
 
 
 @inject
-@expects_json(update_shopping_cart_schema)
 @shopping_cart_bp.route("/<user_id>/<product_id>", methods=["PUT"])
+@expects_json(update_shopping_cart_schema)
 def update_shopping_cart_product_quantity(
     user_id, product_id, shopping_cart_service: ShoppingCartService
 ):
@@ -62,8 +62,8 @@ def update_shopping_cart_product_quantity(
 
 
 @inject
-@expects_json(checkout_shopping_cart_schema)
 @shopping_cart_bp.route("/<user_id>/checkout", methods=["POST"])
+@expects_json(checkout_shopping_cart_schema)
 def checkout_shopping_cart(user_id, shopping_cart_service: ShoppingCartService):
     # TODO: Debería hacer un request al user service para chequear que exista el usuario
     # user = shopping_cart_service.get_user_by_id(user_id)

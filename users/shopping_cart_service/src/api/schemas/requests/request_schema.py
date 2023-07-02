@@ -21,7 +21,8 @@ checkout_shopping_cart_schema = {
             "pattern": "^[0-9]{14,20}$",
         },
         "expiration_year": {
-            "type": "string",
+            "type": "integer",
+            "minimum": 2022,
         },
         "expiration_month": {
             "type": "integer",

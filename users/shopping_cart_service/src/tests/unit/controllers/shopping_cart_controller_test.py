@@ -76,8 +76,8 @@ def test_checkout_shopping_cart(test_client, monkeypatch):
         data=json.dumps(
             {
                 "payment_method": "CREDIT_CARD",
-                "card_number": "1234 1234 1234 1234",
-                "card_number": 2023,
+                "card_number": "1234123412341234",
+                "expiration_year": 2023,
                 "expiration_month": 11,
                 "cvv": 123,
                 "card_type": "VISA",
