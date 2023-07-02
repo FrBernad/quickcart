@@ -2,9 +2,8 @@ from abc import ABC, abstractmethod
 
 
 class ShoppingCartDao(ABC):
-
     @abstractmethod
-    def get_shopping_cart_by_user_id(self, user_id):
+    def get_products(self, user_id):
         pass
 
     @abstractmethod
@@ -12,9 +11,9 @@ class ShoppingCartDao(ABC):
         pass
 
     @abstractmethod
-    def delete_product_from_shopping_cart(self, user_id, product_id):
+    def delete_product(self, user_id, product_id):
         pass
 
     @abstractmethod
-    def delete_shopping_cart(self, user_id):
+    def empty(self, user_id):
         pass

@@ -1,8 +1,8 @@
 from src import db
 
 
-class ShoppingCarts(db.Model):
-    __tablename__ = 'SHOPPING_CARTS'
+class ShoppingCartProduct(db.Model):
+    __tablename__ = "SHOPPING_CART_PRODUCTS"
     user_id = db.Column(db.Integer, primary_key=True)
     product_id = db.Column(db.Integer, primary_key=True)
     quantity = db.Column(db.Integer)

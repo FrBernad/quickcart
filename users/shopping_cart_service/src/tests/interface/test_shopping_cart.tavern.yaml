@@ -1,8 +1,8 @@
 ---
-test_name: Users creation, get and update interface test.
+test_name: Shopping Cart get, update and checkout interface test
 
 includes:
-  - !include tavern_users_variables.yaml
+  - !include tavern_shopping_cart_variables.yaml
 
 marks:
   - usefixtures:

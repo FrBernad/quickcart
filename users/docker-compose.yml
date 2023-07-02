@@ -81,7 +81,7 @@ services:
         source: shopping_cart_db_vol
         target: /var/lib/postgresql/data
     healthcheck:
-      test: [ "CMD-SHELL", "pg_isready -d $${USERS_DB} -U $${USERS_DB_USER}" ]
+      test: [ "CMD-SHELL", "pg_isready -d $${SHOPPING_CART_DB} -U $${SHOPPING_CART_DB_USER}" ]
       interval: 4s
       timeout: 5s
       retries: 5
