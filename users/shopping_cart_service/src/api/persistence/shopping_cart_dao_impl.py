@@ -29,9 +29,9 @@ class ShoppingCartDaoImpl(ShoppingCartDao):
             self.db.session.commit()
 
     def delete_product(self, user_id, product_id):
-        ShoppingCartProduct.filter_by(user_id=user_id, product_id=product_id).delete()
+        ShoppingCartProduct.query.filter_by(user_id=user_id, product_id=product_id).delete()
         self.db.session.commit()
 
     def empty(self, user_id):
-        ShoppingCartProduct.query.filter_by(id=user_id).delete()
+        ShoppingCartProduct.query.filter_by(user_id=user_id).delete()
         self.db.session.commit()

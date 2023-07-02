@@ -1,172 +1,123 @@
-# import pytest
-# import json
-# from src.api.services.user_service_impl import UserServiceImpl
-# from src.api.models.users import User
-# import datetime
+import pytest
+from flask import url_for
+from src.api.services.shopping_cart_service_impl import ShoppingCartServiceImpl
+from src.api.models.shopping_cart_product import ShoppingCartProduct
+import json
 
 
-# ## --------       CREATE USER     --------
+def test_get_shopping_cart_products(test_client, test_database):
+    product = ShoppingCartProduct(user_id=1, product_id=1, quantity=1)
+    test_database.session.add(product)
+    test_database.session.commit()
+
+    resp = test_client.get(
+        "/shopping-cart/1",
+        content_type="application/json",
+    )
+
+    data = json.loads(resp.data)
+    assert resp.status_code == 200
+    assert len(data) == 1
+    assert product.product_id == data[0]["product_id"]
+    assert product.quantity == data[0]["quantity"]
 
 
-# def test_create_user(test_client, test_database):
-#     user = User(username="test", email="test@test.com", password="12345678")
-#     user.id = 1
+def test_update_shopping_cart_product_quantity(test_client, test_database):
+    product = ShoppingCartProduct(user_id=1, product_id=1, quantity=1)
+    test_database.session.add(product)
+    test_database.session.commit()
 
-#     resp = test_client.post(
-#         "/users",
-#         data=json.dumps(
-#             {
-#                 "username": "test",
-#                 "email": "test@test.com",
-#                 "password": "12345678",
-#             }
-#         ),
-#         content_type="application/json",
-#     )
+    resp = test_client.put(
+        "/shopping-cart/1/1",
+        content_type="application/json",
+        data=json.dumps(
+            {
+                "quantity": "2",
+            }
+        ),
+    )
 
-#     data = json.loads(resp.data)
-#     assert resp.status_code == 201
-#     assert user.id == data["id"]
-#     assert user.username == data["username"]
-#     assert user.email == data["email"]
-#     assert "password" not in data
+    assert resp.status_code == 204
 
 
-# def test_create_user_with_email_already_register(test_client, test_database):
-#     user = User(username="test", email="test@test.com", password="12345678")
-#     test_database.session.add(user)
-#     test_database.session.commit()
+def test_update_shopping_cart_product_with_invalid_quantity(test_client, test_database):
+    resp = test_client.put(
+        "/shopping-cart/1/1",
+        content_type="application/json",
+        data=json.dumps(
+            {
+                "quantity": "-1",
+            }
+        ),
+    )
 
-#     resp = test_client.post(
-#         "/users",
-#         data=json.dumps(
-#             {
-#                 "username": "test",
-#                 "email": "test@test.com",
-#                 "password": "12345678",
-#             }
-#         ),
-#         content_type="application/json",
-#     )
-
-#     data = json.loads(resp.data.decode())
-#     assert resp.status_code == 400
-#     assert f"The email is already in use" == data["message"]
+    data = json.loads(resp.data)
+    assert resp.status_code == 400
+    assert "Invalid input" == data["error"]
 
 
-# def test_create_user_missing_username(test_client, test_database):
-#     resp = test_client.post(
-#         "/users",
-#         data=json.dumps(
-#             {
-#                 "email": "test@test.com",
-#                 "password": "12345678",
-#             }
-#         ),
-#         content_type="application/json",
-#     )
+def test_checkout_shopping_cart(test_client, test_database):
+    product = ShoppingCartProduct(user_id=1, product_id=1, quantity=1)
+    test_database.session.add(product)
+    test_database.session.commit()
 
-#     data = json.loads(resp.data.decode())
-#     assert resp.status_code == 400
-#     assert "Invalid input" == data["error"]
+    resp = test_client.post(
+        "/shopping-cart/1/checkout",
+        data=json.dumps(
+            {
+                "payment_method": "CREDIT_CARD",
+                "card_number": "1234 1234 1234 1234",
+                "card_number": 2023,
+                "expiration_month": 11,
+                "cvv": 123,
+                "card_type": "VISA",
+            }
+        ),
+        content_type="application/json",
+    )
 
-
-# def test_create_user_missing_password(test_client, test_database):
-#     resp = test_client.post(
-#         "/users",
-#         data=json.dumps(
-#             {
-#                 "username": "test",
-#                 "email": "test@test.com",
-#             }
-#         ),
-#         content_type="application/json",
-#     )
-
-#     data = json.loads(resp.data.decode())
-#     assert resp.status_code == 400
-#     assert "Invalid input" == data["error"]
+    assert resp.status_code == 200
 
 
-# def test_create_user_missing_email(test_client, test_database):
-#     resp = test_client.post(
-#         "/users",
-#         data=json.dumps(
-#             {
-#                 "username": "test",
-#                 "password": "12345678",
-#             }
-#         ),
-#         content_type="application/json",
-#     )
+def test_checkout_shopping_cart_with_invalid_information(test_client, test_database):
+    resp = test_client.post(
+        "/shopping-cart/1/checkout",
+        data=json.dumps(
+            {
+                "payment_method": "CREDIT_CARD",
+                "card_number": "1234 1234 1234 1234",
+                "expiration_month": 11,
+                "cvv": 123,
+                "card_type": "VISA",
+            }
+        ),
+        content_type="application/json",
+    )
 
-#     data = json.loads(resp.data.decode())
-#     print(data)
-#     assert resp.status_code == 400
-#     assert "Invalid input" == data["error"]
-
-
-# ## --------       GET USER     --------
-
-
-# def test_get_existing_user_by_id(test_client, test_database):
-#     user = User(username="test", email="test@test.com", password="12345678")
-#     test_database.session.add(user)
-#     test_database.session.commit()
-
-#     resp = test_client.get("/users/1")
-
-#     data = json.loads(resp.data.decode())
-#     assert resp.status_code == 200
-#     assert 1 == data["id"]
-#     assert "test" == data["username"]
-#     assert "test@test.com" == data["email"]
-#     assert "password" not in data
+    data = json.loads(resp.data)
+    assert resp.status_code == 400
+    assert "Invalid input" == data["error"]
 
 
-# def test_get_non_existing_user_by_id(test_client, test_database):
-#     resp = test_client.get("/users/1")
+def test_delete_shopping_cart_product(test_client, test_database):
+    product = ShoppingCartProduct(user_id=1, product_id=1, quantity=1)
+    test_database.session.add(product)
+    test_database.session.commit()
 
-#     data = json.loads(resp.data.decode())
-#     assert resp.status_code == 404
+    resp = test_client.delete(
+        "/shopping-cart/1/1",
+    )
 
-
-# ## --------       UPDATE USER     --------
-
-
-# def test_update_user(test_client, test_database):
-#     user = User(username="test", email="test@test.com", password="12345678")
-#     test_database.session.add(user)
-#     test_database.session.commit()
-    
-#     user_updated = User(username="test2", email="test@test.com", password="123456789")
-
-#     resp = test_client.put(
-#         "/users/1",
-#         data=json.dumps(
-#             {
-#                 "username": "test",
-#                 "password": "12345678",
-#             }
-#         ),
-#         content_type="application/json",
-#     )
-
-#     assert resp.status_code == 204
-#     assert not resp.data
+    assert resp.status_code == 204
 
 
-# def test_update_not_existing_user(test_client, test_database):
-#     resp = test_client.put(
-#         "/users/1",
-#         data=json.dumps(
-#             {
-#                 "username": "test",
-#                 "email": "test@test.com",
-#                 "password": "12345678",
-#             }
-#         ),
-#         content_type="application/json",
-#     )
+def test_empty_shopping(test_client, test_database):
+    product = ShoppingCartProduct(user_id=1, product_id=1, quantity=1)
+    test_database.session.add(product)
+    test_database.session.commit()
 
-#     assert resp.status_code == 404
+    resp = test_client.delete(
+        "/shopping-cart/1",
+    )
+
+    assert resp.status_code == 204
