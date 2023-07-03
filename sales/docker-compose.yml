@@ -21,4 +21,3 @@ networks:
     internal: true
   domain:
     name: sales_${ENV}
-    external: true

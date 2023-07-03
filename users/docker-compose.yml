@@ -113,7 +113,6 @@ networks:
     internal: true
   domain:
     name: users_${ENV}
-    external: true
 
 volumes:
   users_db_vol:
