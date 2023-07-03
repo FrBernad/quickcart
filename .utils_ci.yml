@@ -148,6 +148,8 @@
   script:
     - !reference [.login_to_gitlab_registry]
     - docker compose -f ${DOMAIN_PATH}/docker-compose.yml -p ${ENV} --env-file ${DOMAIN_PATH}/.env_files/.env.qa --profile ${SERVICE_NAME} pull
+    - docker compose -f ${DOMAIN_PATH}/docker-compose.yml -p ${ENV} --env-file ${DOMAIN_PATH}/.env_files/.env.qa --profile ${SERVICE_NAME} stop
+    - docker compose -f ${DOMAIN_PATH}/docker-compose.yml -p ${ENV} --env-file ${DOMAIN_PATH}/.env_files/.env.qa --profile ${SERVICE_NAME} rm
     - docker compose -f ${DOMAIN_PATH}/docker-compose.yml -p ${ENV} --env-file ${DOMAIN_PATH}/.env_files/.env.qa --profile ${SERVICE_NAME} up -d
 
 .deliver_dockerhub:
@@ -174,4 +176,6 @@
   script:
     - !reference [.login_to_dockerhub_registry]
     - docker compose -f ${DOMAIN_PATH}/docker-compose.yml -p ${ENV} --env-file ${DOMAIN_PATH}/.env_files/.env.prod --profile all pull
+    - docker compose -f ${DOMAIN_PATH}/docker-compose.yml -p ${ENV} --env-file ${DOMAIN_PATH}/.env_files/.env.prod --profile all stop
+    - docker compose -f ${DOMAIN_PATH}/docker-compose.yml -p ${ENV} --env-file ${DOMAIN_PATH}/.env_files/.env.prod --profile all rm
     - docker compose -f ${DOMAIN_PATH}/docker-compose.yml -p ${ENV} --env-file ${DOMAIN_PATH}/.env_files/.env.prod --profile all up -d
