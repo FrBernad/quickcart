@@ -33,3 +33,4 @@ deliver_users_dockerhub:
       artifacts: false
     - job: deploy_qa_users_service
       artifacts: false
+      
