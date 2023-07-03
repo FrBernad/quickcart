@@ -1,9 +1,6 @@
 import pytest
-from src.api.persistence.user_dao_impl import UserDaoImpl
-from src.api.persistence.db import db
 from src.api.models.users import User
-from unittest.mock import patch, MagicMock
-from src.api.services.user_service_impl import UserServiceImpl
+from unittest.mock import MagicMock
 
 
 def test_get_user_by_email(monkeypatch, test_user_dao):

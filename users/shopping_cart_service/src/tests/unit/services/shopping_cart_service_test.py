@@ -1,7 +1,5 @@
 import pytest
-from src.api.persistence.shopping_cart_dao_impl import ShoppingCartDaoImpl
 from src.api.models.shopping_cart_product import ShoppingCartProduct
-from src.api.services.shopping_cart_service_impl import ShoppingCartService
 from unittest.mock import MagicMock
 
 

@@ -1,8 +1,6 @@
 import pytest
 import json
-from src.api.services.user_service_impl import UserServiceImpl
 from src.api.models.users import User
-import datetime
 
 
 ## --------       CREATE USER     --------

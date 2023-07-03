@@ -1,8 +1,5 @@
 import pytest
-import json
-from src.api.persistence.user_dao_impl import UserDaoImpl
 from src.api.models.users import User
-from src.api.services.user_service_impl import UserServiceImpl
 import copy
 
 

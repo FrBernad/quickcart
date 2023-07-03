@@ -3,8 +3,6 @@ from src.api.persistence.db import db
 from src import create_app
 from unittest.mock import Mock
 from src.api.persistence.user_dao_impl import UserDaoImpl
-from flask_sqlalchemy import SQLAlchemy
-from unittest.mock import MagicMock
 
 @pytest.fixture(scope="module")
 def test_client():

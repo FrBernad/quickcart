@@ -1,14 +1,6 @@
 import pytest
-import json
-from src.api.persistence.shopping_cart_dao_impl import ShoppingCartDaoImpl
-from src.api.persistence.db import db
 from src.api.models.shopping_cart_product import ShoppingCartProduct
-from unittest.mock import patch, MagicMock
-
-#     def get_products(self, user_id):
-#     def add_product(self, user_id, product_id, quantity):
-#     def delete_product(self, user_id, product_id):
-#     def empty(self, user_id):
+from unittest.mock import MagicMock
 
 
 def test_get_products(monkeypatch, test_shopping_cart_dao):

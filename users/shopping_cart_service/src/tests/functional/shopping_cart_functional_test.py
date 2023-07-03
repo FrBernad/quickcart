@@ -1,6 +1,4 @@
 import pytest
-from flask import url_for
-from src.api.services.shopping_cart_service_impl import ShoppingCartServiceImpl
 from src.api.models.shopping_cart_product import ShoppingCartProduct
 import json
 
