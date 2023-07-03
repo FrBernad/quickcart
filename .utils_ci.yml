@@ -167,6 +167,8 @@
   stage: deploy
   tags:
     - prod
+  variables:
+    ENV: "prod"
   rules:
     - !reference [.run_if_domain_changes, rules]
   script:
