@@ -35,7 +35,7 @@ services:
       - PGDATA=/var/lib/postgresql/data/pgdata
     volumes:
       - type: volume
-        source: users_db_vol
+        source: users_db_vol_${ENV}
         target: /var/lib/postgresql/data
     healthcheck:
       test: [ "CMD-SHELL", "pg_isready -d $${USERS_DB} -U $${USERS_DB_USER}" ]
@@ -78,7 +78,7 @@ services:
       - PGDATA=/var/lib/postgresql/data/pgdata
     volumes:
       - type: volume
-        source: shopping_cart_db_vol
+        source: shopping_cart_db_vol_${ENV}
         target: /var/lib/postgresql/data
     healthcheck:
       test: [ "CMD-SHELL", "pg_isready -d $${SHOPPING_CART_DB} -U $${SHOPPING_CART_DB_USER}" ]
