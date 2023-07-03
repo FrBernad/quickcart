@@ -76,6 +76,7 @@ services:
     networks:
       - shopping_cart
       - domain
+      - default
 
   shopping_cart_db:
     container_name: shopping_cart_db_${ENV}
