@@ -7,7 +7,7 @@ services:
       - category_api
       - all
     ports:
-    - "5000:5000"
+    - "5000"
     restart: always
     environment:
       - SERVICE_NAME=category_api
@@ -18,7 +18,7 @@ services:
       - product_coordinator_api
       - all
     ports:
-    - "5001:5000"
+    - "5000"
     restart: always
     environment:
       - SERVICE_NAME=product_coordinator_api
@@ -29,7 +29,7 @@ services:
       - products_api
       - all
     ports:
-    - "5002:5000"
+    - "5000"
     restart: always
     environment:
       - SERVICE_NAME=products_api
@@ -40,7 +40,7 @@ services:
       - reviews_api
       - all
     ports:
-    - "5003:5000"
+    - "5000"
     restart: always
     environment:
       - SERVICE_NAME=reviews_api
@@ -51,7 +51,7 @@ services:
       - tags_api
       - all
     ports:
-    - "5004:5000"
+    - "5000"
     restart: always
     environment:
       - SERVICE_NAME=tags_api

@@ -7,7 +7,7 @@ services:
       - users_api
       - all
     ports:
-      - "5008:5000"
+      - "5000"
     restart: always
     depends_on:
       users_db:
@@ -50,7 +50,7 @@ services:
       - shopping_cart_api
       - all
     ports:
-      - "5007:5000"
+      - "5000"
     restart: always
     depends_on:
       shopping_cart_db:

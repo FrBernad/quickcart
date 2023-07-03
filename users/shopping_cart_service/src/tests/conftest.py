@@ -12,11 +12,17 @@ def test_client():
         yield app.test_client()
 
 
-@pytest.fixture(scope="module")
+@pytest.fixture(scope="function")
 def test_shopping_cart_dao():
     from src.api.persistence.shopping_cart_dao_impl import ShoppingCartDaoImpl
 
     db_mock = Mock()
+    db_session = Mock()
+    db_commit = Mock()
+    db_add = Mock()
+    db_session.commit = db_commit
+    db_session.add = db_add
+    db_mock.session = db_session
     dao = ShoppingCartDaoImpl(db_mock)
     yield dao, db_mock
 

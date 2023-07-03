@@ -14,11 +14,17 @@ def test_client():
         yield app.test_client()
 
 
-@pytest.fixture(scope="module")
+@pytest.fixture(scope="test")
 def test_user_dao():
     from src.api.persistence.user_dao_impl import UserDaoImpl
 
     db_mock = Mock()
+    db_session = Mock()
+    db_commit = Mock()
+    db_add = Mock()
+    db_session.commit = db_commit
+    db_session.add = db_add
+    db_mock.session = db_session
     dao = UserDaoImpl(db_mock)
     yield dao, db_mock
 
