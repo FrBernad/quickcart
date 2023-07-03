@@ -113,6 +113,7 @@ networks:
     internal: true
   domain:
     name: users_${ENV}
+    driver: bridge
 
 volumes:
   users_db_vol:
