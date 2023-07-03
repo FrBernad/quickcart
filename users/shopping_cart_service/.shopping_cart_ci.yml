@@ -33,4 +33,3 @@ deliver_shopping_cart_dockerhub:
       artifacts: false
     - job: deploy_qa_shopping_cart_service
       artifacts: false
-      
