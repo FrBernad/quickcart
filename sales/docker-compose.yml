@@ -11,3 +11,14 @@ services:
     restart: always
     environment:
       - SERVICE_NAME=purchase_orders_api
+    networks:
+      - purchase_orders
+      - domain
+
+networks:
+  purchase_orders:
+    name: purchase_orders_api_${ENV}
+    internal: true
+  domain:
+    name: sales_${ENV}
+    external: true

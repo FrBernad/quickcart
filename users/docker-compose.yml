@@ -106,14 +106,14 @@ services:
 
 networks:
   shopping_cart:
-    name: shopping_cart_${ENV}
+    name: shopping_cart_api_${ENV}
     internal: true
   users:
-    name: users_${ENV}
+    name: users_api_${ENV}
     internal: true
   domain:
     name: users_${ENV}
-    internal: true
+    external: true
 
 volumes:
   users_db_vol:
