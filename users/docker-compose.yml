@@ -23,6 +23,7 @@ services:
     networks:
       - users
       - domain
+      - default
 
   users_db:
     container_name: users_db_${ENV}
