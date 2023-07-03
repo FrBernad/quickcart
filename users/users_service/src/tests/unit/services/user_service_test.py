@@ -29,7 +29,7 @@ def test_get_user_by_id(test_user_service):
     mock_user = User(username="test", email="test@test.com", password="12345678")
     mock_user.id = 1
 
-    def mock_get_user_by_id(id):
+    def mock_get_user_by_id(user_id):
         return mock_user
 
     user_service, user_dao_mock = test_user_service
