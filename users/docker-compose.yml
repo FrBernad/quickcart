@@ -20,6 +20,9 @@ services:
       - POSTGRES_DB=${USERS_DB}
       - POSTGRES_SERVICE=users_db
       - EXPOSED_INTERFACES=${EXPOSED_INTERFACES}
+    networks:
+      - users
+      - domain
 
   users_db:
     container_name: users_db_${ENV}
@@ -37,8 +40,14 @@ services:
       - type: volume
         source: users_db_vol
         target: /var/lib/postgresql/data
+    networks:
+      - users
     healthcheck:
-      test: [ "CMD-SHELL", "pg_isready -d $${USERS_DB} -U $${USERS_DB_USER}" ]
+      test:
+        [
+          "CMD-SHELL",
+          "pg_isready -d $${USERS_DB} -U $${USERS_DB_USER}"
+        ]
       interval: 4s
       timeout: 5s
       retries: 5
@@ -63,6 +72,9 @@ services:
       - POSTGRES_DB=${SHOPPING_CART_DB}
       - POSTGRES_SERVICE=shopping_cart_db
       - EXPOSED_INTERFACES=${EXPOSED_INTERFACES}
+    networks:
+      - shopping_cart
+      - domain
 
   shopping_cart_db:
     container_name: shopping_cart_db_${ENV}
@@ -80,11 +92,28 @@ services:
       - type: volume
         source: shopping_cart_db_vol
         target: /var/lib/postgresql/data
+    networks:
+      - shopping_cart
     healthcheck:
-      test: [ "CMD-SHELL", "pg_isready -d $${SHOPPING_CART_DB} -U $${SHOPPING_CART_DB_USER}" ]
+      test:
+        [
+          "CMD-SHELL",
+          "pg_isready -d $${SHOPPING_CART_DB} -U $${SHOPPING_CART_DB_USER}"
+        ]
       interval: 4s
       timeout: 5s
       retries: 5
+
+networks:
+  shopping_cart:
+    name: shopping_cart_${ENV}
+    internal: true
+  users:
+    name: users_${ENV}
+    internal: true
+  domain:
+    name: users_${ENV}
+    internal: true
 
 volumes:
   users_db_vol:
