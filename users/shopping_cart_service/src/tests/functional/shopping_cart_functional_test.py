@@ -32,7 +32,7 @@ def test_update_shopping_cart_product_quantity(test_client, test_database):
         content_type="application/json",
         data=json.dumps(
             {
-                "quantity": "2",
+                "quantity": 2,
             }
         ),
     )
@@ -46,7 +46,7 @@ def test_update_shopping_cart_product_with_invalid_quantity(test_client, test_da
         content_type="application/json",
         data=json.dumps(
             {
-                "quantity": "-1",
+                "quantity": -1,
             }
         ),
     )
@@ -66,10 +66,10 @@ def test_checkout_shopping_cart(test_client, test_database):
         data=json.dumps(
             {
                 "payment_method": "CREDIT_CARD",
-                "card_number": "1234 1234 1234 1234",
-                "card_number": 2023,
+                "card_number": "1234123412341234",
+                "expiration_year": 2023,
                 "expiration_month": 11,
-                "cvv": 123,
+                "cvv": "123",
                 "card_type": "VISA",
             }
         ),
@@ -84,10 +84,31 @@ def test_checkout_shopping_cart_with_invalid_information(test_client, test_datab
         "/shopping-cart/1/checkout",
         data=json.dumps(
             {
-                "payment_method": "CREDIT_CARD",
-                "card_number": "1234 1234 1234 1234",
+                "payment_method": "CREDIT_CARDDD",
+                "card_number": "1234123412341234",
+                "expiration_year": 2023,
                 "expiration_month": 11,
-                "cvv": 123,
+                "cvv": "123",
+                "card_type": "VISA",
+            }
+        ),
+        content_type="application/json",
+    )
+
+    data = json.loads(resp.data)
+    assert resp.status_code == 400
+    assert "Invalid input" == data["error"]
+
+
+def test_checkout_shopping_cart_with_missing_fields(test_client, test_database):
+    resp = test_client.post(
+        "/shopping-cart/1/checkout",
+        data=json.dumps(
+            {
+                "payment_method": "CREDIT_CARDDD",
+                "card_number": "1234123412341234",
+                "expiration_month": 11,
+                "cvv": "123",
                 "card_type": "VISA",
             }
         ),

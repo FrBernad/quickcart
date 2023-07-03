@@ -6,7 +6,9 @@ update_shopping_cart_schema = {
             "minimum": 1,
         },
     },
-    "required": ["quantity"],
+    "required": [
+        "quantity",
+    ],
 }
 
 checkout_shopping_cart_schema = {

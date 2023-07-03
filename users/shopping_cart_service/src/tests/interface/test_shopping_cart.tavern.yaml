@@ -10,65 +10,70 @@ marks:
       - test_database
 
 stages:
-  - name: Get non existing user
+  - name: Get empty shopping cart
     request:
-      url: "{users_base_url:s}/"
+      url: "{shopping_cart_base_url:s}/{user_id:d}"
       method: GET
     response:
-      status_code: 404
-  - name: Create user
+      status_code: 204
+  - name: Add item to shopping cart
     request:
-      url: "{users_base_url:s}"
-      method: POST
-      json: 
-        username: "new_user"
-        email: "new_user@test.com"
-        password: "secret_password"
-      headers:
-        content-type: application/json
-    response:
-      status_code: 201
-      json: 
-        id: !anyint
-        username: "new_user"
-        email: "new_user@test.com"
-      headers:
-        content-type: application/json
-      save:
-        json:
-          new_user_id: id
-  - name: Get created user
-    request:
-      url: "{users_base_url:s}/{new_user_id:d}"
-      method: GET
-    response:
-      status_code: 200
-      json: 
-        id: !int "{new_user_id:d}"
-        username: "new_user"
-        email: "new_user@test.com"
-      headers:
-        content-type: application/json
-  - name: Update created user
-    request:
-      url: "{users_base_url:s}/{new_user_id:d}"
+      url: "{shopping_cart_base_url:s}/{user_id:d}/{product_id:d}"
       method: PUT
-      json: 
-        username: "new_user_updated"
-        password: "secret_password_updated"
+      json:
+        quantity: 1
       headers:
         content-type: application/json
     response:
       status_code: 204
-  - name: Get updated user
+  - name: Get shopping cart with items
     request:
-      url: "{users_base_url:s}/{new_user_id:d}"
+      url: "{shopping_cart_base_url:s}/{user_id:d}"
       method: GET
     response:
       status_code: 200
-      json: 
-        id: !int "{new_user_id:d}"
-        username: "new_user_updated"
-        email: "new_user@test.com"
+      json:
+        - product_id: !int "{product_id:d}"
+          quantity: 1
       headers:
         content-type: application/json
+  - name: Update item quantity
+    request:
+      url: "{shopping_cart_base_url:s}/{user_id:d}/{product_id:d}"
+      method: PUT
+      json:
+        quantity: 2
+      headers:
+        content-type: application/json
+    response:
+      status_code: 204
+  - name: Get shopping cart with updated quanity
+    request:
+      url: "{shopping_cart_base_url:s}/{user_id:d}"
+      method: GET
+    response:
+      status_code: 200
+      json:
+        - product_id: !int "{product_id:d}"
+          quantity: 2
+      headers:
+        content-type: application/json
+  - name: Checkout
+    request:
+      url: "{shopping_cart_base_url:s}/{user_id:d}/checkout"
+      method: POST
+      json:
+        payment_method: "CREDIT_CARD"
+        card_number: "1234123412341234"
+        expiration_year: 2023
+        expiration_month: 11
+        cvv: "123"
+        card_type: "VISA"
+    response:
+      status_code: 200
+  - name: Get empty shopping cart after checkout
+    request:
+      url: "{shopping_cart_base_url:s}/{user_id:d}"
+      method: GET
+    response:
+      status_code: 204

@@ -28,6 +28,9 @@ def get_shopping_cart_products(user_id, shopping_cart_service: ShoppingCartServi
 
     shopping_cart_products = shopping_cart_service.get_products(user_id=user_id)
 
+    if len(shopping_cart_products) == 0:
+        return "", 204
+
     return shopping_cart_products_schema.dump(shopping_cart_products), 200
 
 

@@ -36,7 +36,7 @@ def test_update_shopping_cart_product_quantity(test_client, monkeypatch):
         content_type="application/json",
         data=json.dumps(
             {
-                "quantity": "2",
+                "quantity": 2,
             }
         ),
     )
@@ -55,7 +55,7 @@ def test_update_shopping_cart_product_with_invalid_quantity(test_client, monkeyp
         content_type="application/json",
         data=json.dumps(
             {
-                "quantity": "-1",
+                "quantity": -1,
             }
         ),
     )
@@ -79,7 +79,7 @@ def test_checkout_shopping_cart(test_client, monkeypatch):
                 "card_number": "1234123412341234",
                 "expiration_year": 2023,
                 "expiration_month": 11,
-                "cvv": 123,
+                "cvv": "123",
                 "card_type": "VISA",
             }
         ),

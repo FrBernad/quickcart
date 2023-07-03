@@ -43,8 +43,8 @@ def get_user(user_id, user_service: UserService):
 
 
 @inject
-@expects_json(update_user_schema)
 @users_bp.route("/<user_id>", methods=["PUT"])
+@expects_json(update_user_schema)
 def update_user(user_id, user_service: UserService):
     data = request.get_json()
     username = data.get("username")
