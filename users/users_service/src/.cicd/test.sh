@@ -6,7 +6,7 @@ if [ "${ENV:-}" = "qa" ]; then
     echo "Initializing ${SERVICE_NAME} for interface and integration testing"
     gunicorn -b 0.0.0.0:5000 main:app &
 
-    app_pid = $!
+    app_pid=$!
 
     echo "Waiting for the app to initialize..."
     sleep 3
