@@ -14,7 +14,7 @@ def test_client():
         yield app.test_client()
 
 
-@pytest.fixture(scope="test")
+@pytest.fixture(scope="function")
 def test_user_dao():
     from src.api.persistence.user_dao_impl import UserDaoImpl
 
