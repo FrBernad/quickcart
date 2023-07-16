@@ -6,11 +6,11 @@ ENV FLASK_DEBUG=1
 ENV FLASK_ENV=development
 
 # Add and install requirements
-COPY --chown=python:python requirements.test.txt .
-RUN python -m pip install -r requirements.test.txt
+COPY --chown=python:python requirements.test.txt ./src/requirements.test.txt
+RUN python -m pip install -r ./src/requirements.test.txt
 
 # Add app
-COPY --chown=python:python src/tests tests
+COPY --chown=python:python src/tests ./src/tests
 
 # Add coveragerc config
 COPY --chown=python:python ./.coveragerc .
@@ -18,8 +18,11 @@ COPY --chown=python:python ./.coveragerc .
 # Add flake8 config
 COPY --chown=python:python ./.flake8 .
 
+# Add pytest config
+COPY --chown=python:python ./.pytest.ini .
+
 # Add entrypoint.sh
 COPY --chown=python:python src/.cicd/test.sh .
 RUN chmod +x /usr/app/test.sh
 
-CMD ["/usr/app/test.sh"]
+CMD ["./test.sh"]

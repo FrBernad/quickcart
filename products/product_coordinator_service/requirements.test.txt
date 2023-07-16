@@ -8,3 +8,4 @@ bandit==1.7.5
 pactman==2.3.0
 pytest-xdist==3.2.0
 pytest-watch==4.2.0
+tavern==2.2.0

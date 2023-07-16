@@ -1,0 +1,11 @@
+#---
+#test_name: Purchase orders
+#
+#includes:
+#  - !include tavern_purchase_orders_variables.yaml
+#
+#marks:
+#  - usefixtures:
+#      - test_client
+#      - test_database
+#

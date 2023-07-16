@@ -1,4 +1,4 @@
 [flake8]
 exclude =
-    ./tests
+    ./src/tests
     ./.venv

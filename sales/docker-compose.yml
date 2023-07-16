@@ -7,14 +7,51 @@ services:
       - purchase_orders_api
       - all
     ports:
-    - "5000"
+      - "5000"
     restart: always
     environment:
+      - ENV=${ENV}
       - SERVICE_NAME=purchase_orders_api
+      - POSTGRES_USER=${PURCHASE_ORDERS_DB_USER}
+      - POSTGRES_PASSWORD=${PURCHASE_ORDERS_DB_PASSWORD}
+      - POSTGRES_DB=${PURCHASE_ORDERS_DB}
+      - POSTGRES_SERVICE=purchase_orders_db
+      - EXPOSED_INTERFACES=${EXPOSED_INTERFACES}
     networks:
       - purchase_orders
       - domain
       - default
+    depends_on:
+      purchase_orders_db:
+        condition: service_healthy
+
+  purchase_orders_db:
+    container_name: purchase_orders_db_${ENV}
+    image: postgres:15
+    profiles:
+      - purchase_orders_api
+      - all
+    restart: always
+    environment:
+      - POSTGRES_USER=${PURCHASE_ORDERS_DB_USER}
+      - POSTGRES_PASSWORD=${PURCHASE_ORDERS_DB_PASSWORD}
+      - POSTGRES_DB=${PURCHASE_ORDERS_DB}
+      - PGDATA=/var/lib/postgresql/data/pgdata
+    volumes:
+      - type: volume
+        source: purchase_orders_db_vol
+        target: /var/lib/postgresql/data
+    networks:
+      - users
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "pg_isready -d $${PURCHASE_ORDERS_DB} -U $${PURCHASE_ORDERS_DB_USER}"
+        ]
+      interval: 4s
+      timeout: 5s
+      retries: 5
 
 networks:
   purchase_orders:
@@ -22,3 +59,8 @@ networks:
     internal: true
   domain:
     name: sales_${ENV}
+    driver: bridge
+
+volumes:
+  purchase_orders_db_vol:
+    name: purchase_orders_db_vol_${ENV}
