@@ -47,7 +47,7 @@ services:
       test:
         [
           "CMD-SHELL",
-          "pg_isready -d $${USERS_DB} -U $${USERS_DB_USER}"
+          "pg_isready -d $${CATEGORIES_DB} -U $${CATEGORIES_DB_USER}"
         ]
       interval: 4s
       timeout: 5s
@@ -78,13 +78,50 @@ services:
     ports:
       - "5000"
     restart: always
+    depends_on:
+      products_db:
+        condition: service_healthy
     environment:
+      - ENV=${ENV}
       - SERVICE_NAME=products_api
+      - POSTGRES_USER=${PRODUCTS_DB_USER}
+      - POSTGRES_PASSWORD=${PRODUCTS_DB_PASSWORD}
+      - POSTGRES_DB=${PRODUCTS_DB}
+      - POSTGRES_SERVICE=products_db
+      - EXPOSED_INTERFACES=${EXPOSED_INTERFACES}
     networks:
       - products
       - domain
       - default
 
+
+  products_db:
+    container_name: products_db_${ENV}
+    image: postgres:15
+    profiles:
+      - products_api
+      - all
+    restart: always
+    environment:
+      - POSTGRES_USER=${PRODUCTS_DB_USER}
+      - POSTGRES_PASSWORD=${PRODUCTS_DB_PASSWORD}
+      - POSTGRES_DB=${PRODUCTS_DB}
+      - PGDATA=/var/lib/postgresql/data/pgdata
+    volumes:
+      - type: volume
+        source: products_db_vol
+        target: /var/lib/postgresql/data
+    networks:
+      - products
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "pg_isready -d $${PRODUCTS_DB} -U $${PRODUCTS_DB_USER}"
+        ]
+      interval: 4s
+      timeout: 5s
+      retries: 5
 
   reviews_api:
     container_name: reviews_api_${ENV}
@@ -96,11 +133,46 @@ services:
       - "5000"
     restart: always
     environment:
+      - ENV=${ENV}
       - SERVICE_NAME=reviews_api
+      - POSTGRES_USER=${REVIEWS_DB_USER}
+      - POSTGRES_PASSWORD=${REVIEWS_DB_PASSWORD}
+      - POSTGRES_DB=${REVIEWS_DB}
+      - POSTGRES_SERVICE=reviews_db
+      - EXPOSED_INTERFACES=${EXPOSED_INTERFACES}
     networks:
       - reviews
       - domain
       - default
+
+  reviews_db:
+    container_name: reviews_db_${ENV}
+    image: postgres:15
+    profiles:
+      - reviews_api
+      - all
+    restart: always
+    environment:
+      - POSTGRES_USER=${REVIEWS_DB_USER}
+      - POSTGRES_PASSWORD=${REVIEWS_DB_PASSWORD}
+      - POSTGRES_DB=${REVIEWS_DB}
+      - PGDATA=/var/lib/postgresql/data/pgdata
+    volumes:
+      - type: volume
+        source: products_db_vol
+        target: /var/lib/postgresql/data
+    networks:
+      - reviews
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "pg_isready -d $${REVIEWS_DB} -U $${REVIEWS_DB_USER}"
+        ]
+      interval: 4s
+      timeout: 5s
+      retries: 5
+
   tags_api:
     container_name: tags_api_${ENV}
     image: ${TAGS_SERVICE_IMAGE}
@@ -138,4 +210,8 @@ networks:
 
 volumes:
   categories_db_vol:
-    name: purchase_orders_db_vol_${ENV}
+    name: categories_db_vol_${ENV}
+  products_db_vol:
+    name: products_db_vol_${ENV}
+  reviews_db_vol:
+    name: reviews_db_vol_${ENV}
