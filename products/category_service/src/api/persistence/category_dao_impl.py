@@ -1,5 +1,5 @@
 from src.api.interfaces.persistence.category_dao import CategoryDao
-from src.api.models.users import User
+from src.api.models.categories import Category
 from injector import inject
 from flask_sqlalchemy import SQLAlchemy
 
@@ -9,20 +9,20 @@ class CategoryDaoImpl(CategoryDao):
     def __init__(self, db: SQLAlchemy):
         self.db = db
 
-    def get_user_by_id(self, user_id):
-        return User.query.filter_by(id=user_id).first()
+    def get_categories(self):
+        return Category.query.all()
 
-    def get_user_by_email(self, email):
-        return User.query.filter_by(email=email).first()
-
-    def create_user(self, username, email, password):
-        user = User(username=username, email=email, password=password)
-        self.db.session.add(user)
+    def create_category(self, name):
+        category = Category(name=name)
+        self.db.session.add(category)
         self.db.session.commit()
-        return user
+        return category
 
-    def update_user(self, user, username, password):
-        user.username = username
-        user.password = password
-        self.db.session.commit()
-        return user
+    def update_category(self, category_id, name):
+        category = Category.query.get(category_id)
+
+        if category:
+            category.name = name
+            self.db.session.commit()
+
+        return category

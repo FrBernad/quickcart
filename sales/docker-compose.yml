@@ -42,7 +42,7 @@ services:
         source: purchase_orders_db_vol
         target: /var/lib/postgresql/data
     networks:
-      - users
+      - purchase_orders
     healthcheck:
       test:
         [

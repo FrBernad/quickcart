@@ -4,17 +4,13 @@ from abc import ABC, abstractmethod
 class CategoryDao(ABC):
 
     @abstractmethod
-    def get_user_by_id(self, user_id):
+    def create_category(self, name):
         pass
 
     @abstractmethod
-    def get_user_by_email(self, email):
+    def get_categories(self):
         pass
 
     @abstractmethod
-    def create_user(self, username, email, password):
-        pass
-
-    @abstractmethod
-    def update_user(self, user, username, password):
+    def update_category(self, category_id, name):
         pass

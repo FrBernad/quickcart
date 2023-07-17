@@ -5,6 +5,10 @@ from src.api.schemas.requests.request_schema import (
     create_category_schema,
     update_category_schema,
 )
+from src.api.schemas.category_schema import (
+    categories_schema,
+    category_schema
+)
 from flask_expects_json import expects_json
 from jsonschema import ValidationError
 
@@ -16,23 +20,17 @@ categories_bp = Blueprint("main", __name__, url_prefix="/categories")
 @expects_json(create_category_schema)
 def create_category(category_service: CategoryService):
     data = request.get_json()
-
     name = data.get("name")
-    return f"Create category with name {name}", 201
+    category = category_service.create_category(name=name)
+
+    return jsonify(category_schema.dump(category)), 201
 
 
 @inject
 @categories_bp.route("", methods=["GET"])
 def get_categories(category_service: CategoryService):
-    categories = [
-        {"name": "Tecnología", "id": "123"},
-        {"name": "Tecnología", "id": "123"},
-        {"name": "Tecnología", "id": "123"},
-        {"name": "Tecnología", "id": "123"},
-    ]
-    response = make_response(jsonify(categories))
-    response.status_code = 201
-    return response
+    categories = category_service.get_categories()
+    return jsonify(categories_schema.dump(categories)), 200
 
 
 @inject
@@ -41,8 +39,8 @@ def get_categories(category_service: CategoryService):
 def update_category(category_id, category_service: CategoryService):
     data = request.get_json()
     name = data.get("name")
-
-    return f"Update category with id {category_id} with name {name}", 204
+    category = category_service.update_category(category_id=category_id, name=name)
+    return jsonify({}), 204
 
 
 @categories_bp.errorhandler(400)

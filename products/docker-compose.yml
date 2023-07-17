@@ -9,12 +9,50 @@ services:
     ports:
       - "5000"
     restart: always
+    depends_on:
+      categories_db:
+        condition: service_healthy
     environment:
+      - ENV=${ENV}
       - SERVICE_NAME=category_api
+      - POSTGRES_USER=${CATEGORIES_DB_USER}
+      - POSTGRES_PASSWORD=${CATEGORIES_DB_PASSWORD}
+      - POSTGRES_DB=${CATEGORIES_DB}
+      - POSTGRES_SERVICE=categories_db
+      - EXPOSED_INTERFACES=${EXPOSED_INTERFACES}
     networks:
       - category
       - domain
       - default
+
+  categories_db:
+    container_name: categories_db_${ENV}
+    image: postgres:15
+    profiles:
+      - category_api
+      - all
+    restart: always
+    environment:
+      - POSTGRES_USER=${CATEGORIES_DB_USER}
+      - POSTGRES_PASSWORD=${CATEGORIES_DB_PASSWORD}
+      - POSTGRES_DB=${CATEGORIES_DB}
+      - PGDATA=/var/lib/postgresql/data/pgdata
+    volumes:
+      - type: volume
+        source: categories_db_vol
+        target: /var/lib/postgresql/data
+    networks:
+      - category
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "pg_isready -d $${USERS_DB} -U $${USERS_DB_USER}"
+        ]
+      interval: 4s
+      timeout: 5s
+      retries: 5
+
   product_coordinator_api:
     container_name: product_coordinator_api_${ENV}
     image: ${PRODUCT_COORDINATOR_SERVICE_IMAGE}
@@ -30,6 +68,7 @@ services:
       - product_coordinator
       - domain
       - default
+
   products_api:
     container_name: products_api_${ENV}
     image: ${PRODUCTS_SERVICE_IMAGE}
@@ -45,6 +84,8 @@ services:
       - products
       - domain
       - default
+
+
   reviews_api:
     container_name: reviews_api_${ENV}
     image: ${REVIEWS_SERVICE_IMAGE}
@@ -94,3 +135,7 @@ networks:
     internal: true
   domain:
     name: products_${ENV}
+
+volumes:
+  categories_db_vol:
+    name: purchase_orders_db_vol_${ENV}
