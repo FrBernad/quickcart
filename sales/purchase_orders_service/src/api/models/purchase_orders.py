@@ -9,15 +9,15 @@ class PurchaseOrders(db.Model):
     __tablename__ = 'PURCHASE_ORDERS'
     purchase_order_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     creation_date = db.Column(db.DateTime, default=func.now(), nullable=False)
-    comments = db.Column(db.String(256), nullable=False)
+    comments = db.Column(db.String(256), nullable=True)
     user_id = db.Column(db.Integer, nullable=False)
     total_price = db.Column(db.Double, nullable=False)
-    payment_method = db.Column(EnumType(PaymentMethod))
+    payment_method = db.Column(EnumType(PaymentMethod), nullable=False)
     card_number = db.Column(db.String(25), nullable=False)
     expiration_year = db.Column(db.Integer, nullable=False)
     expiration_month = db.Column(db.Integer, nullable=False)
     cvv = db.Column(db.Integer, nullable=False)
-    card_type = db.Column(EnumType(CardType))
+    card_type = db.Column(EnumType(CardType), nullable=False)
 
     def __init__(self,
                  comments,

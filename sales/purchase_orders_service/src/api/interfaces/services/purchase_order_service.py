@@ -4,17 +4,17 @@ from abc import ABC, abstractmethod
 class PurchaseOrderService(ABC):
 
     @abstractmethod
-    def get_purchase_orders(self, email):
+    def get_purchase_orders(self):
         pass
 
     @abstractmethod
-    def get_purchase_order_by_id(self, email):
+    def get_purchase_order_by_id(self, purchase_order_id):
         pass
 
     @abstractmethod
-    def get_purchase_order_by_user_id(self, user, username, password):
-        pass
-
-    @abstractmethod
-    def create_purchase_order(self, username, email, password):
+    def create_purchase_order(self, comments,
+                              user_id,
+                              total_price,
+                              products,
+                              payment_details):
         pass

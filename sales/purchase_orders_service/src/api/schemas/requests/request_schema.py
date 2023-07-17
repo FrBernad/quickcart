@@ -64,5 +64,5 @@ create_purchase_order_schema = {
             ],
         }
     },
-    "required": ["comments", "user_id", "products", "total_price", "payment_details"]
+    "required": ["user_id", "products", "total_price", "payment_details"]
 }
