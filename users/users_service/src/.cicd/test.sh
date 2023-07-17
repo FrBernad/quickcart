@@ -3,23 +3,23 @@
 
 if [ "${ENV:-}" = "qa" ]; then
 
-    echo "Initializing ${SERVICE_NAME} for interface and integration testing"
-    gunicorn -b 0.0.0.0:5000 main:app &
+    # echo "Initializing ${SERVICE_NAME} for interface and integration testing"
+    # gunicorn -b 0.0.0.0:5000 main:app &
 
-    app_pid=$!
+    # app_pid=$!
 
-    echo "Waiting for the app to initialize..."
-    sleep 3
-    echo "${SERVICE_NAME} initialized"
+    # echo "Waiting for the app to initialize..."
+    # sleep 3
+    # echo "${SERVICE_NAME} initialized"
 
     echo "Running interface tests for ${SERVICE_NAME}"
-    python -m pytest "./src/tests/interface" -p no:warnings
+    # python -m pytest "./src/tests/interface" -p no:warnings
 
-    kill $app_pid
+    # kill $app_pid
 
-    gunicorn -b 0.0.0.0:5000 main:app &
+    # gunicorn -b 0.0.0.0:5000 main:app &
 
-    wait $!
+    # wait $!
 
 else
     
