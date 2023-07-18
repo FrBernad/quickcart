@@ -11,29 +11,33 @@ class ProductDaoImpl(ProductDao):
         self.db = db
 
     def create_product(self, name, price, category_id, tags, stock):
-        product = Product(name, category_id, name, stock, price)
+        product = Product(name=name, category_id=category_id, stock=stock, price=price)
 
-        tags = [Tag(name=tag) for tag in tags]
-
-        product.tags.extend(tags)
+        product.tags = self._get_and_generate_tags(tags)
 
         self.db.session.add(product)
-        self.db.session.add_all(tags)
         self.db.session.commit()
 
         return product
 
     def delete_product(self, product):
-        pass
+        self.db.session.execute(self.db.delete(Product).where(Product.id == product.id))
+        self.db.session.commit()
 
     def get_products(self):
-        return Product.query.all()
+        return self.db.session.scalars(self.db.select(Product)).all()
 
     def get_product_by_id(self, product_id):
-        return Product.query.filter_by(id=product_id).first()
+        return self.db.session.execute(
+            self.db.select(Product).where(Product.id == product_id)
+        ).scalar_one()
 
     def update_product(self, product, name, price, category_id, tags):
-        pass
+        product.name = name
+        product.price = price
+        product.category_id = category_id
+        product.tags = self._get_and_generate_tags(tags)
+        self.db.session.commit()
 
     def update_product_score(self, product, score):
         product.score = score
@@ -43,20 +47,17 @@ class ProductDaoImpl(ProductDao):
         product.stock = stock
         self.db.session.commit()
 
-    # def get_user_by_id(self, user_id):
-    #     return User.query.filter_by(id=user_id).first()
+    def _get_and_generate_tags(self, tags):
+        existing_tags = self.db.session.scalars(
+            self.db.select(Tag).where(Tag.name.in_(tags))
+        ).all()
 
-    # def get_user_by_email(self, email):
-    #     return User.query.filter_by(email=email).first()
+        existing_tags_names = [tag.name for tag in existing_tags]
 
-    # def create_user(self, username, email, password):
-    #     user = User(username=username, email=email, password=password)
-    #     self.db.session.add(user)
-    #     self.db.session.commit()
-    #     return user
+        new_tags = [Tag(name=tag) for tag in tags if tag not in existing_tags_names]
 
-    # def update_user(self, user, username, password):
-    #     user.username = username
-    #     user.password = password
-    #     self.db.session.commit()
-    #     return user
+        self.db.session.add_all(new_tags)
+
+        new_tags.extend(existing_tags)
+
+        return new_tags

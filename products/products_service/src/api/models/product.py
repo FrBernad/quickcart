@@ -15,7 +15,7 @@ class Product(db.Model):
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     category_id = db.Column(db.Integer, nullable=False)
-    name = db.Column(db.Integer, nullable=False)
+    name = db.Column(db.String(50), nullable=False)
     stock = db.Column(db.Integer, nullable=False)
     price = db.Column(db.Float, nullable=False)
     score = db.Column(db.Float, nullable=False, default=0)

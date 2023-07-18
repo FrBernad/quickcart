@@ -38,7 +38,7 @@ def create_product(product_service: ProductService):
 
 
 @inject
-@products_bp.route("/", methods=["GET"])
+@products_bp.route("", methods=["GET"])
 def get_products(product_service: ProductService):
     products = product_service.get_products()
 
