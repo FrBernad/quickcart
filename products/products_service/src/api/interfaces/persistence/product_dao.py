@@ -2,19 +2,30 @@ from abc import ABC, abstractmethod
 
 
 class ProductDao(ABC):
-
     @abstractmethod
-    def get_user_by_id(self, user_id):
+    def create_product(self, name, price, category_id, tags, stock):
         pass
 
     @abstractmethod
-    def get_user_by_email(self, email):
+    def get_products(self):
         pass
 
     @abstractmethod
-    def create_user(self, username, email, password):
+    def get_product_by_id(self, product_id):
         pass
 
     @abstractmethod
-    def update_user(self, user, username, password):
+    def delete_product(self, product):
+        pass
+
+    @abstractmethod
+    def update_product(self, product, name, price, category_id, tags):
+        pass
+
+    @abstractmethod
+    def update_product_score(self, product, score):
+        pass
+
+    @abstractmethod
+    def update_product_stock(self, product, stock):
         pass
