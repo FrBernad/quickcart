@@ -1,5 +1,5 @@
-from src.api.interfaces.services.user_service import PurchaseOrderService
-from src.api.interfaces.persistence.user_dao import PurchaseOrderDao
+from src.api.interfaces.services.purchase_order_service import PurchaseOrderService
+from src.api.interfaces.persistence.purchase_order_dao import PurchaseOrderDao
 from injector import inject
 
 

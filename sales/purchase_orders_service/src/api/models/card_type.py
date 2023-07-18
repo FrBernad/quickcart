@@ -2,5 +2,5 @@ from enum import Enum
 
 
 class CardType(Enum):
-    VISA = 'VISA',
+    VISA = 'VISA'
     MASTERCARD = 'MASTERCARD'

@@ -12,9 +12,9 @@ class PurchaseOrderDao(ABC):
         pass
 
     @abstractmethod
-    def create_purchase_order(self, comments,
-                              user_id,
-                              total_price,
-                              products,
-                              payment_details):
+    def create_purchase_order_with_products(self, comments,
+                                            user_id,
+                                            total_price,
+                                            products,
+                                            payment_details):
         pass

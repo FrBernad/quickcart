@@ -6,7 +6,7 @@ from src.api.models.card_type import CardType
 
 
 class PurchaseOrders(db.Model):
-    __tablename__ = 'PURCHASE_ORDERS'
+    __tablename__ = 'purchase_orders'
     purchase_order_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     creation_date = db.Column(db.DateTime, default=func.now(), nullable=False)
     comments = db.Column(db.String(256), nullable=True)
@@ -18,23 +18,4 @@ class PurchaseOrders(db.Model):
     expiration_month = db.Column(db.Integer, nullable=False)
     cvv = db.Column(db.Integer, nullable=False)
     card_type = db.Column(EnumType(CardType), nullable=False)
-
-    def __init__(self,
-                 comments,
-                 user_id,
-                 total_price,
-                 payment_method,
-                 card_number,
-                 expiration_year,
-                 expiration_month,
-                 cvv,
-                 card_type):
-        self.comments = comments
-        self.user_id = user_id
-        self.total_price = total_price
-        self.payment_method = payment_method
-        self.card_number = card_number
-        self.expiration_year = expiration_year
-        self.expiration_month = expiration_month
-        self.cvv = cvv
-        self.card_type = card_type
+    products = db.relationship('ProductsPurchased', back_populates='purchase_order')
