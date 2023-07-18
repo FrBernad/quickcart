@@ -1,7 +1,0 @@
----
-name: Tag Variables
-description: Test variables for tag service
-
-variables:
-  tag_base_url: http://localhost:5000/tags
-
