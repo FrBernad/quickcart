@@ -39,6 +39,8 @@ checkout_shopping_cart_schema = {
             "type": "string",
             "enum": ["VISA", "MASTERCARD"],
         },
+        "comments": {"type": "string"},
+
     },
     "required": [
         "payment_method",

@@ -13,19 +13,14 @@ from injector import inject
 from jsonschema import ValidationError
 from src.api.interfaces.exceptions.generic_api_exception import GenericApiException
 
+from src.api.models.payment_info import PaymentInfo
+
 shopping_cart_bp = Blueprint("shopping_cart", __name__, url_prefix="/shopping-cart")
 
 
 @inject
 @shopping_cart_bp.route("/<user_id>", methods=["GET"])
 def get_shopping_cart_products(user_id, shopping_cart_service: ShoppingCartService):
-    # Debería hacer un request al user service para chequear que exista el usuario
-    # TODO: revisar la respuesta que hasta ahora no tiene la información del producto
-    # user = shopping_cart_service.get_user_by_id(user_id)
-
-    # if not user:
-    # return jsonify({"message": f"User with id {user_id} not found"}), 404
-
     shopping_cart_products = shopping_cart_service.get_products(user_id=user_id)
 
     if len(shopping_cart_products) == 0:
@@ -38,22 +33,10 @@ def get_shopping_cart_products(user_id, shopping_cart_service: ShoppingCartServi
 @shopping_cart_bp.route("/<user_id>/<product_id>", methods=["PUT"])
 @expects_json(update_shopping_cart_schema)
 def update_shopping_cart_product_quantity(
-    user_id, product_id, shopping_cart_service: ShoppingCartService
+        user_id, product_id, shopping_cart_service: ShoppingCartService
 ):
-    # TODO: Debería hacer un request al user service para chequear que exista el usuario
-    # user = shopping_cart_service.get_user_by_id(user_id=user_id)
-
-    # if not user:
-    #     return jsonify({"message": f"User with id {user_id} not found"}), 404
-
     data = request.get_json()
     quantity = data.get("quantity")
-
-    # TODO: Debería hacer un request para ver que exista el producto
-    # product = shopping_cart_service.get_product_by_id(product_id=product_id)
-
-    # if not product:
-    # return jsonify({"message": f"Product with id {product_id} not found"}), 404
 
     shopping_cart_service.add_product(
         user_id=user_id,
@@ -68,11 +51,20 @@ def update_shopping_cart_product_quantity(
 @shopping_cart_bp.route("/<user_id>/checkout", methods=["POST"])
 @expects_json(checkout_shopping_cart_schema)
 def checkout_shopping_cart(user_id, shopping_cart_service: ShoppingCartService):
-    # TODO: Debería hacer un request al user service para chequear que exista el usuario
-    # user = shopping_cart_service.get_user_by_id(user_id)
+    data = request.get_json()
 
-    payment_info = request.get_json()
-    shopping_cart_service.checkout(user_id, payment_info)
+    comments = data.get("comments")
+
+    payment_info = PaymentInfo(
+        payment_method=data['payment_method'],
+        expiration_year=data['expiration_year'],
+        expiration_month=data['expiration_month'],
+        card_number=data['card_number'],
+        cvv=data['cvv'],
+        card_type=data['card_type'],
+    )
+
+    shopping_cart_service.checkout(user_id, payment_info, comments)
 
     return f"Checkout shopping cart for user with id {user_id}", 200
 
@@ -80,9 +72,9 @@ def checkout_shopping_cart(user_id, shopping_cart_service: ShoppingCartService):
 @inject
 @shopping_cart_bp.route("/<user_id>/<product_id>", methods=["DELETE"])
 def delete_shopping_cart_product(
-    user_id,
-    product_id,
-    shopping_cart_service: ShoppingCartService,
+        user_id,
+        product_id,
+        shopping_cart_service: ShoppingCartService,
 ):
     shopping_cart_service.delete_product(user_id=user_id, product_id=product_id)
     return "", 204
