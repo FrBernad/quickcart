@@ -12,7 +12,7 @@ from injector import inject
 import requests
 import logging
 
-class UserServiceImpl(ReviewService):
+class ReviewServiceImpl(ReviewService):
 
     @inject
     def __init__(self, review_dao: ReviewDao):
@@ -21,8 +21,8 @@ class UserServiceImpl(ReviewService):
     def get_reviews_by_product(self, product_id):
         return self.review_dao.get_reviews_by_product(product_id=product_id)
 
-    def get_review_by_id(self, product_id):
-        return self.review_dao.get_review_by_id(product_id=product_id)
+    def get_review_by_id(self, review_id):
+        return self.review_dao.get_review_by_id(review_id=review_id)
 
     def create_review(self, product_id, user_id, review_body, score):
         if self._user_has_orders_for_product(user_id, product_id):

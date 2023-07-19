@@ -5,8 +5,8 @@ from sqlalchemy import CheckConstraint
 class Review(db.Model):
     __tablename__ = 'reviews'
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    product_id = db.Column(db.Integer, db.ForeignKey('products.id'))
-    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    product_id = db.Column(db.Integer, nullable=False)
+    user_id = db.Column(db.Integer, nullable=False)
     review_body = db.Column(db.String, nullable=False)
     score = db.Column(db.Float, nullable=False)
     creation_date = db.Column(db.DateTime, default=func.now(), nullable=False)
