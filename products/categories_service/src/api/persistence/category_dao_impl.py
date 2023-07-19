@@ -18,6 +18,9 @@ class CategoryDaoImpl(CategoryDao):
         self.db.session.commit()
         return category
 
+    def get_category_by_id(self, category_id):
+        return Category.query.get(category_id)
+
     def update_category(self, category_id, name):
         category = Category.query.get(category_id)
 
