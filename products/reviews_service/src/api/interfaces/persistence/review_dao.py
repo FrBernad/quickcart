@@ -4,17 +4,13 @@ from abc import ABC, abstractmethod
 class ReviewDao(ABC):
 
     @abstractmethod
-    def get_user_by_id(self, user_id):
+    def get_reviews_by_product(self, product_id):
         pass
 
     @abstractmethod
-    def get_user_by_email(self, email):
+    def get_review_by_id(self, review_id):
         pass
 
     @abstractmethod
-    def create_user(self, username, email, password):
-        pass
-
-    @abstractmethod
-    def update_user(self, user, username, password):
+    def create_review(self, product_id, user_id, review_body, score):
         pass

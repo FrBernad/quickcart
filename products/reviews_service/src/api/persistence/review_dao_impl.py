@@ -1,28 +1,22 @@
-from src.api.interfaces.persistence.user_dao import UserDao
-from src.api.models.users import User
+from src.api.interfaces.persistence.review_dao import ReviewDao
+from src.api.models.reviews import Review
 from injector import inject
 from flask_sqlalchemy import SQLAlchemy
 
 
-class ReviewDaoImpl(UserDao):
+class ReviewDaoImpl(ReviewDao):
     @inject
     def __init__(self, db: SQLAlchemy):
         self.db = db
 
-    def get_user_by_id(self, user_id):
-        return User.query.filter_by(id=user_id).first()
+    def get_reviews_by_product(self, product_id):
+        return Review.query.filter_by(id=product_id).all()
 
-    def get_user_by_email(self, email):
-        return User.query.filter_by(email=email).first()
+    def get_review_by_id(self, review_id):
+        return Review.query.filter_by(review_id=review_id).first()
 
-    def create_user(self, username, email, password):
-        user = User(username=username, email=email, password=password)
-        self.db.session.add(user)
+    def create_review(self, product_id, user_id, review_body, score):
+        review = Review(product_id=product_id, user_id=user_id, review_body=review_body, score=score)
+        self.db.session.add(review)
         self.db.session.commit()
-        return user
-
-    def update_user(self, user, username, password):
-        user.username = username
-        user.password = password
-        self.db.session.commit()
-        return user
+        return review
