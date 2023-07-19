@@ -4,6 +4,6 @@ from src import db
 app = create_app()
 
 with app.app_context():
-    #FIXME: from src.api.models.users import User
+    from src.api.models.reviews import Review
 
     db.create_all()

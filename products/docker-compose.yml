@@ -107,10 +107,12 @@ services:
       - reviews_api
       - all
     restart: always
+    depends_on:
+      reviews_db:
+        condition: service_healthy
     environment:
       - ENV=${ENV}
       - SERVICE_NAME=reviews_api
-      - GUSERR=${REVIEWS_DB_USER}
       - POSTGRES_USER=${REVIEWS_DB_USER}
       - POSTGRES_PASSWORD=${REVIEWS_DB_PASSWORD}
       - POSTGRES_DB=${REVIEWS_DB}
@@ -128,14 +130,13 @@ services:
       - all
     restart: always
     environment:
-      - GUSERR=${REVIEWS_DB_USER}
       - POSTGRES_USER=${REVIEWS_DB_USER}
       - POSTGRES_PASSWORD=${REVIEWS_DB_PASSWORD}
       - POSTGRES_DB=${REVIEWS_DB}
       - PGDATA=/var/lib/postgresql/data/pgdata
     volumes:
       - type: volume
-        source: products_db_vol
+        source: reviews_db_vol
         target: /var/lib/postgresql/data
     networks:
       - reviews

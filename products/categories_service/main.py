@@ -4,5 +4,6 @@ from src import db
 app = create_app()
 
 with app.app_context():
-    # FIXME: from src.api.models.users import User
+    from src.api.models.categories import Category
+
     db.create_all()
