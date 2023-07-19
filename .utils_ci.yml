@@ -90,9 +90,9 @@
   script:
     - export BUILD_ID=$(date +%Y%m%d%H%M)
     - echo "BUILD_ID=${BUILD_ID}" > context.env
-    - docker network inspect services-prod >/dev/null 2>&1 || docker network create --driver bridge services-prod
-    - docker network inspect services-qa >/dev/null 2>&1 || docker network create --driver bridge services-qa
-    - docker network inspect services-test >/dev/null 2>&1 || docker network create --driver bridge services-test
+    - docker network inspect services-prod >/dev/null 2>&1 || docker network create --driver bridge services_prod
+    - docker network inspect services_qa >/dev/null 2>&1 || docker network create --driver bridge services_qa
+    - docker network inspect services_test >/dev/null 2>&1 || docker network create --driver bridge services_test
   artifacts:
     reports:
       dotenv: context.env
