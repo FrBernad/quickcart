@@ -1,6 +1,7 @@
 from src.api.interfaces.persistence.purchase_order_dao import PurchaseOrderDao
 from injector import inject
 from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy import or_
 from src.api.models.purchase_orders import PurchaseOrders
 from src.api.models.purchase_products import ProductsPurchased
 from src.api.models.purchase_order_details import PurchaseOrderDetails
@@ -14,10 +15,14 @@ class PurchaseOrderDaoImpl(PurchaseOrderDao):
     def get_purchase_orders(self):
         return PurchaseOrders.query.all()
 
-    def get_purchase_order_by_id(self, purchase_order_id):
+    def get_purchase_order_by_user_id(self, user_id, product_id = None):
 
-        purchase_order = PurchaseOrders.query.filter_by(purchase_order_id=purchase_order_id).first()
-        return purchase_order
+        query = PurchaseOrders.query.filter(PurchaseOrders.user_id == user_id)
+
+        if product_id is not None:
+            query = query.join(PurchaseOrders.products).filter(or_(ProductsPurchased.product_id == product_id))
+
+        return query.all()
 
     def create_purchase_order_with_products(self, comments,
                                             user_id,

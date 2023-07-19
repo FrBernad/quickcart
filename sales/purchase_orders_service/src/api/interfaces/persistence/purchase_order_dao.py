@@ -8,7 +8,7 @@ class PurchaseOrderDao(ABC):
         pass
 
     @abstractmethod
-    def get_purchase_order_by_id(self, purchase_order_id):
+    def get_purchase_order_by_user_id(self, user_id, product_id = None):
         pass
 
     @abstractmethod

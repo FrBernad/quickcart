@@ -99,14 +99,18 @@ def get_purchase_orders(purchase_order_service: PurchaseOrderService):
 
 
 @inject
-@purchase_orders_bp.route("/<purchase_order_id>", methods=["GET"])
-def get_purchase_order(purchase_order_id, purchase_order_service: PurchaseOrderService):
-    purchase_order = purchase_order_service.get_purchase_order_by_id(
-        purchase_order_id=purchase_order_id
+@purchase_orders_bp.route("/<user_id>", methods=["GET"])
+def get_purchase_order(user_id, purchase_order_service: PurchaseOrderService):
+    product_id = request.args.get('product_id')  # Retrieve the product_id query parameter
+
+    purchase_orders = purchase_order_service.get_purchase_order_by_user_id(
+        user_id=user_id,
+        product_id=product_id
     )
-    if not purchase_order:
-        return jsonify(purchase_order_schema.dump(purchase_order)), 404
-    return jsonify(purchase_order_schema.dump(purchase_order)), 200
+    
+    if not purchase_orders:
+        return jsonify(purchase_orders_schema.dump(purchase_orders)), 404
+    return jsonify(purchase_orders_schema.dump(purchase_orders)), 200
 
 
 @purchase_orders_bp.errorhandler(400)
