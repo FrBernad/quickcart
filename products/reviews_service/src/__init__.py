@@ -30,10 +30,8 @@ def create_app():
     db.init_app(app)
 
     from src.api.controllers.review_controller import reviews_bp
-    from src.api.controllers.review_controller import products_bp
 
     app.register_blueprint(reviews_bp)
-    app.register_blueprint(products_bp)
 
     FlaskInjector(app=app, modules=[configure])
 

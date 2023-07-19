@@ -101,7 +101,7 @@ def get_purchase_orders(purchase_order_service: PurchaseOrderService):
 @inject
 @purchase_orders_bp.route("/<user_id>", methods=["GET"])
 def get_purchase_order(user_id, purchase_order_service: PurchaseOrderService):
-    product_id = request.args.get('product-id')  # Retrieve the product_id query parameter
+    product_id = request.args.get('product-id')
 
     purchase_orders = purchase_order_service.get_purchase_order_by_user_id(
         user_id=user_id,
