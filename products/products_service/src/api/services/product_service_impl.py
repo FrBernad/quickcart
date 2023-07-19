@@ -41,6 +41,8 @@ class ProductServiceImpl(ProductService):
         product.owner = user
         product.category = category
 
+        return product
+
     def get_products(self):
         products = self.product_dao.get_products()
         return [self._popualate_product(product) for product in products]

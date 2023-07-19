@@ -110,6 +110,7 @@ services:
     environment:
       - ENV=${ENV}
       - SERVICE_NAME=reviews_api
+      - GUSERR=${REVIEWS_DB_USER}
       - POSTGRES_USER=${REVIEWS_DB_USER}
       - POSTGRES_PASSWORD=${REVIEWS_DB_PASSWORD}
       - POSTGRES_DB=${REVIEWS_DB}
@@ -127,6 +128,7 @@ services:
       - all
     restart: always
     environment:
+      - GUSERR=${REVIEWS_DB_USER}
       - POSTGRES_USER=${REVIEWS_DB_USER}
       - POSTGRES_PASSWORD=${REVIEWS_DB_PASSWORD}
       - POSTGRES_DB=${REVIEWS_DB}

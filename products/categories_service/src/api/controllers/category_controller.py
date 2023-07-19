@@ -32,13 +32,20 @@ def get_categories(category_service: CategoryService):
 
 
 @inject
-@categories_bp.route("/<string:category_id>", methods=["PUT"])
+@categories_bp.route("/<category_id>", methods=["PUT"])
 @expects_json(update_category_schema)
 def update_category(category_id, category_service: CategoryService):
     data = request.get_json()
     name = data.get("name")
     category = category_service.update_category(category_id=category_id, name=name)
     return jsonify({}), 204
+
+
+@inject
+@categories_bp.route("/<category_id>", methods=["GET"])
+def get_category_by_id(category_id, category_service: CategoryService):
+    category = category_service.get_category_by_id(category_id=category_id)
+    return jsonify(category_schema.dump(category)), 200
 
 
 @categories_bp.errorhandler(400)
