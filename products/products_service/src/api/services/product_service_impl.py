@@ -9,6 +9,8 @@ class ProductServiceImpl(ProductService):
         self.product_dao = product_dao
 
     def create_product(self, name, price, category_id, tags, stock):
+        # TODO: API - Validate if category exists
+
         return self.product_dao.create_product(
             name=name, price=price, category_id=category_id, tags=tags, stock=stock
         )
@@ -23,6 +25,8 @@ class ProductServiceImpl(ProductService):
         self.product_dao.delete_product(product)
 
     def update_product(self, product, name, price, category_id, tags):
+        # TODO: API - Validate if category exists
+
         self.product_dao.update_product(
             product=product, name=name, price=price, category_id=category_id, tags=tags
         )

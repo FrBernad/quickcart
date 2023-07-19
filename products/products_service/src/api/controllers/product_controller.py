@@ -1,6 +1,7 @@
 from flask import jsonify, request, Blueprint, make_response
 from injector import inject
 from src.api.interfaces.services.product_service import ProductService
+from src.api.interfaces.exceptions.generic_api_exception import GenericApiException
 from src.api.schemas.requests.request_schema import (
     create_product_schema,
     update_product_schema,
@@ -15,6 +16,7 @@ from src.api.schemas.products_schema import (
 
 from flask_expects_json import expects_json
 from jsonschema import ValidationError
+
 
 products_bp = Blueprint("products", __name__, url_prefix="/products")
 
@@ -31,7 +33,6 @@ def create_product(product_service: ProductService):
     tags = data.get("tags")
     stock = data.get("stock")
 
-    # TODO: Check category is valid
     product = product_service.create_product(name, price, category_id, tags, stock)
 
     return jsonify(product_schema.dump(product)), 201
@@ -141,3 +142,8 @@ def bad_request(error):
         )
 
     return error
+
+
+@products_bp.errorhandler(GenericApiException)
+def generic_api_exception(e):
+    return jsonify(e.to_dict()), e.status_code
