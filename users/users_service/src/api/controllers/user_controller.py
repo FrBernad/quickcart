@@ -61,6 +61,11 @@ def update_user(user_id, user_service: UserService):
     return "", 204
 
 
+@users_bp.errorhandler(404)
+def not_found(error):
+    return jsonify({"message": f"url {request.url} not found"}), 404
+
+
 @users_bp.errorhandler(400)
 def bad_request(error):
     if isinstance(error.description, ValidationError):

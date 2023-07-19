@@ -48,6 +48,11 @@ def get_category_by_id(category_id, category_service: CategoryService):
     return jsonify(category_schema.dump(category)), 200
 
 
+@categories_bp.errorhandler(404)
+def not_found(error):
+    return jsonify({"message": f"url {request.url} not found"}), 404
+
+
 @categories_bp.errorhandler(400)
 def bad_request(error):
     if isinstance(error.description, ValidationError):

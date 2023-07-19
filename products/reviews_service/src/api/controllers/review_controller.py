@@ -53,21 +53,9 @@ def get_review_by_id(review_id, review_service: ReviewService):
     return jsonify(reviews_schema.dump(review)), 200
 
 
-@products_bp.errorhandler(400)
-def bad_request(error):
-    if isinstance(error.description, ValidationError):
-        original_error = error.description
-        return make_response(
-            jsonify(
-                {
-                    "message": original_error.message,
-                    "error": "Invalid input",
-                },
-            ),
-            400,
-        )
-
-    return error
+@reviews_bp.errorhandler(404)
+def not_found(error):
+    return jsonify({"message": f"url {request.url} not found"}), 404
 
 
 @reviews_bp.errorhandler(400)
