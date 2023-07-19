@@ -43,6 +43,8 @@ def create_product(product_service: ProductService):
 @products_bp.route("", methods=["GET"])
 def get_products(product_service: ProductService):
     products = product_service.get_products()
+    if not products:
+        "", 204
 
     return jsonify(products_schema.dump(products)), 200
 

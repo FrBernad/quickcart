@@ -16,6 +16,7 @@ from src.api.interfaces.exceptions.category_not_found_exception import (
 from src.api.interfaces.exceptions.generic_api_exception import GenericApiException
 from injector import inject
 import requests
+import logging
 
 
 class ProductServiceImpl(ProductService):
@@ -26,7 +27,7 @@ class ProductServiceImpl(ProductService):
     def create_product(self, user_id, name, price, category_id, tags, stock):
         user = self._validate_user(user_id)
 
-        self._validate_category(category_id)
+        category = self._validate_category(category_id)
 
         product = self.product_dao.create_product(
             user_id=user_id,
@@ -38,15 +39,17 @@ class ProductServiceImpl(ProductService):
         )
 
         product.owner = user
+        product.category = category
 
     def get_products(self):
-        return self.product_dao.get_products()
+        products = self.product_dao.get_products()
+        return [self._popualate_product(product) for product in products]
 
     def get_product_by_id(self, product_id):
         product = self.product_dao.get_product_by_id(product_id)
         if not product:
             raise ProductNotFoundException()
-        return product
+        return self._popualate_product(product)
 
     def delete_product(self, product):
         self.product_dao.delete_product(product)
@@ -68,6 +71,15 @@ class ProductServiceImpl(ProductService):
     def update_product_stock(self, product, stock):
         self.product_dao.update_product_stock(product=product, stock=stock)
 
+    def _popualate_product(self, product):
+        user = self._validate_user(product.user_id)
+        product.owner = user
+
+        category = self._validate_category(product.category_id)
+        product.category = category
+
+        return product
+
     def _validate_user(self, user_id):
         try:
             response = requests.get(f"http://users_api:5000/users/{user_id}")
@@ -77,25 +89,27 @@ class ProductServiceImpl(ProductService):
             if response.status_code == 404:
                 raise UserNotFoundException(user_id)
             else:
-                raise ServiceInternalException("user")
+                raise ServiceInternalException("users")
         except GenericApiException:
             raise
         except Exception as e:
-            print(str(e))
-            raise ServiceUnavailableException("user")
+            logging.debug(str(e))
+            raise ServiceUnavailableException("users")
 
     def _validate_category(self, category_id):
         try:
-            response = requests.get(f"http://category_api:5000/users/{user_id}")
+            response = requests.get(
+                f"http://categories_api:5000/categories/{category_id}"
+            )
             if response.status_code == 200:
                 return response.json()
 
             if response.status_code == 404:
-                raise UserNotFoundException(user_id)
+                raise CategoryNotFoundException(category_id)
             else:
-                raise ServiceInternalException("user")
+                raise ServiceInternalException("categories")
         except GenericApiException:
             raise
         except Exception as e:
-            print(str(e))
-            raise ServiceUnavailableException("user")
+            logging.debug(str(e))
+            raise ServiceUnavailableException("categories")

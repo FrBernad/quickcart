@@ -5,19 +5,26 @@ class OwnerSchema(Schema):
     id = fields.Int(required=True)
     username = fields.Str(required=True)
 
+
+class CategorySchema(Schema):
+    id = fields.Int(required=True)
+    name = fields.Str(required=True)
+
+
 class TagSchema(Schema):
     id = fields.Int(required=True)
     name = fields.Str(required=True)
 
+
 class ProductsSchema(Schema):
     id = fields.Int(required=True)
-    category = fields.Str(required=True)
+    category = fields.Nested(CategorySchema, required=True)
     name = fields.Str(required=True)
-    tags = fields.Nested(TagSchema, many=True)
+    tags = fields.Nested(TagSchema, many=True, required=True)
     price = fields.Float(required=True)
     stock = fields.Int(required=True)
     score = fields.Float(required=True)
-    owner = fields.Nested(OwnerSchema)
+    owner = fields.Nested(OwnerSchema, required=True)
     # creation_date = fields.Date(required=True)
 
 
