@@ -6,8 +6,6 @@ services:
     profiles:
       - purchase_orders_api
       - all
-    ports:
-      - "5000"
     restart: always
     environment:
       - ENV=${ENV}

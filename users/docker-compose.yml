@@ -6,8 +6,6 @@ services:
     profiles:
       - users_api
       - all
-    ports:
-      - "5000"
     restart: always
     depends_on:
       users_db:
@@ -58,8 +56,6 @@ services:
     profiles:
       - shopping_cart_api
       - all
-    ports:
-      - "5000"
     restart: always
     depends_on:
       shopping_cart_db:

@@ -6,8 +6,6 @@ services:
     profiles:
       - categories_api
       - all
-    ports:
-      - "5000"
     restart: always
     depends_on:
       categories_db:
@@ -58,8 +56,6 @@ services:
     profiles:
       - products_api
       - all
-    ports:
-      - "5000"
     restart: always
     depends_on:
       products_db:
@@ -110,8 +106,6 @@ services:
     profiles:
       - reviews_api
       - all
-    ports:
-      - "5000"
     restart: always
     environment:
       - ENV=${ENV}
