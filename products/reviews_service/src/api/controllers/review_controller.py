@@ -58,7 +58,13 @@ def get_reviews_by_product(review_service: ReviewService):
 #     if not review:
 #         return jsonify({"message": f"Review with id {review_id} not found"}), 404
 
-#     return jsonify(reviews_schema.dump(review)), 200
+#    return jsonify(reviews_schema.dump(review)), 200
+
+
+@reviews_bp.errorhandler(404)
+def not_found(error):
+    return jsonify({"message": f"url {request.url} not found"}), 404
+
 
 @reviews_bp.errorhandler(400)
 def bad_request(error):

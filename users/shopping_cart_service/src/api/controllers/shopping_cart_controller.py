@@ -33,7 +33,7 @@ def get_shopping_cart_products(user_id, shopping_cart_service: ShoppingCartServi
 @shopping_cart_bp.route("/<user_id>/<product_id>", methods=["PUT"])
 @expects_json(update_shopping_cart_schema)
 def update_shopping_cart_product_quantity(
-        user_id, product_id, shopping_cart_service: ShoppingCartService
+    user_id, product_id, shopping_cart_service: ShoppingCartService
 ):
     data = request.get_json()
     quantity = data.get("quantity")
@@ -56,12 +56,12 @@ def checkout_shopping_cart(user_id, shopping_cart_service: ShoppingCartService):
     comments = data.get("comments")
 
     payment_info = PaymentInfo(
-        payment_method=data['payment_method'],
-        expiration_year=data['expiration_year'],
-        expiration_month=data['expiration_month'],
-        card_number=data['card_number'],
-        cvv=data['cvv'],
-        card_type=data['card_type'],
+        payment_method=data["payment_method"],
+        expiration_year=data["expiration_year"],
+        expiration_month=data["expiration_month"],
+        card_number=data["card_number"],
+        cvv=data["cvv"],
+        card_type=data["card_type"],
     )
 
     shopping_cart_service.checkout(user_id, payment_info, comments)
@@ -72,9 +72,9 @@ def checkout_shopping_cart(user_id, shopping_cart_service: ShoppingCartService):
 @inject
 @shopping_cart_bp.route("/<user_id>/<product_id>", methods=["DELETE"])
 def delete_shopping_cart_product(
-        user_id,
-        product_id,
-        shopping_cart_service: ShoppingCartService,
+    user_id,
+    product_id,
+    shopping_cart_service: ShoppingCartService,
 ):
     shopping_cart_service.delete_product(user_id=user_id, product_id=product_id)
     return "", 204
@@ -85,6 +85,11 @@ def delete_shopping_cart_product(
 def empty_shopping_cart(user_id, shopping_cart_service: ShoppingCartService):
     shopping_cart_service.empty(user_id=user_id)
     return "", 204
+
+
+@shopping_cart_bp.errorhandler(404)
+def not_found(error):
+    return jsonify({"message": f"url {request.url} not found"}), 404
 
 
 @shopping_cart_bp.errorhandler(400)

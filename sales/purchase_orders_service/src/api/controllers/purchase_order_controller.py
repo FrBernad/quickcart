@@ -104,13 +104,17 @@ def get_purchase_order(user_id, purchase_order_service: PurchaseOrderService):
     product_id = request.args.get('product-id')
 
     purchase_orders = purchase_order_service.get_purchase_order_by_user_id(
-        user_id=user_id,
-        product_id=product_id
+        user_id=user_id, product_id=product_id
     )
-    
+
     if not purchase_orders:
         return jsonify(purchase_orders_schema.dump(purchase_orders)), 404
     return jsonify(purchase_orders_schema.dump(purchase_orders)), 200
+
+
+@purchase_orders_bp.errorhandler(404)
+def not_found(error):
+    return jsonify({"message": f"url {request.url} not found"}), 404
 
 
 @purchase_orders_bp.errorhandler(400)

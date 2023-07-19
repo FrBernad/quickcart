@@ -108,6 +108,11 @@ def update_product_stock(product_id, product_service: ProductService):
     return "", 204
 
 
+@products_bp.errorhandler(404)
+def not_found(error):
+    return jsonify({"message": f"url {request.url} not found"}), 404
+
+
 @products_bp.errorhandler(400)
 def bad_request(error):
     if isinstance(error.description, ValidationError):
