@@ -37,7 +37,7 @@ def get_categories(category_service: CategoryService):
 def update_category(category_id, category_service: CategoryService):
     data = request.get_json()
     name = data.get("name")
-    category = category_service.update_category(category_id=category_id, name=name)
+    category_service.update_category(category_id=category_id, name=name)
     return jsonify({}), 204
 
 

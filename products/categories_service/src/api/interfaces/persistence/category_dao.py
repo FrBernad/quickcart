@@ -11,7 +11,7 @@ class CategoryDao(ABC):
         pass
 
     @abstractmethod
-    def update_category(self, category_id, name):
+    def update_category(self, category, name):
         pass
 
     @abstractmethod
