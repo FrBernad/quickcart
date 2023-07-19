@@ -3,7 +3,7 @@ from abc import ABC, abstractmethod
 
 class ProductDao(ABC):
     @abstractmethod
-    def create_product(self, name, price, category_id, tags, stock):
+    def create_product(self, user_id, name, price, category_id, tags, stock):
         pass
 
     @abstractmethod

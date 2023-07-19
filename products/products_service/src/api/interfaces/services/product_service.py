@@ -3,7 +3,7 @@ from abc import ABC, abstractmethod
 
 class ProductService(ABC):
     @abstractmethod
-    def create_product(self, name, price, category_id, tags, stock):
+    def create_product(self, user_id, name, price, category_id, tags, stock):
         pass
 
     @abstractmethod
@@ -19,13 +19,13 @@ class ProductService(ABC):
         pass
 
     @abstractmethod
-    def update_product(self, product, name, price, category_id, tags):
+    def update_product(self, user_id, product_id, name, price, category_id, tags):
         pass
 
     @abstractmethod
-    def update_product_score(self, product, score):
+    def update_product_score(self, product_id, score):
         pass
 
     @abstractmethod
-    def update_product_stock(self, product, stock):
+    def update_product_stock(self, product_id, stock):
         pass

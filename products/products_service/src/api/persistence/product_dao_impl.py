@@ -10,8 +10,14 @@ class ProductDaoImpl(ProductDao):
     def __init__(self, db: SQLAlchemy):
         self.db = db
 
-    def create_product(self, name, price, category_id, tags, stock):
-        product = Product(name=name, category_id=category_id, stock=stock, price=price)
+    def create_product(self, user_id, name, price, category_id, tags, stock):
+        product = Product(
+            user_id=user_id,
+            name=name,
+            category_id=category_id,
+            stock=stock,
+            price=price,
+        )
 
         product.tags = self._get_and_generate_tags(tags)
 
