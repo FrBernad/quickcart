@@ -6,15 +6,15 @@ from src.api.schemas.requests.request_schema import (
 )
 from src.api.schemas.purchase_order_schema import (
     purchase_order_schema,
-    purchase_orders_schema
+    purchase_orders_schema,
 )
 from flask_expects_json import expects_json
 from jsonschema import ValidationError
-
 from src.api.models.product import Product
 from src.api.models.payment_details import PaymentDetails
 from src.api.models.card_type import CardType
 from src.api.models.payment_method import PaymentMethod
+from src.api.interfaces.exceptions.generic_api_exception import GenericApiException
 
 purchase_orders_bp = Blueprint(
     "purchase_orders", __name__, url_prefix="/purchase-orders"
@@ -29,37 +29,55 @@ def create_purchase_order(purchase_order_service: PurchaseOrderService):
 
     comments = data.get("comments")
     user_id = data.get("user_id")
-    total_price = data.get('total_price')
+    total_price = data.get("total_price")
 
     products_array = data.get("products", [])
 
     if len(products_array) == 0:
-        return jsonify({"message": "Missing products",
-                        "error": "Invalid input", }), 400
+        return (
+            jsonify(
+                {
+                    "message": "Missing products",
+                    "error": "Invalid input",
+                }
+            ),
+            400,
+        )
 
     products = []
     for p in products_array:
         products.append(
-            Product(product_id=p.get('product_id'),
-                    price=p.get('product_price'),
-                    quantity=p.get('product_quantity'))
+            Product(
+                product_id=p.get("product_id"),
+                price=p.get("product_price"),
+                quantity=p.get("product_quantity"),
+            )
         )
 
-    payment_details_map = data.get('payment_details', {})
+    payment_details_map = data.get("payment_details", {})
     if not payment_details_map:
-        return jsonify({"message": "Payment details are missing or empty",
-                        "error": "Invalid input", }), 400
+        return (
+            jsonify(
+                {
+                    "message": "Payment details are missing or empty",
+                    "error": "Invalid input",
+                }
+            ),
+            400,
+        )
 
-    card_type = getattr(CardType, payment_details_map.get('card_type'), None)
-    payment_method = getattr(PaymentMethod, payment_details_map.get('payment_method'), None)
+    card_type = getattr(CardType, payment_details_map.get("card_type"), None)
+    payment_method = getattr(
+        PaymentMethod, payment_details_map.get("payment_method"), None
+    )
 
     payment_details = PaymentDetails(
         payment_method=payment_method,
-        card_number=payment_details_map.get('card_number'),
-        expiration_year=payment_details_map.get('expiration_year'),
-        expiration_month=payment_details_map.get('expiration_month'),
-        cvv=payment_details_map.get('cvv'),
-        card_type=card_type
+        card_number=payment_details_map.get("card_number"),
+        expiration_year=payment_details_map.get("expiration_year"),
+        expiration_month=payment_details_map.get("expiration_month"),
+        cvv=payment_details_map.get("cvv"),
+        card_type=card_type,
     )
 
     purchase_order = purchase_order_service.create_purchase_order(
@@ -67,7 +85,7 @@ def create_purchase_order(purchase_order_service: PurchaseOrderService):
         user_id=user_id,
         total_price=total_price,
         products=products,
-        payment_details=payment_details
+        payment_details=payment_details,
     )
 
     return jsonify(purchase_order_schema.dump(purchase_order)), 201
@@ -83,7 +101,9 @@ def get_purchase_orders(purchase_order_service: PurchaseOrderService):
 @inject
 @purchase_orders_bp.route("/<purchase_order_id>", methods=["GET"])
 def get_purchase_order(purchase_order_id, purchase_order_service: PurchaseOrderService):
-    purchase_order = purchase_order_service.get_purchase_order_by_id(purchase_order_id=purchase_order_id)
+    purchase_order = purchase_order_service.get_purchase_order_by_id(
+        purchase_order_id=purchase_order_id
+    )
     if not purchase_order:
         return jsonify(purchase_order_schema.dump(purchase_order)), 404
     return jsonify(purchase_order_schema.dump(purchase_order)), 200
@@ -104,3 +124,8 @@ def bad_request(error):
         )
 
     return error
+
+
+@purchase_orders_bp.errorhandler(GenericApiException)
+def generic_api_exception(e):
+    return jsonify(e.to_dict()), e.status_code

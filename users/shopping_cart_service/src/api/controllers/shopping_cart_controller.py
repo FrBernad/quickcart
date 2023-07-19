@@ -10,8 +10,8 @@ from src.api.schemas.shopping_cart_product_schema import (
 from src.api.interfaces.services.shopping_cart_service import ShoppingCartService
 from flask_expects_json import expects_json
 from injector import inject
-
 from jsonschema import ValidationError
+from src.api.interfaces.exceptions.generic_api_exception import GenericApiException
 
 shopping_cart_bp = Blueprint("shopping_cart", __name__, url_prefix="/shopping-cart")
 
@@ -102,3 +102,8 @@ def bad_request(error):
         return {"message": original_error.message, "error": "Invalid input"}, 400
 
     return error
+
+
+@shopping_cart_bp.errorhandler(GenericApiException)
+def generic_api_exception(e):
+    return jsonify(e.to_dict()), e.status_code

@@ -5,12 +5,10 @@ from src.api.schemas.requests.request_schema import (
     create_category_schema,
     update_category_schema,
 )
-from src.api.schemas.category_schema import (
-    categories_schema,
-    category_schema
-)
+from src.api.schemas.category_schema import categories_schema, category_schema
 from flask_expects_json import expects_json
 from jsonschema import ValidationError
+from src.api.interfaces.exceptions.generic_api_exception import GenericApiException
 
 categories_bp = Blueprint("main", __name__, url_prefix="/categories")
 
@@ -58,3 +56,8 @@ def bad_request(error):
         )
 
     return error
+
+
+@categories_bp.errorhandler(GenericApiException)
+def generic_api_exception(e):
+    return jsonify(e.to_dict()), e.status_code

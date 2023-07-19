@@ -8,6 +8,7 @@ from src.api.schemas.requests.request_schema import (
 )
 from flask_expects_json import expects_json
 from jsonschema import ValidationError
+from src.api.interfaces.exceptions.generic_api_exception import GenericApiException
 
 users_bp = Blueprint("users", __name__, url_prefix="/users")
 
@@ -75,3 +76,8 @@ def bad_request(error):
         )
 
     return error
+
+
+@users_bp.errorhandler(GenericApiException)
+def generic_api_exception(e):
+    return jsonify(e.to_dict()), e.status_code

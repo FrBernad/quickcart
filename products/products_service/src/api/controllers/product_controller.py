@@ -8,12 +8,10 @@ from src.api.schemas.requests.request_schema import (
     update_product_score_schema,
     update_product_stock_schema,
 )
-
 from src.api.schemas.products_schema import (
     product_schema,
     products_schema,
 )
-
 from flask_expects_json import expects_json
 from jsonschema import ValidationError
 
