@@ -19,8 +19,7 @@ services:
       - EXPOSED_INTERFACES=${EXPOSED_INTERFACES}
     networks:
       - purchase_orders
-      - domain
-      - default
+      - services
     depends_on:
       purchase_orders_db:
         condition: service_healthy
@@ -57,9 +56,9 @@ networks:
   purchase_orders:
     name: purchase_orders_api_${ENV}
     internal: true
-  domain:
-    name: sales_${ENV}
-    driver: bridge
+  services:
+    name: services_${ENV}
+    external: true
 
 volumes:
   purchase_orders_db_vol:

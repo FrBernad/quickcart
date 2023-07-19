@@ -13,18 +13,10 @@ variables:
   GITLAB_IMAGE_BASE: "$CI_REGISTRY/$CI_PROJECT_NAMESPACE/$CI_PROJECT_NAME"
   DOCKERHUB_IMAGE_BASE: "$DOCKERHUB_USER"
 
-preparation:
-  stage: prep
-  tags:
-    - dev
-  script:
-    - export BUILD_ID=$(date +%Y%m%d%H%M)
-    - echo "BUILD_ID=${BUILD_ID}" > context.env
-  artifacts:
-    reports:
-      dotenv: context.env
-
 include:
   - "/.utils_ci.yml"
   - "*/**/*_ci.yml"
   - "**/*_ci.yml"
+
+preparation:
+  extends: .preparation

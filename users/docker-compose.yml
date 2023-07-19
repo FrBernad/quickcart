@@ -22,8 +22,7 @@ services:
       - EXPOSED_INTERFACES=${EXPOSED_INTERFACES}
     networks:
       - users
-      - domain
-      - default
+      - services
 
   users_db:
     container_name: users_db_${ENV}
@@ -75,8 +74,7 @@ services:
       - EXPOSED_INTERFACES=${EXPOSED_INTERFACES}
     networks:
       - shopping_cart
-      - domain
-      - default
+      - services
 
   shopping_cart_db:
     container_name: shopping_cart_db_${ENV}
@@ -113,9 +111,9 @@ networks:
   users:
     name: users_api_${ENV}
     internal: true
-  domain:
-    name: users_${ENV}
-    driver: bridge
+  services:
+    name: services_${ENV}
+    external: true
 
 volumes:
   users_db_vol:

@@ -83,6 +83,20 @@
           - $DOMAIN_PATH/**/*
           - .utils_ci.yml
 
+.preparation:
+  stage: prep
+  tags:
+    - dev
+  script:
+    - export BUILD_ID=$(date +%Y%m%d%H%M)
+    - echo "BUILD_ID=${BUILD_ID}" > context.env
+    - docker network inspect services-prod >/dev/null 2>&1 || docker network create --driver bridge services-prod
+    - docker network inspect services-qa >/dev/null 2>&1 || docker network create --driver bridge services-qa
+    - docker network inspect services-test >/dev/null 2>&1 || docker network create --driver bridge services-test
+  artifacts:
+    reports:
+      dotenv: context.env
+
 .build_service:
   stage: build
   tags:

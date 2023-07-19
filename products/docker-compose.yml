@@ -22,8 +22,7 @@ services:
       - EXPOSED_INTERFACES=${EXPOSED_INTERFACES}
     networks:
       - category
-      - domain
-      - default
+      - services
 
   categories_db:
     container_name: categories_db_${ENV}
@@ -66,8 +65,7 @@ services:
       - SERVICE_NAME=product_coordinator_api
     networks:
       - product_coordinator
-      - domain
-      - default
+      - services
 
   products_api:
     container_name: products_api_${ENV}
@@ -91,9 +89,7 @@ services:
       - EXPOSED_INTERFACES=${EXPOSED_INTERFACES}
     networks:
       - products
-      - domain
-      - default
-
+      - services
 
   products_db:
     container_name: products_db_${ENV}
@@ -142,8 +138,7 @@ services:
       - EXPOSED_INTERFACES=${EXPOSED_INTERFACES}
     networks:
       - reviews
-      - domain
-      - default
+      - services
 
   reviews_db:
     container_name: reviews_db_${ENV}
@@ -186,15 +181,11 @@ services:
       - SERVICE_NAME=tags_api
     networks:
       - tags
-      - domain
-      - default
+      - services
 
 networks:
   category:
     name: category_api_${ENV}
-    internal: true
-  tags:
-    name: tags_api_${ENV}
     internal: true
   reviews:
     name: reviews_api_${ENV}
@@ -202,11 +193,9 @@ networks:
   products:
     name: products_api_${ENV}
     internal: true
-  product_coordinator:
-    name: product_coordinator_api_${ENV}
-    internal: true
-  domain:
-    name: products_${ENV}
+  services:
+    name: services_${ENV}
+    external: true
 
 volumes:
   categories_db_vol:
