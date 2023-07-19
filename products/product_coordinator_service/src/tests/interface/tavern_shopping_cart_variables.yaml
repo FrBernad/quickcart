@@ -1,9 +1,0 @@
----
-name: Shopping Cart Variables
-description: Test variables for shopping cart service
-
-variables:
-  shopping_cart_base_url: http://localhost:5000/shopping-cart
-  user_id: 1
-  product_id: 1
-

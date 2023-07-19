@@ -8,12 +8,9 @@ deploy_prod_products_domain:
     - job: deliver_category_dockerhub
       optional: true
       artifacts: false
-    - job: deliver_product_coordinator_dockerhub
-      optional: true
-      artifacts: false
     - job: deliver_products_dockerhub
       optional: true
       artifacts: false
-    - job: deliver_tags_dockerhub
+    - job: deliver_reviews_dockerhub
       optional: true
       artifacts: false

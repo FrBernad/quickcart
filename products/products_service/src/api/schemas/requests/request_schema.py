@@ -6,7 +6,7 @@ create_product_schema = {
             'type': 'number',
             'minimum': 0,
         },
-        'category_id': {'type': 'string'},
+        'category_id': {'type': 'integer'},
         'tags': {
             'type': 'array',
             'items': {
@@ -29,7 +29,7 @@ update_product_schema = {
             'type': 'number',
             'minimum': 0,
         },
-        'category_id': {'type': 'string'},
+        'category_id': {'type': 'integer'},
         'tags': {
             'type': 'array',
             'items': {

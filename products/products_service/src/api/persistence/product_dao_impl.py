@@ -1,5 +1,6 @@
 from src.api.interfaces.persistence.product_dao import ProductDao
-from src.api.models.products import Product
+from src.api.models.product import Product
+from src.api.models.tag import Tag
 from injector import inject
 from flask_sqlalchemy import SQLAlchemy
 
@@ -9,14 +10,54 @@ class ProductDaoImpl(ProductDao):
     def __init__(self, db: SQLAlchemy):
         self.db = db
 
-    def get_user_by_id(self, user_id):
-        pass
+    def create_product(self, name, price, category_id, tags, stock):
+        product = Product(name=name, category_id=category_id, stock=stock, price=price)
 
-    def get_user_by_email(self, email):
-        pass
+        product.tags = self._get_and_generate_tags(tags)
 
-    def create_user(self, username, email, password):
-        pass
+        self.db.session.add(product)
+        self.db.session.commit()
 
-    def update_user(self, user, username, password):
-        pass
+        return product
+
+    def delete_product(self, product):
+        self.db.session.execute(self.db.delete(Product).where(Product.id == product.id))
+        self.db.session.commit()
+
+    def get_products(self):
+        return self.db.session.scalars(self.db.select(Product)).all()
+
+    def get_product_by_id(self, product_id):
+        return self.db.session.execute(
+            self.db.select(Product).where(Product.id == product_id)
+        ).scalar_one()
+
+    def update_product(self, product, name, price, category_id, tags):
+        product.name = name
+        product.price = price
+        product.category_id = category_id
+        product.tags = self._get_and_generate_tags(tags)
+        self.db.session.commit()
+
+    def update_product_score(self, product, score):
+        product.score = score
+        self.db.session.commit()
+
+    def update_product_stock(self, product, stock):
+        product.stock = stock
+        self.db.session.commit()
+
+    def _get_and_generate_tags(self, tags):
+        existing_tags = self.db.session.scalars(
+            self.db.select(Tag).where(Tag.name.in_(tags))
+        ).all()
+
+        existing_tags_names = [tag.name for tag in existing_tags]
+
+        new_tags = [Tag(name=tag) for tag in tags if tag not in existing_tags_names]
+
+        self.db.session.add_all(new_tags)
+
+        new_tags.extend(existing_tags)
+
+        return new_tags

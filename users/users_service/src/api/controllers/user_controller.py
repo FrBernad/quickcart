@@ -57,7 +57,7 @@ def update_user(user_id, user_service: UserService):
 
     user = user_service.update_user(user, username, password)
 
-    return jsonify({}), 204
+    return "", 204
 
 
 @users_bp.errorhandler(400)

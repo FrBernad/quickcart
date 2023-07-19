@@ -9,14 +9,11 @@ class CategoryServiceImpl(CategoryService):
     def __init__(self, category_dao: CategoryDao):
         self.category_dao = category_dao
 
-    def get_user_by_email(self, email):
-        return self.category_dao.get_user_by_email(email=email)
+    def create_category(self, name):
+        return self.category_dao.create_category(name=name)
 
-    def get_user_by_id(self, user_id):
-        return self.category_dao.get_user_by_id(user_id=user_id)
+    def get_categories(self):
+        return self.category_dao.get_categories()
 
-    def create_user(self, username, email, password):
-        return self.category_dao.create_user(username=username, email=email, password=password)
-
-    def update_user(self, user, username, password):
-        return self.category_dao.update_user(user=user, username=username, password=password)
+    def update_category(self, category_id, name):
+        return self.category_dao.update_category(category_id=category_id, name=name)

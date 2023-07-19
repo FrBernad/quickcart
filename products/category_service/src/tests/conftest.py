@@ -14,7 +14,7 @@ def test_client():
 
 @pytest.fixture(scope="function")
 def test_shopping_cart_dao():
-    from src.api.persistence.shopping_cart_dao_impl import ShoppingCartDaoImpl
+    from src.api.persistence.purchase_order_dao_impl import PurchaseOrderDaoImpl
 
     db_mock = Mock()
     db_session = Mock()
@@ -23,23 +23,23 @@ def test_shopping_cart_dao():
     db_session.commit = db_commit
     db_session.add = db_add
     db_mock.session = db_session
-    dao = ShoppingCartDaoImpl(db_mock)
+    dao = PurchaseOrderDaoImpl(db_mock)
     yield dao, db_mock
 
 
 @pytest.fixture(scope="module")
 def test_shopping_cart_service():
-    from src.api.services.shopping_cart_service_impl import ShoppingCartServiceImpl
+    from src.api.services.purchase_order_service_impl import PurchaseOrderServiceImpl
 
-    shopping_cart_dao_mock = Mock(spec=ShoppingCartServiceImpl)
-    service = ShoppingCartServiceImpl(shopping_cart_dao_mock)
-    yield service, shopping_cart_dao_mock
+    purchase_order_dao_mock = Mock(spec=PurchaseOrderServiceImpl)
+    service = PurchaseOrderServiceImpl(purchase_order_dao_mock)
+    yield service, purchase_order_dao_mock
 
 
 @pytest.fixture(scope="function")
 def test_database():
-    from src.api.models.shopping_cart_product import ShoppingCartProduct
-
+    from src.api.models.purchase_orders import PurchaseOrders
+    from src.api.models.purchase_products import ProductsPurchased
     db.drop_all()
     db.create_all()
     yield db

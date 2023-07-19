@@ -11,7 +11,7 @@ from src.api.schemas.purchase_order_schema import (
 from flask_expects_json import expects_json
 from jsonschema import ValidationError
 
-from src.api.models.products import Product
+from src.api.models.product import Product
 from src.api.models.payment_details import PaymentDetails
 from src.api.models.card_type import CardType
 from src.api.models.payment_method import PaymentMethod
@@ -34,7 +34,8 @@ def create_purchase_order(purchase_order_service: PurchaseOrderService):
     products_array = data.get("products", [])
 
     if len(products_array) == 0:
-        return jsonify({}), 400
+        return jsonify({"message": "Missing products",
+                        "error": "Invalid input", }), 400
 
     products = []
     for p in products_array:
@@ -44,19 +45,20 @@ def create_purchase_order(purchase_order_service: PurchaseOrderService):
                     quantity=p.get('product_quantity'))
         )
 
-    payment_details_obj = data.get('payment_details', {})
-    if not payment_details_obj:
-        return 'Payment details are missing or empty'
+    payment_details_map = data.get('payment_details', {})
+    if not payment_details_map:
+        return jsonify({"message": "Payment details are missing or empty",
+                        "error": "Invalid input", }), 400
 
-    card_type = getattr(CardType, data.get('card_type'), None)
-    payment_method = getattr(PaymentMethod, data.get('payment_method'), None)
+    card_type = getattr(CardType, payment_details_map.get('card_type'), None)
+    payment_method = getattr(PaymentMethod, payment_details_map.get('payment_method'), None)
 
     payment_details = PaymentDetails(
         payment_method=payment_method,
-        card_number=data.get('card_number'),
-        expiration_year=data.get('expiration_year'),
-        expiration_month=data.get('expiration_month'),
-        cvv=data.get('cvv'),
+        card_number=payment_details_map.get('card_number'),
+        expiration_year=payment_details_map.get('expiration_year'),
+        expiration_month=payment_details_map.get('expiration_month'),
+        cvv=payment_details_map.get('cvv'),
         card_type=card_type
     )
 
@@ -79,10 +81,12 @@ def get_purchase_orders(purchase_order_service: PurchaseOrderService):
 
 
 @inject
-@purchase_orders_bp.route("/<order_id>", methods=["GET"])
+@purchase_orders_bp.route("/<purchase_order_id>", methods=["GET"])
 def get_purchase_order(purchase_order_id, purchase_order_service: PurchaseOrderService):
-    purchase_order = purchase_order_service.get_purchase_order_by_id(purchase_order_id)
-    return jsonify(purchase_order_schema.dump(purchase_order)),
+    purchase_order = purchase_order_service.get_purchase_order_by_id(purchase_order_id=purchase_order_id)
+    if not purchase_order:
+        return jsonify(purchase_order_schema.dump(purchase_order)), 404
+    return jsonify(purchase_order_schema.dump(purchase_order)), 200
 
 
 @purchase_orders_bp.errorhandler(400)
