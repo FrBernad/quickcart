@@ -1,7 +1,7 @@
 version: "3.3"
 services:
   categories_api_test:
-    container_name: categories_api_test
+    container_name: categories_api_test_integration
     image: ${CATEGORIES_SERVICE_IMAGE}
     profiles:
       - categories_api
@@ -13,7 +13,7 @@ services:
       - services
 
   products_api_test:
-    container_name: products_api_test
+    container_name: products_api_test_integration
     image: ${PRODUCTS_SERVICE_IMAGE}
     profiles:
       - products_api
@@ -25,7 +25,7 @@ services:
       - services
 
   reviews_api_test:
-    container_name: reviews_api_test
+    container_name: reviews_api_test_integration
     image: ${REVIEWS_SERVICE_IMAGE}
     profiles:
       - reviews_api

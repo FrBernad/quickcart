@@ -1,7 +1,7 @@
 version: "3.3"
 services:
   users_api_test:
-    container_name: users_api_test
+    container_name: users_api_test_integration
     image: ${USERS_SERVICE_IMAGE}
     profiles:
       - users_api
@@ -13,7 +13,7 @@ services:
       - services
 
   shopping_cart_api_test:
-    container_name: shopping_cart_api_test
+    container_name: shopping_cart_api_test_integration
     image: ${SHOPPING_CART_SERVICE_IMAGE}
     profiles:
       - shopping_cart_api

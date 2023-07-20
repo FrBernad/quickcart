@@ -1,7 +1,7 @@
 version: "3.3"
 services:
   purchase_orders_api_test:
-    container_name: purchase_orders_api_test
+    container_name: purchase_orders_api_test_integration
     image: ${PURCHASE_ORDERS_SERVICE_IMAGE}
     profiles:
       - purchase_orders_api
