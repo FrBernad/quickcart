@@ -23,14 +23,20 @@ deploy_qa_users_service:
     - job: test_users_service
       artifacts: false
 
+test_integration_and_functional_users_service:
+  extends: .test_integration_and_functional_service
+  variables: *users_service_variables
+  needs:
+    - job: build_users_service
+      artifacts: true
+    - job: deploy_qa_users_service
+      artifacts: false
+
 deliver_users_dockerhub:
   extends: .deliver_dockerhub
   variables: *users_service_variables
   needs:
     - job: build_users_service
       artifacts: true
-    - job: test_users_service
+    - job: test_integration_and_functional_users_service
       artifacts: false
-    - job: deploy_qa_users_service
-      artifacts: false
-      

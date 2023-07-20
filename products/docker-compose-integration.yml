@@ -1,0 +1,42 @@
+version: "3.3"
+services:
+  categories_api_test:
+    container_name: categories_api_test
+    image: ${CATEGORIES_SERVICE_IMAGE}
+    profiles:
+      - categories_api
+    restart: always
+    environment:
+      - ENV=${ENV}
+      - SERVICE_NAME=categories_api
+    networks:
+      - services
+
+  products_api_test:
+    container_name: products_api_test
+    image: ${PRODUCTS_SERVICE_IMAGE}
+    profiles:
+      - products_api
+    restart: always
+    environment:
+      - ENV=${ENV}
+      - SERVICE_NAME=products_api
+    networks:
+      - services
+
+  reviews_api_test:
+    container_name: reviews_api_test
+    image: ${REVIEWS_SERVICE_IMAGE}
+    profiles:
+      - reviews_api
+    restart: always
+    environment:
+      - ENV=${ENV}
+      - SERVICE_NAME=reviews_api
+    networks:
+      - services
+
+networks:
+  services:
+    name: services_${ENV}
+    external: true

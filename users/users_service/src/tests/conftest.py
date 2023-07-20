@@ -2,7 +2,6 @@ import pytest
 from src.api.persistence.db import db
 from src import create_app
 from unittest.mock import Mock
-from src.api.persistence.user_dao_impl import UserDaoImpl
 
 @pytest.fixture(scope="module")
 def test_client():
@@ -30,6 +29,7 @@ def test_user_dao():
 @pytest.fixture(scope="module")
 def test_user_service():
     from src.api.services.user_service_impl import UserServiceImpl
+    from src.api.persistence.user_dao_impl import UserDaoImpl
 
     user_dao_mock = Mock(spec=UserDaoImpl)
     service = UserServiceImpl(user_dao_mock)

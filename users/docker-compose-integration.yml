@@ -1,0 +1,30 @@
+version: "3.3"
+services:
+  users_api_test:
+    container_name: users_api_test
+    image: ${USERS_SERVICE_IMAGE}
+    profiles:
+      - users_api
+    restart: always
+    environment:
+      - ENV=${ENV}
+      - SERVICE_NAME=users_api
+    networks:
+      - services
+
+  shopping_cart_api_test:
+    container_name: shopping_cart_api_test
+    image: ${SHOPPING_CART_SERVICE_IMAGE}
+    profiles:
+      - shopping_cart_api
+    restart: always
+    environment:
+      - ENV=${ENV}
+      - SERVICE_NAME=shopping_cart_api
+    networks:
+      - services
+
+networks:
+  services:
+    name: services_${ENV}
+    external: true
