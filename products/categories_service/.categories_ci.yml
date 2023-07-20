@@ -14,11 +14,29 @@ test_categories_service:
     - job: build_categories_service
       artifacts: true
 
+deploy_qa_categories_service:
+  extends: .deploy_qa
+  variables: *categories_service_variables
+  needs:
+    - job: build_categories_service
+      artifacts: true
+    - job: test_categories_service
+      artifacts: false
+
+test_integration_and_functional_categories_service:
+  extends: .test_integration_and_functional_service
+  variables: *categories_service_variables
+  needs:
+    - job: build_categories_service
+      artifacts: true
+    - job: deploy_qa_categories_service
+      artifacts: false
+
 deliver_categories_dockerhub:
   extends: .deliver_dockerhub
   variables: *categories_service_variables
   needs:
     - job: build_categories_service
       artifacts: true
-    - job: test_categories_service
+    - job: test_integration_and_functional_categories_service
       artifacts: false

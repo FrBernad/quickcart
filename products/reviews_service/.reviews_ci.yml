@@ -14,11 +14,29 @@ test_reviews_service:
     - job: build_reviews_service
       artifacts: true
 
+deploy_qa_reviews_service:
+  extends: .deploy_qa
+  variables: *reviews_service_variables
+  needs:
+    - job: build_reviews_service
+      artifacts: true
+    - job: test_reviews_service
+      artifacts: false
+
+test_integration_and_functional_reviews_service:
+  extends: .test_integration_and_functional_service
+  variables: *reviews_service_variables
+  needs:
+    - job: build_reviews_service
+      artifacts: true
+    - job: deploy_qa_reviews_service
+      artifacts: false
+
 deliver_reviews_dockerhub:
   extends: .deliver_dockerhub
   variables: *reviews_service_variables
   needs:
     - job: build_reviews_service
       artifacts: true
-    - job: test_reviews_service
+    - job: test_integration_and_functional_reviews_service
       artifacts: false

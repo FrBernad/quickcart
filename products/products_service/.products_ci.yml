@@ -14,11 +14,29 @@ test_products_service:
     - job: build_products_service
       artifacts: true
 
+deploy_qa_products_service:
+  extends: .deploy_qa
+  variables: *products_service_variables
+  needs:
+    - job: build_products_service
+      artifacts: true
+    - job: test_products_service
+      artifacts: false
+
+test_integration_and_functional_products_service:
+  extends: .test_integration_and_functional_service
+  variables: *products_service_variables
+  needs:
+    - job: build_products_service
+      artifacts: true
+    - job: deploy_qa_products_service
+      artifacts: false
+
 deliver_products_dockerhub:
   extends: .deliver_dockerhub
   variables: *products_service_variables
   needs:
     - job: build_products_service
       artifacts: true
-    - job: test_products_service
+    - job: test_integration_and_functional_products_service
       artifacts: false
