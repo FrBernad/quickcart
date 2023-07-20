@@ -23,11 +23,6 @@ def create_user(user_service: UserService):
     email = data.get("email")
     password = data.get("password")
 
-    user = user_service.get_user_by_email(email)
-
-    if user:
-        return jsonify({"message": f"The email is already in use"}), 400
-
     new_user = user_service.create_user(username, email, password)
 
     return jsonify(user_schema.dump(new_user)), 201
@@ -37,8 +32,6 @@ def create_user(user_service: UserService):
 @users_bp.route("/<user_id>", methods=["GET"])
 def get_user(user_id, user_service: UserService):
     user = user_service.get_user_by_id(user_id)
-    if not user:
-        return jsonify({"message": f"User with id {user_id} not found"}), 404
 
     return jsonify(user_schema.dump(user)), 200
 
@@ -51,12 +44,7 @@ def update_user(user_id, user_service: UserService):
     username = data.get("username")
     password = data.get("password")
 
-    user = user_service.get_user_by_id(user_id)
-
-    if not user:
-        return jsonify({"message": f"User with id {user_id} not found"}), 404
-
-    user = user_service.update_user(user, username, password)
+    user_service.update_user(user_id, username, password)
 
     return "", 204
 
