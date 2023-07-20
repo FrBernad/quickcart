@@ -1,4 +1,4 @@
-# Rerun: add/remove space
+# Rerun: add/remove space 
 
 .create_and_export_service_images_variables:
   # GITLAB PROD IMAGE
@@ -130,13 +130,13 @@
 
     - docker cp ${SERVICE_NAME}_${ENV}:/usr/app/coverage.xml .
     - docker cp ${SERVICE_NAME}_${ENV}:/usr/app/report.xml .
-  artifacts:
-    when: always
-    paths:
-      - unit_report_coverage.xml
-      - unit_report.xml
-      - functional_report_coverage.xml
-      - functional_report.xml
+  # artifacts:
+  #   when: always
+  #   paths:
+  #     - unit_report_coverage.xml
+  #     - unit_report.xml
+  #     - functional_report_coverage.xml
+  #     - functional_report.xml
 
 .deploy_qa:
   stage: qa
