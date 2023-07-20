@@ -11,6 +11,7 @@ from src.api.interfaces.exceptions.generic_api_exception import GenericApiExcept
 
 reviews_bp = Blueprint("reviews", __name__, url_prefix="/reviews")
 
+
 @inject
 @expects_json(create_review_schema)
 @reviews_bp.route("/<product_id>", methods=["POST"])
@@ -30,8 +31,7 @@ def create_review(product_id, review_service: ReviewService):
 @inject
 @reviews_bp.route("", methods=["GET"])
 def get_reviews_by_product(review_service: ReviewService):
-    
-    product_id = request.args.get('product-id')
+    product_id = request.args.get("product-id")
 
     if product_id == None:
         return (
@@ -59,6 +59,11 @@ def get_reviews_by_product(review_service: ReviewService):
 #         return jsonify({"message": f"Review with id {review_id} not found"}), 404
 
 #    return jsonify(reviews_schema.dump(review)), 200
+
+
+@reviews_bp.route("/health", methods=["GET"])
+def health_check():
+    return jsonify({"status": "OK"}), 200
 
 
 @reviews_bp.errorhandler(404)

@@ -112,6 +112,11 @@ def get_purchase_order(user_id, purchase_order_service: PurchaseOrderService):
     return jsonify(purchase_orders_schema.dump(purchase_orders)), 200
 
 
+@purchase_orders_bp.route("/health", methods=["GET"])
+def health_check():
+    return jsonify({"status": "OK"}), 200
+
+
 @purchase_orders_bp.errorhandler(404)
 def not_found(error):
     return jsonify({"message": f"url {request.url} not found"}), 404

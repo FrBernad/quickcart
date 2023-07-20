@@ -1,4 +1,4 @@
-from flask import jsonify, request, Blueprint, make_response
+from flask import jsonify, request, Blueprint
 from src.api.schemas.requests.request_schema import (
     update_shopping_cart_schema,
     checkout_shopping_cart_schema,
@@ -85,6 +85,11 @@ def delete_shopping_cart_product(
 def empty_shopping_cart(user_id, shopping_cart_service: ShoppingCartService):
     shopping_cart_service.empty(user_id=user_id)
     return "", 204
+
+
+@shopping_cart_bp.route("/health", methods=["GET"])
+def health_check():
+    return jsonify({"status": "OK"}), 200
 
 
 @shopping_cart_bp.errorhandler(404)

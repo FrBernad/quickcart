@@ -49,6 +49,11 @@ def update_user(user_id, user_service: UserService):
     return "", 204
 
 
+@users_bp.route("/health", methods=["GET"])
+def health_check():
+    return jsonify({"status": "OK"}), 200
+
+
 @users_bp.errorhandler(404)
 def not_found(error):
     return jsonify({"message": f"url {request.url} not found"}), 404
