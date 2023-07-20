@@ -1,0 +1,20 @@
+.api_gateway_domain_variables: &api_gateway_domain_variables
+  DOMAIN_PATH: "api_gateway"
+
+deploy_prod_api_gateway:
+  stage: deploy
+  tags:
+    - prod
+  extends: .deploy_api_gateway
+  variables:
+    ENV: prod
+    <<: *products_domain_variables
+
+deploy_qa_api_gateway:
+  stage: qa
+  tags:
+    - qa
+  extends: .deploy_api_gateway
+  variables:
+    ENV: qa
+    <<: *products_domain_variables

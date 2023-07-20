@@ -31,6 +31,10 @@ test_integration_and_functional_purchase_orders_service:
       artifacts: true
     - job: deploy_qa_purchase_orders_service
       artifacts: false
+    - job: deploy_qa_api_gateway
+      artifacts: false
+    - job: deploy_qa_users_service
+      artifacts: false
 
 deliver_purchase_orders_dockerhub:
   extends: .deliver_dockerhub
