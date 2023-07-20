@@ -67,10 +67,14 @@ class ProductServiceImpl(ProductService):
             product=product, name=name, price=price, category_id=category_id, tags=tags
         )
 
-    def update_product_score(self, product, score):
+    def update_product_score(self, product_id, score):
+        product = self.get_product_by_id(product_id)
+
         self.product_dao.update_product_score(product=product, score=score)
 
-    def update_product_stock(self, product, stock):
+    def update_product_stock(self, product_id, stock):
+        product = self.get_product_by_id(product_id)
+
         self.product_dao.update_product_stock(product=product, stock=stock)
 
     def _popualate_product(self, product):
