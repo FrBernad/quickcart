@@ -8,7 +8,7 @@ deploy_prod_api_gateway:
   extends: .deploy_api_gateway
   variables:
     ENV: prod
-    <<: *products_domain_variables
+    <<: *api_gateway_domain_variables
 
 deploy_qa_api_gateway:
   stage: qa
@@ -17,4 +17,4 @@ deploy_qa_api_gateway:
   extends: .deploy_api_gateway
   variables:
     ENV: qa
-    <<: *products_domain_variables
+    <<: *api_gateway_domain_variables
