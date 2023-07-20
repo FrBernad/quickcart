@@ -1,5 +1,4 @@
-#!/bin/bash -e 
-
+#!/bin/bash
 
 if [ "${ENV:-}" = "qa" ]; then
 

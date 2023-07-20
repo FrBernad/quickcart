@@ -1,3 +1,5 @@
+#!/bin/bash
+
 if [ "${ENV:-}" = "qa" ]; then
 
     echo "Running intregration tests for ${SERVICE_NAME}"
