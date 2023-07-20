@@ -66,7 +66,7 @@ def checkout_shopping_cart(user_id, shopping_cart_service: ShoppingCartService):
 
     shopping_cart_service.checkout(user_id, payment_info, comments)
 
-    return f"Checkout shopping cart for user with id {user_id}", 200
+    return "", 204
 
 
 @inject

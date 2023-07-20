@@ -90,7 +90,7 @@ def update_product_score(product_id, product_service: ProductService):
 
     score = data.get("score")
 
-    product_service.update_product(product_id, score)
+    product_service.update_product_score(product_id, score)
 
     return "", 204
 
@@ -103,7 +103,7 @@ def update_product_stock(product_id, product_service: ProductService):
 
     stock = data.get("stock")
 
-    product_service.update_product(product_id, stock)
+    product_service.update_product_stock(product_id, stock)
 
     return "", 204
 
