@@ -157,8 +157,10 @@
   rules:
     - !reference [.run_if_service_changes, rules]
   script:
-    - docker rm -f api_gateway || true
-    - docker run -d --rm --network services_$ENV --name api_gateway -p 80:80 -v $PWD/api_gateway/nginx.conf:/etc/nginx/conf.d/default.conf:ro nginx:1.21.0-alpine
+    - docker compose -f ${DOMAIN_PATH}/docker-compose.yml -p ${SERVICE_NAME}_${ENV} --profile ${SERVICE_NAME} pull
+    - docker compose -f ${DOMAIN_PATH}/docker-compose.yml -p ${SERVICE_NAME}_${ENV} --profile ${SERVICE_NAME} stop
+    - docker compose -f ${DOMAIN_PATH}/docker-compose.yml -p ${SERVICE_NAME}_${ENV} --profile ${SERVICE_NAME} rm
+    - docker compose -f ${DOMAIN_PATH}/docker-compose.yml -p ${SERVICE_NAME}_${ENV} --profile ${SERVICE_NAME} up
 
 .test_integration_and_functional_service:
   stage: qa
