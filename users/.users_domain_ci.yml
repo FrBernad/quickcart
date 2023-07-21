@@ -1,4 +1,4 @@
-.users_domain_variables: &users_domain_variables
+.users_domain_variables: &users_domain_variables 
   DOMAIN_PATH: "users"
 
 deploy_prod_users_domain:

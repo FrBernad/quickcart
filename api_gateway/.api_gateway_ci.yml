@@ -20,7 +20,7 @@ deliver_api_gateway_dockerhub:
       artifacts: true
 
 deploy_prod_api_gateway:
-  stage: deploy
+  stage: prep_deploy
   tags:
     - prod
   extends: .deploy_api_gateway
@@ -33,7 +33,7 @@ deploy_prod_api_gateway:
       optional: true
 
 deploy_qa_api_gateway:
-  stage: qa
+  stage: prep_qa
   tags:
     - qa
   extends: .deploy_api_gateway
