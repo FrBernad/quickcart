@@ -30,6 +30,7 @@ deploy_prod_api_gateway:
   needs:
     - job: deliver_api_gateway_dockerhub
       artifacts: false
+      optional: true
 
 deploy_qa_api_gateway:
   stage: qa
@@ -42,3 +43,4 @@ deploy_qa_api_gateway:
   needs:
     - job: deliver_api_gateway_dockerhub
       artifacts: true
+      optional: true

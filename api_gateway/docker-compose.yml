@@ -5,7 +5,7 @@ services:
     image: "${DOCKERHUB_IMAGE_BASE}/api_gateway:prod-latest"
     restart: always
     ports:
-      - "80:80"
+      - "80"
     networks:
       - services
 
