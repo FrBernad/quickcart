@@ -7,7 +7,7 @@ build_categories_service:
   extends: .build_service
   variables: *categories_service_variables
 
-test_categories_service:
+test_categories_service: 
   extends: .test_service
   variables: *categories_service_variables
   needs:

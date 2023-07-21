@@ -1,4 +1,4 @@
-.reviews_service_variables: &reviews_service_variables
+.reviews_service_variables: &reviews_service_variables 
   DOMAIN_PATH: "products"
   SERVICE_PATH: "products/reviews_service"
   SERVICE_NAME: "reviews_api"

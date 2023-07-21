@@ -31,10 +31,9 @@ test_integration_and_functional_users_service:
       artifacts: true
     - job: deploy_qa_users_service
       artifacts: false
-      optional: true
     - job: deploy_qa_api_gateway
       artifacts: false
-      
+      optional: true
 
 deliver_users_dockerhub:
   extends: .deliver_dockerhub
