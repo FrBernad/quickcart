@@ -49,7 +49,7 @@ def test_create_user_with_email_already_register(test_client, test_database):
 
     data = json.loads(resp.data.decode())
     assert resp.status_code == 400
-    assert f"The email is already in use" == data["message"]
+    assert f"The email test@test.com is already in use." == data["message"]
 
 
 def test_create_user_missing_username(test_client, test_database):
