@@ -4,8 +4,8 @@ FROM python:3.9-alpine
 RUN apk add --no-cache curl
 
 # Create a non-root user for the container
-RUN groupadd -g 999 python \
-    && useradd -r -u 999 -g python python \
+RUN addgroup -g 999 python \
+    && adduser -r -u 999 -g python python \
     && mkdir -p /usr/app \
     && python -m venv /usr/app/.venv \
     && chown -R python:python /usr/app
