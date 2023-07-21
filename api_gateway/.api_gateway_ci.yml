@@ -11,7 +11,7 @@ build_api_gateway_service:
     - !reference [.login_to_gitlab_registry]
     - !reference [.push_gitlab_prod_image]
 
-deliver_api_gateway_dockerhub:
+deliver_api_gatewayy_dockerhub:
   extends: .deliver_dockerhub
   variables: *api_gateway_domain_variables
   needs:
@@ -29,7 +29,7 @@ deploy_prod_api_gateway:
   needs:
     - job: build_api_gateway_service
       artifacts: true
-    - job: deliver_api_gateway_dockerhub
+    - job: deliver_api_gatewayy_dockerhub
       artifacts: false
 
 deploy_qa_api_gateway:
@@ -43,5 +43,5 @@ deploy_qa_api_gateway:
   needs:
     - job: build_api_gateway_service
       artifacts: true
-    - job: deliver_api_gateway_dockerhub
+    - job: deliver_api_gatewayy_dockerhub
       artifacts: false
