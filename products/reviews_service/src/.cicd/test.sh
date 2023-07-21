@@ -21,8 +21,8 @@ else
     
     ## Unit tests 
     echo "Running unit tests and coverage for ${SERVICE_NAME} service"
-    # python -m pytest "./src/tests/unit" -p no:warnings --junitxml=unit_report.xml --cov="." --cov-report=xml:unit_report_coverage
-    # unit_tests_exit_status=$?
+    python -m pytest "./src/tests/unit" -p no:warnings --junitxml=unit_report.xml --cov="." --cov-report=xml:unit_report_coverage
+    unit_tests_exit_status=$?
 
     ## Functional tests
     echo "Running functional tests and coverage for ${SERVICE_NAME} service"
