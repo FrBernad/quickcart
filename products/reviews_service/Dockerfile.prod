@@ -1,8 +1,6 @@
 # Use Python 3.9 base image
 FROM python:3.9
 
-RUN apk add --no-cache curl
-
 # Create a non-root user for the container
 RUN groupadd -g 999 python \
     && useradd -r -u 999 -g python python \

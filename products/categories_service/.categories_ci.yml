@@ -1,4 +1,4 @@
-.categories_service_variables: &categories_service_variables
+.categories_service_variables: &categories_service_variables 
   DOMAIN_PATH: "products"
   SERVICE_PATH: "products/categories_service"
   SERVICE_NAME: "categories_api"

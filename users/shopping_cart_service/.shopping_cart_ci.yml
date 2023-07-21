@@ -1,4 +1,4 @@
-.shopping_cart_service_variables: &shopping_cart_service_variables 
+.shopping_cart_service_variables: &shopping_cart_service_variables
   DOMAIN_PATH: "users"
   SERVICE_PATH: "users/shopping_cart_service"
   SERVICE_NAME: "shopping_cart_api"

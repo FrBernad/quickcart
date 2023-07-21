@@ -1,4 +1,4 @@
-.purchase_orders_service_variables: &purchase_orders_service_variables 
+.purchase_orders_service_variables: &purchase_orders_service_variables
   DOMAIN_PATH: "sales"
   SERVICE_PATH: "sales/purchase_orders_service"
   SERVICE_NAME: "purchase_orders_api"
