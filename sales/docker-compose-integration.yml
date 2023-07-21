@@ -1,0 +1,18 @@
+version: "3.3"
+services:
+  purchase_orders_api_test:
+    container_name: purchase_orders_api_test_integration
+    image: ${PURCHASE_ORDERS_SERVICE_IMAGE}
+    profiles:
+      - purchase_orders_api
+    restart: always
+    environment:
+      - ENV=${ENV}
+      - SERVICE_NAME=purchase_orders_api
+    networks:
+      - services
+
+networks:
+  services:
+    name: services_${ENV}
+    external: true

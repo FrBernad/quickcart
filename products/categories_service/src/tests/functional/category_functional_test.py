@@ -1,36 +1,70 @@
 import pytest
-from src.api.models.shopping_cart_product import ShoppingCartProduct
+from src.api.models.categories import Category
 import json
 
 
-def test_get_shopping_cart_products(test_client, test_database):
-    product = ShoppingCartProduct(user_id=1, product_id=1, quantity=1)
-    test_database.session.add(product)
+def test_create_category(test_client, test_database):
+
+    resp = test_client.post(
+        "/categories",
+        content_type="application/json",
+        data=json.dumps(
+            {
+                "name": "Categoria 1",
+            }
+        ),
+    )
+
+    assert resp.status_code == 201
+    data = json.loads(resp.data)
+    assert 1 == data['id']
+    assert "Categoria 1" == data['name']
+
+def test_update_category_by_id_non_existent(test_client, test_database):
+
+    resp = test_client.put(
+        "/categories/1",
+        content_type="application/json",
+        data=json.dumps(
+            {
+                "name": "Categoria X",
+            }
+        ),
+    )
+
+    assert resp.status_code == 404
+
+
+def test_get_categories(test_client, test_database):
+    category1 = Category(id=1,name="Categoria 1")
+    test_database.session.add(category1)
+    test_database.session.commit()
+    category2 = Category(id=2,name="Categoria 2")
+    test_database.session.add(category2)
     test_database.session.commit()
 
     resp = test_client.get(
-        "/shopping-cart/1",
+        "/categories",
         content_type="application/json",
     )
 
     data = json.loads(resp.data)
     assert resp.status_code == 200
-    assert len(data) == 1
-    assert product.product_id == data[0]["product_id"]
-    assert product.quantity == data[0]["quantity"]
+    assert len(data) == 2
 
 
-def test_update_shopping_cart_product_quantity(test_client, test_database):
-    product = ShoppingCartProduct(user_id=1, product_id=1, quantity=1)
-    test_database.session.add(product)
+def test_update_category_by_id(test_client, test_database):
+    category = Category(name="Categoria 1")
+    test_database.session.add(category)
     test_database.session.commit()
+    category.id = 1
 
     resp = test_client.put(
-        "/shopping-cart/1/1",
+        "/categories/1",
         content_type="application/json",
         data=json.dumps(
             {
-                "quantity": 2,
+                "name": "Categoria X",
             }
         ),
     )
@@ -38,105 +72,60 @@ def test_update_shopping_cart_product_quantity(test_client, test_database):
     assert resp.status_code == 204
 
 
-def test_update_shopping_cart_product_with_invalid_quantity(test_client, test_database):
+def test_update_category_by_id_missing_name(test_client, test_database):
+    category = Category(name="Categoria 1")
+    test_database.session.add(category)
+    test_database.session.commit()
+    category.id = 1
+
     resp = test_client.put(
-        "/shopping-cart/1/1",
+        "/categories/1",
+        content_type="application/json",
+        data=json.dumps(
+            {}
+        ),
+    )
+
+    assert resp.status_code == 400
+
+
+def test_update_category_by_id_non_existent(test_client, test_database):
+
+
+    resp = test_client.put(
+        "/categories/1",
         content_type="application/json",
         data=json.dumps(
             {
-                "quantity": -1,
+                "name": "Categoria X",
             }
         ),
+    )
+
+    assert resp.status_code == 404
+
+
+def test_get_category_by_id(test_client, test_database):
+    category = Category(name="Categoria 1")
+    test_database.session.add(category)
+    test_database.session.commit()
+    category.id = 1
+
+    resp = test_client.get(
+        "/categories/1"
     )
 
     data = json.loads(resp.data)
-    assert resp.status_code == 400
-    assert "Invalid input" == data["error"]
-
-
-def test_checkout_shopping_cart(test_client, test_database):
-    product = ShoppingCartProduct(user_id=1, product_id=1, quantity=1)
-    test_database.session.add(product)
-    test_database.session.commit()
-
-    resp = test_client.post(
-        "/shopping-cart/1/checkout",
-        data=json.dumps(
-            {
-                "payment_method": "CREDIT_CARD",
-                "card_number": "1234123412341234",
-                "expiration_year": 2023,
-                "expiration_month": 11,
-                "cvv": "123",
-                "card_type": "VISA",
-            }
-        ),
-        content_type="application/json",
-    )
-
     assert resp.status_code == 200
+    assert category.id == data['id']
+    assert category.name == data['name']
 
 
-def test_checkout_shopping_cart_with_invalid_information(test_client, test_database):
-    resp = test_client.post(
-        "/shopping-cart/1/checkout",
-        data=json.dumps(
-            {
-                "payment_method": "CREDIT_CARDDD",
-                "card_number": "1234123412341234",
-                "expiration_year": 2023,
-                "expiration_month": 11,
-                "cvv": "123",
-                "card_type": "VISA",
-            }
-        ),
+def test_get_category_by_id_non_existent(test_client, test_database):
+ 
+    resp = test_client.get(
+        "/categories/1",
         content_type="application/json",
     )
 
-    data = json.loads(resp.data)
-    assert resp.status_code == 400
-    assert "Invalid input" == data["error"]
-
-
-def test_checkout_shopping_cart_with_missing_fields(test_client, test_database):
-    resp = test_client.post(
-        "/shopping-cart/1/checkout",
-        data=json.dumps(
-            {
-                "payment_method": "CREDIT_CARDDD",
-                "card_number": "1234123412341234",
-                "expiration_month": 11,
-                "cvv": "123",
-                "card_type": "VISA",
-            }
-        ),
-        content_type="application/json",
-    )
-
-    data = json.loads(resp.data)
-    assert resp.status_code == 400
-    assert "Invalid input" == data["error"]
-
-
-def test_delete_shopping_cart_product(test_client, test_database):
-    product = ShoppingCartProduct(user_id=1, product_id=1, quantity=1)
-    test_database.session.add(product)
-    test_database.session.commit()
-
-    resp = test_client.delete(
-        "/shopping-cart/1/1",
-    )
-
-    assert resp.status_code == 204
-
-
-def test_empty_shopping(test_client, test_database):
-    product = ShoppingCartProduct(user_id=1, product_id=1, quantity=1)
-    test_database.session.add(product)
-    test_database.session.commit()
-
-    resp = test_client.delete(
-        "/shopping-cart/1",
-    )
-
-    assert resp.status_code == 204
+    assert resp.status_code == 404

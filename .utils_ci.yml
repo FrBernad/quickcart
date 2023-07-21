@@ -23,15 +23,6 @@
 .login_to_gitlab_registry:
   - docker login -u $CI_REGISTRY_USER --password $CI_JOB_TOKEN $CI_REGISTRY
 
-# .setup_multi_os_build:
-#   - docker buildx create --name multi-os-driver --driver docker-container --bootstrap --use
-
-# .build_and_push_gitlab_prod_image:
-#   - docker buildx build --platform linux/arm64,linux/amd64 -t ${GITLAB_PROD_IMAGE} -t ${GITLAB_PROD_IMAGE_LATEST} -f ${SERVICE_PATH}/Dockerfile.prod ${SERVICE_PATH} --push
-
-# .build_and_push_gitlab_test_image:
-#   - docker buildx build --platform linux/arm64,linux/amd64 -t ${GITLAB_TEST_IMAGE} -t ${GITLAB_TEST_IMAGE_LATEST} -f ${SERVICE_PATH}/Dockerfile.test --build-arg "BASE_IMAGE=$GITLAB_PROD_IMAGE" ${SERVICE_PATH} --push
-
 .build_gitlab_prod_image:
   - docker build -t ${GITLAB_PROD_IMAGE} -f ${SERVICE_PATH}/Dockerfile.prod ${SERVICE_PATH}
   - docker tag ${GITLAB_PROD_IMAGE} ${GITLAB_PROD_IMAGE_LATEST}
@@ -90,7 +81,7 @@
   script:
     - export BUILD_ID=$(date +%Y%m%d%H%M)
     - echo "BUILD_ID=${BUILD_ID}" > context.env
-    - docker network inspect services-prod >/dev/null 2>&1 || docker network create --driver bridge services_prod
+    - docker network inspect services_prod >/dev/null 2>&1 || docker network create --driver bridge services_prod
     - docker network inspect services_qa >/dev/null 2>&1 || docker network create --driver bridge services_qa
     - docker network inspect services_test >/dev/null 2>&1 || docker network create --driver bridge services_test
   artifacts:
@@ -107,10 +98,6 @@
     - !reference [.create_and_export_service_images_variables]
     - !reference [.set_images_names]
   script:
-    # - !reference [.setup_multi_os_build]
-    # - !reference [.login_to_gitlab_registry]
-    # - !reference [.build_and_push_gitlab_prod_image]
-    # - !reference [.build_and_push_gitlab_test_image]
     - !reference [.build_gitlab_prod_image]
     - !reference [.build_gitlab_test_image]
     - !reference [.login_to_gitlab_registry]
@@ -141,20 +128,20 @@
     - docker compose -f ${DOMAIN_PATH}/docker-compose.yml -p ${SERVICE_NAME}_${ENV} --env-file ${DOMAIN_PATH}/.env_files/.env.test --profile ${SERVICE_NAME} up --abort-on-container-exit
     - docker compose -f ${DOMAIN_PATH}/docker-compose.yml -p ${SERVICE_NAME}_${ENV} --env-file ${DOMAIN_PATH}/.env_files/.env.test --profile ${SERVICE_NAME} rm
 
-    - docker cp ${SERVICE_NAME}_${ENV}:/usr/app/coverage.xml .
-    - docker cp ${SERVICE_NAME}_${ENV}:/usr/app/report.xml .
-  artifacts:
-    when: always
-    paths:
-      - coverage.xml
-      - report.xml
-    reports:
-      junit: report.xml
+    # - docker cp ${SERVICE_NAME}_${ENV}:/usr/app/coverage.xml .
+    # - docker cp ${SERVICE_NAME}_${ENV}:/usr/app/report.xml .
+  # artifacts:
+  #   when: always
+  #   paths:
+  #     - unit_report_coverage.xml
+  #     - unit_report.xml
+  #     - functional_report_coverage.xml
+  #     - functional_report.xml
 
 .deploy_qa:
   stage: qa
   tags:
-    - dev
+    - qa
   variables:
     ENV: "qa"
   rules:
@@ -166,10 +153,35 @@
     - docker compose -f ${DOMAIN_PATH}/docker-compose.yml -p ${SERVICE_NAME}_${ENV} --env-file ${DOMAIN_PATH}/.env_files/.env.qa --profile ${SERVICE_NAME} rm
     - docker compose -f ${DOMAIN_PATH}/docker-compose.yml -p ${SERVICE_NAME}_${ENV} --env-file ${DOMAIN_PATH}/.env_files/.env.qa --profile ${SERVICE_NAME} up -d
 
+.deploy_api_gateway:
+  rules:
+    - !reference [.run_if_service_changes, rules]
+  script:
+    - !reference [.login_to_dockerhub_registry]
+    - docker compose -f ${DOMAIN_PATH}/docker-compose.yml -p ${SERVICE_NAME}_${ENV} pull
+    - docker compose -f ${DOMAIN_PATH}/docker-compose.yml -p ${SERVICE_NAME}_${ENV} stop
+    - docker compose -f ${DOMAIN_PATH}/docker-compose.yml -p ${SERVICE_NAME}_${ENV} rm
+    - docker compose -f ${DOMAIN_PATH}/docker-compose.yml -p ${SERVICE_NAME}_${ENV} up -d
+
+.test_integration_and_functional_service:
+  stage: qa
+  tags:
+    - qa
+  variables:
+    ENV: "qa"
+  rules:
+    - !reference [.run_if_service_changes, rules]
+  script:
+    - !reference [.login_to_gitlab_registry]
+    - docker compose -f ${DOMAIN_PATH}/docker-compose-integration.yml -p ${SERVICE_NAME}_${ENV} --env-file ${DOMAIN_PATH}/.env_files/.env.qa_test --profile ${SERVICE_NAME} pull
+    - docker compose -f ${DOMAIN_PATH}/docker-compose-integration.yml -p ${SERVICE_NAME}_${ENV} --env-file ${DOMAIN_PATH}/.env_files/.env.qa_test --profile ${SERVICE_NAME} stop
+    - docker compose -f ${DOMAIN_PATH}/docker-compose-integration.yml -p ${SERVICE_NAME}_${ENV} --env-file ${DOMAIN_PATH}/.env_files/.env.qa_test --profile ${SERVICE_NAME} rm
+    - docker compose -f ${DOMAIN_PATH}/docker-compose-integration.yml -p ${SERVICE_NAME}_${ENV} --env-file ${DOMAIN_PATH}/.env_files/.env.qa_test --profile ${SERVICE_NAME} up --abort-on-container-exit
+
 .deliver_dockerhub:
   stage: deliver
   tags:
-    - dev
+    - qa
   rules:
     - !reference [.run_if_service_changes, rules]
   before_script:

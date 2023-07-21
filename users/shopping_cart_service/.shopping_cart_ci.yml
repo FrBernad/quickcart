@@ -23,13 +23,29 @@ deploy_qa_shopping_cart_service:
     - job: test_shopping_cart_service
       artifacts: false
 
+test_integration_and_functional_shopping_cart_service:
+  extends: .test_integration_and_functional_service
+  variables: *shopping_cart_service_variables
+  needs:
+    - job: build_shopping_cart_service
+      artifacts: true
+    - job: deploy_qa_shopping_cart_service
+      artifacts: false
+    - job: deploy_qa_api_gateway
+      artifacts: false
+      optional: true
+    - job: deploy_qa_users_service
+      artifacts: false
+      optional: true
+    - job: deploy_qa_products_service
+      artifacts: false
+      optional: true
+
 deliver_shopping_cart_dockerhub:
   extends: .deliver_dockerhub
   variables: *shopping_cart_service_variables
   needs:
     - job: build_shopping_cart_service
       artifacts: true
-    - job: test_shopping_cart_service
-      artifacts: false
-    - job: deploy_qa_shopping_cart_service
+    - job: test_integration_and_functional_shopping_cart_service
       artifacts: false

@@ -20,7 +20,6 @@ def create_category(category_service: CategoryService):
     data = request.get_json()
     name = data.get("name")
     category = category_service.create_category(name=name)
-
     return jsonify(category_schema.dump(category)), 201
 
 
@@ -46,6 +45,11 @@ def update_category(category_id, category_service: CategoryService):
 def get_category_by_id(category_id, category_service: CategoryService):
     category = category_service.get_category_by_id(category_id=category_id)
     return jsonify(category_schema.dump(category)), 200
+
+
+@categories_bp.route("/health", methods=["GET"])
+def health_check():
+    return jsonify({"status": "OK"}), 200
 
 
 @categories_bp.errorhandler(404)

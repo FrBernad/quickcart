@@ -1,4 +1,4 @@
-.categories_service_variables: &categories_service_variables
+.categories_service_variables: &categories_service_variables 
   DOMAIN_PATH: "products"
   SERVICE_PATH: "products/categories_service"
   SERVICE_NAME: "categories_api"
@@ -7,12 +7,33 @@ build_categories_service:
   extends: .build_service
   variables: *categories_service_variables
 
-test_categories_service:
+test_categories_service: 
   extends: .test_service
   variables: *categories_service_variables
   needs:
     - job: build_categories_service
       artifacts: true
+
+deploy_qa_categories_service:
+  extends: .deploy_qa
+  variables: *categories_service_variables
+  needs:
+    - job: build_categories_service
+      artifacts: true
+    - job: test_categories_service
+      artifacts: false
+
+test_integration_and_functional_categories_service:
+  extends: .test_integration_and_functional_service
+  variables: *categories_service_variables
+  needs:
+    - job: build_categories_service
+      artifacts: true
+    - job: deploy_qa_categories_service
+      artifacts: false
+    - job: deploy_qa_api_gateway
+      artifacts: false
+      optional: true
 
 deliver_categories_dockerhub:
   extends: .deliver_dockerhub
@@ -20,5 +41,5 @@ deliver_categories_dockerhub:
   needs:
     - job: build_categories_service
       artifacts: true
-    - job: test_categories_service
+    - job: test_integration_and_functional_categories_service
       artifacts: false

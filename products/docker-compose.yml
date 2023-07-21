@@ -10,6 +10,12 @@ services:
     depends_on:
       categories_db:
         condition: service_healthy
+    healthcheck:
+      test: [ "CMD-SHELL", "curl -f http://localhost:5000/health" ]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 40s
     environment:
       - ENV=${ENV}
       - SERVICE_NAME=categories_api
@@ -60,6 +66,12 @@ services:
     depends_on:
       products_db:
         condition: service_healthy
+    healthcheck:
+      test: [ "CMD-SHELL", "curl -f http://localhost:5000/health" ]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 40s
     environment:
       - ENV=${ENV}
       - SERVICE_NAME=products_api
@@ -110,6 +122,12 @@ services:
     depends_on:
       reviews_db:
         condition: service_healthy
+    healthcheck:
+      test: [ "CMD-SHELL", "curl -f http://localhost:5000/health" ]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 40s
     environment:
       - ENV=${ENV}
       - SERVICE_NAME=reviews_api

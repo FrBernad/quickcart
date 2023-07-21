@@ -2,8 +2,10 @@ stages:
   - prep
   - build
   - test
+  - prep_qa
   - qa
   - deliver
+  - prep_deploy
   - deploy
 
 default:

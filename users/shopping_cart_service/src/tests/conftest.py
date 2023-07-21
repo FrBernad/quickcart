@@ -30,8 +30,9 @@ def test_shopping_cart_dao():
 @pytest.fixture(scope="module")
 def test_shopping_cart_service():
     from src.api.services.shopping_cart_service_impl import ShoppingCartServiceImpl
+    from src.api.persistence.shopping_cart_dao_impl import ShoppingCartDaoImpl
 
-    shopping_cart_dao_mock = Mock(spec=ShoppingCartServiceImpl)
+    shopping_cart_dao_mock = Mock(spec=ShoppingCartDaoImpl)
     service = ShoppingCartServiceImpl(shopping_cart_dao_mock)
     yield service, shopping_cart_dao_mock
 

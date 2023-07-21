@@ -19,6 +19,7 @@ class UserServiceImpl(UserService):
         user = self.user_dao.get_user_by_id(user_id=user_id)
         if not user:
             raise UserNotFoundException(user_id=user_id)
+        return user
 
     def create_user(self, username, email, password):
         user = self.get_user_by_email(email=email)

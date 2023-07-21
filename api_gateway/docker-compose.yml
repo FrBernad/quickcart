@@ -1,0 +1,15 @@
+version: "3.3"
+services:
+  api_gateway:
+    container_name: api_gateway_api_${ENV}
+    image: "${DOCKERHUB_IMAGE_BASE}/api_gateway:prod-latest"
+    restart: always
+    ports:
+      - "80"
+    networks:
+      - services
+
+networks:
+  services:
+    name: services_${ENV}
+    external: true

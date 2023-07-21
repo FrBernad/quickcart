@@ -1,73 +1,114 @@
 import pytest
-from src.api.models.shopping_cart_product import ShoppingCartProduct
+from src.api.models.categories import Category
+from src.api.interfaces.exceptions.category_not_found_exception import CategoryNotFoundException
 from unittest.mock import MagicMock
 
 
-def test_get_products(test_shopping_cart_service):
-    mock_products = [ShoppingCartProduct(user_id=1, product_id=1, quantity=1)]
+def test_get_categories(test_category_service):
+    mock_categories = [Category(id=1, name="Categoria 1"), Category(id=2, name="Categoria 2")]
 
-    def mock_get_products(user_id):
-        return mock_products
+    def mock_get_categories():
+        return mock_categories
 
-    shopping_cart_service, shopping_cart_dao_mock = test_shopping_cart_service
+    category_service, category_dao_mock = test_category_service
 
-    shopping_cart_dao_mock.get_products = mock_get_products
+    category_dao_mock.get_categories = mock_get_categories
 
-    products = shopping_cart_service.get_products(1)
+    categories = category_service.get_categories()
 
-    assert len(products) == len(mock_products)
-    assert products[0].user_id == mock_products[0].user_id
-    assert products[0].product_id == mock_products[0].product_id
-    assert products[0].quantity == mock_products[0].quantity
-
-
-def test_add_product(test_shopping_cart_service):
-    def mock_add_product(user_id, product_id, quantity):
-        return
-
-    shopping_cart_service, shopping_cart_dao_mock = test_shopping_cart_service
-
-    shopping_cart_dao_mock.add_product = MagicMock(spec=mock_add_product)
-
-    shopping_cart_service.add_product(1, 1, 1)
-
-    shopping_cart_dao_mock.add_product.assert_called()
+    assert len(categories) == len(mock_categories)
+    assert categories[0].id == mock_categories[0].id
+    assert categories[0].name == mock_categories[0].name
+    assert categories[1].id == mock_categories[1].id
+    assert categories[1].name == mock_categories[1].name
 
 
-def test_checkout(test_shopping_cart_service):
-    def mock_empty(user_id):
-        return
+def test_get_category_by_id(test_category_service):
+    mock_category = Category(id=1, name="Categoria 1")
 
-    shopping_cart_service, shopping_cart_dao_mock = test_shopping_cart_service
-
-    shopping_cart_dao_mock.empty = MagicMock(spec=mock_empty)
-
-    shopping_cart_service.empty(1)
-
-    shopping_cart_dao_mock.empty.assert_called()
+    def mock_get_category_by_id(category_id):
+        return mock_category
 
 
-def test_delete_product(test_shopping_cart_service):
-    def mock_delete_product(user_id, product_id):
-        return
+    category_service, category_dao_mock = test_category_service
 
-    shopping_cart_service, shopping_cart_dao_mock = test_shopping_cart_service
+    category_dao_mock.get_category_by_id = mock_get_category_by_id
 
-    shopping_cart_dao_mock.delete_product = MagicMock(spec=mock_delete_product)
-
-    shopping_cart_service.delete_product(1, 1)
-
-    shopping_cart_dao_mock.delete_product.assert_called()
+    category = category_service.get_category_by_id(1)
+    assert category.id == mock_category.id
+    assert category.name == mock_category.name
 
 
-def test_empty(test_shopping_cart_service):
-    def mock_empty(user_id):
-        return
 
-    shopping_cart_service, shopping_cart_dao_mock = test_shopping_cart_service
+def test_get_category_by_id_non_existent(test_category_service):
 
-    shopping_cart_dao_mock.empty = MagicMock(spec=mock_empty)
+    def mock_get_category_by_id(category_id):
+        return None
+    
+    category_service, category_dao_mock = test_category_service
 
-    shopping_cart_service.empty(1)
+    category_dao_mock.get_category_by_id = mock_get_category_by_id
 
-    shopping_cart_dao_mock.empty.assert_called()
+    with pytest.raises(CategoryNotFoundException):
+        category = category_service.get_category_by_id(1)
+
+
+def test_create_category(test_category_service):
+    mock_category = Category(id=1, name="Categoria 1")
+
+    def mock_create_category(name):
+        return mock_category
+
+    category_service, category_dao_mock = test_category_service
+
+    category_dao_mock.create_category = mock_create_category
+
+    category = category_service.create_category("Categoria 1")
+
+    assert category.id == mock_category.id
+    assert category.name == mock_category.name
+
+
+def test_update_category(test_category_service):
+    mock_category = Category(id=1, name="Categoria 1")
+    mock_category_updated = Category(id=1, name="Categoria 2")
+
+
+    def mock_update_category(category_id,name):
+        return mock_category_updated
+    
+    def mock_get_category_by_id(category_id):
+        return mock_category
+    
+   
+    category_service, category_dao_mock = test_category_service
+
+    category_dao_mock.get_category_by_id = mock_get_category_by_id
+
+    category_dao_mock.update_category = mock_update_category
+
+    category = category_service.update_category(1,"Categoria 2")
+    
+    assert category.id == mock_category_updated.id
+    assert category.name == mock_category_updated.name
+    
+
+def test_update_category_invalid_id(test_category_service):
+
+
+
+    def mock_update_category(category_id,name):
+        return None
+    
+    def mock_get_category_by_id(category_id):
+        return None
+    
+    
+    category_service, category_dao_mock = test_category_service
+
+    category_dao_mock.get_category_by_id = mock_get_category_by_id
+
+    category_dao_mock.update_category = mock_update_category
+
+    with pytest.raises(CategoryNotFoundException):
+        category = category_service.update_category(1,"Categoria 1")

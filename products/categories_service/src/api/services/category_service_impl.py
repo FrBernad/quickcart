@@ -20,9 +20,11 @@ class CategoryServiceImpl(CategoryService):
     def get_category_by_id(self, category_id):
         category = self.category_dao.get_category_by_id(category_id=category_id)
         if not category:
-            raise CategoryNotFoundException()
+            raise CategoryNotFoundException(category_id)
         return category
 
     def update_category(self, category_id, name):
         category = self.get_category_by_id(category_id=category_id)
+        if not category:
+            raise CategoryNotFoundException(category_id)
         return self.category_dao.update_category(category, name=name)

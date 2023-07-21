@@ -15,12 +15,18 @@ services:
       - POSTGRES_DB=${PURCHASE_ORDERS_DB}
       - POSTGRES_SERVICE=purchase_orders_db
       - EXPOSED_INTERFACES=${EXPOSED_INTERFACES}
-    networks:
-      - purchase_orders
-      - services
+    healthcheck:
+      test: [ "CMD-SHELL", "curl -f http://localhost:5000/health" ]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 40s
     depends_on:
       purchase_orders_db:
         condition: service_healthy
+    networks:
+      - purchase_orders
+      - services
 
   purchase_orders_db:
     container_name: purchase_orders_db_${ENV}
