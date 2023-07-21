@@ -1,127 +1,80 @@
 import pytest
-from src.api.models.shopping_cart_product import ShoppingCartProduct
+from src.api.models.reviews import Review
 from unittest.mock import MagicMock
 
 
-def test_get_products(monkeypatch, test_shopping_cart_dao):
-    mock_products = [ShoppingCartProduct(user_id=1, product_id=1, quantity=1)]
+def test_get_reviews_by_product(monkeypatch, test_review_dao):
+    mock_reviews = [Review(product_id=1, user_id=1, review_body="test", score=1)]
 
-    shopping_cart_db_model_mock = MagicMock()
+    review_db_model_mock = MagicMock()
     query_mock = MagicMock()
     all_mock = MagicMock()
-    all_mock.all = lambda: mock_products
-    query_mock.filter_by = lambda user_id: all_mock
-    shopping_cart_db_model_mock.query = query_mock
+    all_mock.all = lambda: mock_reviews
+    query_mock.filter_by = lambda prodcut_id: all_mock
+    review_db_model_mock.query = query_mock
     monkeypatch.setattr(
-        "src.api.persistence.shopping_cart_dao_impl.ShoppingCartProduct",
-        shopping_cart_db_model_mock,
+        "src.api.persistence.review_dao_impl.Review",
+        review_db_model_mock,
     )
 
-    shopping_cart_dao, db_mock = test_shopping_cart_dao
+    review_dao, db_mock = test_review_dao
 
-    user_id = 1
+    product_id = 1
 
-    products = shopping_cart_dao.get_products(user_id)
+    reviews = review_dao.get_reviews_by_product(product_id)
 
-    assert len(mock_products) == len(products)
-    assert mock_products[0].user_id == products[0].user_id
-    assert mock_products[0].product_id == products[0].product_id
-    assert mock_products[0].quantity == products[0].quantity
+    assert len(mock_reviews) == len(reviews)
+    assert mock_reviews[0].product_id == reviews[0].product_id
+    assert mock_reviews[0].user_id == reviews[0].user_id
+    assert mock_reviews[0].review_body == reviews[0].review_body
+    assert mock_reviews[0].score == reviews[0].score
+
+def test_get_review_by_id(monkeypatch, test_review_dao):
+    mock_review = Review(product_id=1, user_id=1, review_body="test", score=1)
+
+    review_db_model_mock = MagicMock()
+    query_mock = MagicMock()
+    first_mock = MagicMock()
+    first_mock.first = lambda: mock_review
+    query_mock.filter_by = lambda review_id: first_mock
+    review_db_model_mock.query = query_mock
+    monkeypatch.setattr(
+        "src.api.persistence.review_dao_impl.Review",
+        review_db_model_mock,
+    )
+
+    review_dao, db_mock = test_review_dao
+
+    review_id = 1
+
+    review = review_dao.get_review_by_id(review_id)
+
+    assert mock_review.product_id == review.product_id
+    assert mock_review.user_id == review.user_id
+    assert mock_review.review_body == review.review_body
+    assert mock_review.score == review.score
 
 
-def test_add_product(monkeypatch, test_shopping_cart_dao):
-    shopping_cart_db_model_mock = MagicMock()
+def test_create_review(monkeypatch, test_review_dao):
+    review_db_model_mock = MagicMock()
     query_mock = MagicMock()
     first_mock = MagicMock()
     first_mock.first = lambda: []
-    query_mock.filter_by = lambda user_id, product_id: first_mock
-    shopping_cart_db_model_mock.query = query_mock
+    query_mock.filter_by = lambda review_id: first_mock
+    review_db_model_mock.query = query_mock
     monkeypatch.setattr(
-        "src.api.persistence.shopping_cart_dao_impl.ShoppingCartProduct",
-        shopping_cart_db_model_mock,
+        "src.api.persistence.review_dao_impl.Review",
+        review_db_model_mock,
     )
 
-    shopping_cart_dao, db_mock = test_shopping_cart_dao
+    review_dao, db_mock = test_review_dao
 
-    user_id = 1
     product_id = 1
-    quantity = 3
+    user_id = 1
+    review_body = 1
+    score = 3
 
-    shopping_cart_dao.add_product(user_id, product_id, quantity)
+    review_dao.create_review(product_id, user_id, review_body, score)
 
     db_mock.session.add.assert_called_once()
-    db_mock.session.commit.assert_called_once()
-
-
-def test_update_product(monkeypatch, test_shopping_cart_dao):
-    mock_product = ShoppingCartProduct(user_id=1, product_id=1, quantity=1)
-
-    shopping_cart_db_model_mock = MagicMock()
-    query_mock = MagicMock()
-    first_mock = MagicMock()
-    first_mock.first = lambda: mock_product
-    query_mock.filter_by = lambda user_id, product_id: first_mock
-    shopping_cart_db_model_mock.query = query_mock
-    monkeypatch.setattr(
-        "src.api.persistence.shopping_cart_dao_impl.ShoppingCartProduct",
-        shopping_cart_db_model_mock,
-    )
-
-    shopping_cart_dao, db_mock = test_shopping_cart_dao
-
-    user_id = 1
-    product_id = 1
-    quantity = 3
-
-    shopping_cart_dao.add_product(user_id, product_id, quantity)
-
-    assert mock_product.user_id == user_id
-    assert mock_product.product_id == product_id
-    assert mock_product.quantity == quantity
-
-    db_mock.session.commit.assert_called_once()
-
-
-def test_delete_product(monkeypatch, test_shopping_cart_dao):
-    shopping_cart_db_model_mock = MagicMock()
-    query_mock = MagicMock()
-    delete_mock = MagicMock()
-    delete_mock.delete = delete_mock
-    query_mock.filter_by = lambda user_id, product_id: delete_mock
-    shopping_cart_db_model_mock.query = query_mock
-    monkeypatch.setattr(
-        "src.api.persistence.shopping_cart_dao_impl.ShoppingCartProduct",
-        shopping_cart_db_model_mock,
-    )
-
-    shopping_cart_dao, db_mock = test_shopping_cart_dao
-
-    user_id = 1
-    product_id = 1
-
-    shopping_cart_dao.delete_product(user_id, product_id)
-
-    delete_mock.assert_called_once()
-    db_mock.session.commit.assert_called_once()
-
-
-def test_empty(monkeypatch, test_shopping_cart_dao):
-    shopping_cart_db_model_mock = MagicMock()
-    query_mock = MagicMock()
-    delete_mock = MagicMock()
-    delete_mock.delete = delete_mock
-    query_mock.filter_by = lambda user_id: delete_mock
-    shopping_cart_db_model_mock.query = query_mock
-    monkeypatch.setattr(
-        "src.api.persistence.shopping_cart_dao_impl.ShoppingCartProduct",
-        shopping_cart_db_model_mock,
-    )
-
-    shopping_cart_dao, db_mock = test_shopping_cart_dao
-
-    user_id = 1
-
-    shopping_cart_dao.empty(user_id)
-
-    delete_mock.assert_called_once()
     db_mock.session.commit.assert_called_once()
