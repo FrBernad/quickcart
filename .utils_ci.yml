@@ -1,4 +1,4 @@
-# Rerun: add/remove space 
+# Rerun: add/remove space  
 
 .create_and_export_service_images_variables:
   # GITLAB PROD IMAGE
