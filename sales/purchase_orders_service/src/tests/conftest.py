@@ -1,5 +1,6 @@
 import pytest
 from src.api.persistence.db import db
+from src.api.persistence.purchase_order_dao_impl import PurchaseOrderDaoImpl
 from src import create_app
 from unittest.mock import Mock
 
@@ -31,7 +32,7 @@ def test_purchase_order_dao():
 def test_purchase_order_service():
     from src.api.services.purchase_order_service_impl import PurchaseOrderServiceImpl
 
-    purchase_order_dao_mock = Mock(spec=PurchaseOrderServiceImpl)
+    purchase_order_dao_mock = Mock(spec=PurchaseOrderDaoImpl)
     service = PurchaseOrderServiceImpl(purchase_order_dao_mock)
     yield service, purchase_order_dao_mock
 
