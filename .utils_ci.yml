@@ -63,6 +63,7 @@
       changes:
         paths:
           - $SERVICE_PATH/**/*
+          - $SERVICE_PATH/*
           - .utils_ci.yml
 
 .run_if_domain_changes:
