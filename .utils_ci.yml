@@ -161,7 +161,7 @@
     - docker compose -f ${DOMAIN_PATH}/docker-compose.yml -p ${SERVICE_NAME}_${ENV} pull
     - docker compose -f ${DOMAIN_PATH}/docker-compose.yml -p ${SERVICE_NAME}_${ENV} stop
     - docker compose -f ${DOMAIN_PATH}/docker-compose.yml -p ${SERVICE_NAME}_${ENV} rm
-    - docker compose -f ${DOMAIN_PATH}/docker-compose.yml -p ${SERVICE_NAME}_${ENV} up
+    - docker compose -f ${DOMAIN_PATH}/docker-compose.yml -p ${SERVICE_NAME}_${ENV} up -d
 
 .test_integration_and_functional_service:
   stage: qa
