@@ -1,4 +1,4 @@
-.api_gateway_domain_variables: &api_gateway_domain_variables 
+.api_gateway_domain_variables: &api_gateway_domain_variables
   DOMAIN_PATH: "api_gateway"
   SERVICE_NAME: "api_gateway"
   SERVICE_PATH: "api_gateway"
