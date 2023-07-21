@@ -26,9 +26,9 @@ deploy_prod_api_gateway:
   variables:
     ENV: prod
     <<: *api_gateway_domain_variables
-  # needs:
-  #   - job: deliver_api_gateway_dockerhub
-  #     artifacts: true
+  needs:
+    - job: build_api_gateway_service
+      artifacts: true
 
 deploy_qa_api_gateway:
   stage: qa
@@ -38,6 +38,6 @@ deploy_qa_api_gateway:
   variables:
     ENV: qa
     <<: *api_gateway_domain_variables
-  # needs:
-  #   - job: deliver_api_gateway_dockerhub
-  #     artifacts: true
+  needs:
+    - job: build_api_gateway_service
+      artifacts: true
