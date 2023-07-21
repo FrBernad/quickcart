@@ -33,6 +33,7 @@ test_integration_and_functional_purchase_orders_service:
       artifacts: false
     - job: deploy_qa_api_gateway
       artifacts: false
+      optional: true
     - job: deploy_qa_users_service
       artifacts: false
       optional: true

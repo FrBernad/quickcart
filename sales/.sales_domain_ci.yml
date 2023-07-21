@@ -10,3 +10,4 @@ deploy_prod_sales_domain:
       artifacts: false
     - job: deploy_prod_api_gateway
       artifacts: false
+      optional: true

@@ -33,6 +33,7 @@ test_integration_and_functional_categories_service:
       artifacts: false
     - job: deploy_qa_api_gateway
       artifacts: false
+      optional: true
 
 deliver_categories_dockerhub:
   extends: .deliver_dockerhub

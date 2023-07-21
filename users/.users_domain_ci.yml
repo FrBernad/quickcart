@@ -13,3 +13,4 @@ deploy_prod_users_domain:
       artifacts: false
     - job: deploy_prod_api_gateway
       artifacts: false
+      optional: true
