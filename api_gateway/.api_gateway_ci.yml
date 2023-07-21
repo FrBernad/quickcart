@@ -29,6 +29,8 @@ deploy_prod_api_gateway:
   needs:
     - job: build_api_gateway_service
       artifacts: true
+    - job: deliver_api_gateway_dockerhub
+      artifacts: false
 
 deploy_qa_api_gateway:
   stage: qa
@@ -41,3 +43,5 @@ deploy_qa_api_gateway:
   needs:
     - job: build_api_gateway_service
       artifacts: true
+    - job: deliver_api_gateway_dockerhub
+      artifacts: false
