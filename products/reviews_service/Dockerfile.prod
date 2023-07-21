@@ -1,5 +1,7 @@
-# Use a slim Python 3.9 base image
-FROM python:3.9-slim-buster
+# Use Python 3.9 base image
+FROM python:3.9-alpine
+
+RUN apk add --no-cache curl
 
 # Create a non-root user for the container
 RUN groupadd -g 999 python \
@@ -31,6 +33,9 @@ RUN pip install --upgrade pip && \
 
 # Expose port 5000 for the Flask app
 EXPOSE 5000
+
+# Healtheck
+HEALTHCHECK CMD curl -f http://localhost:5000/
 
 # Start the Flask app
 CMD ["gunicorn", "-b", "0.0.0.0:5000", "main:app"]

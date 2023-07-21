@@ -10,6 +10,12 @@ services:
     depends_on:
       users_db:
         condition: service_healthy
+    healthcheck:
+      test: [ "CMD-SHELL", "curl -f http://localhost:5000/health" ]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 40s
     environment:
       - ENV=${ENV}
       - SERVICE_NAME=users_api
@@ -60,6 +66,12 @@ services:
     depends_on:
       shopping_cart_db:
         condition: service_healthy
+    healthcheck:
+      test: [ "CMD-SHELL", "curl -f http://localhost:5000/health" ]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 40s
     environment:
       - ENV=${ENV}
       - SERVICE_NAME=shopping_cart_api
