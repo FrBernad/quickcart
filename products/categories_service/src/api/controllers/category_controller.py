@@ -20,7 +20,6 @@ def create_category(category_service: CategoryService):
     data = request.get_json()
     name = data.get("name")
     category = category_service.create_category(name=name)
-
     return jsonify(category_schema.dump(category)), 201
 
 

@@ -1,5 +1,5 @@
 ---
-test_name: Shopping Cart get, update and checkout interface test
+test_name: Category get, update and checkout interface test
 
 includes:
   - !include tavern_category_variables.yaml
