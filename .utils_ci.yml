@@ -176,7 +176,7 @@
     - docker compose -f ${DOMAIN_PATH}/docker-compose-integration.yml -p ${SERVICE_NAME}_${ENV} --env-file ${DOMAIN_PATH}/.env_files/.env.qa_test --profile ${SERVICE_NAME} pull
     - docker compose -f ${DOMAIN_PATH}/docker-compose-integration.yml -p ${SERVICE_NAME}_${ENV} --env-file ${DOMAIN_PATH}/.env_files/.env.qa_test --profile ${SERVICE_NAME} stop
     - docker compose -f ${DOMAIN_PATH}/docker-compose-integration.yml -p ${SERVICE_NAME}_${ENV} --env-file ${DOMAIN_PATH}/.env_files/.env.qa_test --profile ${SERVICE_NAME} rm
-    - docker compose -f ${DOMAIN_PATH}/docker-compose-integration.yml -p ${SERVICE_NAME}_${ENV} --env-file ${DOMAIN_PATH}/.env_files/.env.qa_test --profile ${SERVICE_NAME} up -d
+    - docker compose -f ${DOMAIN_PATH}/docker-compose-integration.yml -p ${SERVICE_NAME}_${ENV} --env-file ${DOMAIN_PATH}/.env_files/.env.qa_test --profile ${SERVICE_NAME} up --abort-on-container-exit
 
 .deliver_dockerhub:
   stage: deliver
