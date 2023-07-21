@@ -31,12 +31,14 @@ test_integration_and_functional_products_service:
       artifacts: true
     - job: deploy_qa_products_service
       artifacts: false
-    - job: deploy_qa_users_service
-      artifacts: false
-    - job: deploy_qa_categories_service
-      artifacts: false
     - job: deploy_qa_api_gateway
       artifacts: false
+    - job: deploy_qa_users_service
+      artifacts: false
+      optional: true
+    - job: deploy_qa_categories_service
+      artifacts: false
+      optional: true
 
 deliver_products_dockerhub:
   extends: .deliver_dockerhub
