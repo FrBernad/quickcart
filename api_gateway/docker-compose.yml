@@ -3,9 +3,6 @@ services:
   api_gateway:
     container_name: api_gateway_api_${ENV}
     image: "${DOCKERHUB_IMAGE_BASE}/api_gateway_api:prod-latest"
-    profiles:
-      - api_gateway_api
-      - all
     restart: always
     ports:
       - "80:80"

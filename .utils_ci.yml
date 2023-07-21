@@ -157,10 +157,10 @@
   rules:
     - !reference [.run_if_service_changes, rules]
   script:
-    - docker compose -f ${DOMAIN_PATH}/docker-compose.yml -p ${SERVICE_NAME}_${ENV} --profile ${SERVICE_NAME} pull
-    - docker compose -f ${DOMAIN_PATH}/docker-compose.yml -p ${SERVICE_NAME}_${ENV} --profile ${SERVICE_NAME} stop
-    - docker compose -f ${DOMAIN_PATH}/docker-compose.yml -p ${SERVICE_NAME}_${ENV} --profile ${SERVICE_NAME} rm
-    - docker compose -f ${DOMAIN_PATH}/docker-compose.yml -p ${SERVICE_NAME}_${ENV} --profile ${SERVICE_NAME} up
+    - docker compose -f ${DOMAIN_PATH}/docker-compose.yml -p ${SERVICE_NAME}_${ENV} pull
+    - docker compose -f ${DOMAIN_PATH}/docker-compose.yml -p ${SERVICE_NAME}_${ENV} stop
+    - docker compose -f ${DOMAIN_PATH}/docker-compose.yml -p ${SERVICE_NAME}_${ENV} rm
+    - docker compose -f ${DOMAIN_PATH}/docker-compose.yml -p ${SERVICE_NAME}_${ENV} up
 
 .test_integration_and_functional_service:
   stage: qa
