@@ -1,8 +1,8 @@
 ---
-test_name: Shopping Cart get, update and checkout interface test
+test_name: Reviews interface test
 
 includes:
-  - !include tavern_shopping_cart_variables.yaml
+  - !include tavern_reviews_variables.yaml
 
 marks:
   - usefixtures:
@@ -10,70 +10,25 @@ marks:
       - test_database
 
 stages:
-  - name: Get empty shopping cart
+  - name: Get reviews by product
     request:
-      url: "{shopping_cart_base_url:s}/{user_id:d}"
-      method: GET
-    response:
-      status_code: 204
-  - name: Add item to shopping cart
-    request:
-      url: "{shopping_cart_base_url:s}/{user_id:d}/{product_id:d}"
-      method: PUT
-      json:
-        quantity: 1
-      headers:
-        content-type: application/json
-    response:
-      status_code: 204
-  - name: Get shopping cart with items
-    request:
-      url: "{shopping_cart_base_url:s}/{user_id:d}"
+      url: "{reviews_base_url:s}?product_id={product_id:d}"
       method: GET
     response:
       status_code: 200
-      json:
-        - product_id: !int "{product_id:d}"
-          quantity: 1
-      headers:
-        content-type: application/json
-  - name: Update item quantity
+  - name: Get reviews by product withoud product_id
     request:
-      url: "{shopping_cart_base_url:s}/{user_id:d}/{product_id:d}"
-      method: PUT
-      json:
-        quantity: 2
-      headers:
-        content-type: application/json
-    response:
-      status_code: 204
-  - name: Get shopping cart with updated quanity
-    request:
-      url: "{shopping_cart_base_url:s}/{user_id:d}"
+      url: "{reviews_base_url:s}?product_id="
       method: GET
     response:
-      status_code: 200
-      json:
-        - product_id: !int "{product_id:d}"
-          quantity: 2
-      headers:
-        content-type: application/json
-  - name: Checkout
+      status_code: 400
+  - name: Create review
     request:
-      url: "{shopping_cart_base_url:s}/{user_id:d}/checkout"
+      url: "{reviews_base_url:s}/{product_id:d}"
       method: POST
       json:
-        payment_method: "CREDIT_CARD"
-        card_number: "1234123412341234"
-        expiration_year: 2023
-        expiration_month: 11
-        cvv: "123"
-        card_type: "VISA"
+        description: "test"
+        user_id: 1
+        score: 4
     response:
-      status_code: 200
-  - name: Get empty shopping cart after checkout
-    request:
-      url: "{shopping_cart_base_url:s}/{user_id:d}"
-      method: GET
-    response:
-      status_code: 204
+      status_code: 201
