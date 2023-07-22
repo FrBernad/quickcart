@@ -1,6 +1,6 @@
 from flask import jsonify, request, Blueprint, make_response
 from injector import inject
-from src.api.schemas.reviews_schema import reviews_schema
+from src.api.schemas.reviews_schema import review_schema, reviews_schema
 from src.api.interfaces.services.review_service import ReviewService
 from src.api.schemas.requests.request_schema import (
     create_review_schema,
@@ -24,7 +24,7 @@ def create_review(product_id, review_service: ReviewService):
 
     new_review = review_service.create_review(product_id, user_id, review_body, score)
 
-    return jsonify(reviews_schema.dump(new_review)), 201
+    return jsonify(review_schema.dump(new_review)), 201
 
 
 # /reviews?product-id=
