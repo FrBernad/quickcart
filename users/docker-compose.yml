@@ -14,7 +14,7 @@ services:
       test:
         [
           "CMD-SHELL",
-          "curl -f http://localhost:5000/users_api/health"
+          "curl -f http://localhost:5000/users/health"
         ]
       interval: 10s
       timeout: 5s
@@ -74,7 +74,7 @@ services:
       test:
         [
           "CMD-SHELL",
-          "curl -f http://localhost:5000/shopping_cart_api/health"
+          "curl -f http://localhost:5000/shopping-cart/health"
         ]
       interval: 10s
       timeout: 5s
