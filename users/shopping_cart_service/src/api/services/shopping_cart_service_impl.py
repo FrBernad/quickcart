@@ -171,7 +171,7 @@ class ShoppingCartServiceImpl(ShoppingCartService):
 
         try:
             response = requests.put(f"http://products_api:5000/products/{product_id}/stock",json={
-                "stock":new_stock})  # Replace with the desired content type
+                "stock":new_stock}) 
             
             if response.status_code == 204:
                 return
