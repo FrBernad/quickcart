@@ -26,8 +26,8 @@ class ProductDaoImpl(ProductDao):
 
         return product
 
-    def delete_product(self, product):
-        self.db.session.execute(self.db.delete(Product).where(Product.id == product.id))
+    def delete_product(self, product_id):
+        self.db.session.execute(self.db.delete(Product).where(Product.id == product_id))
         self.db.session.commit()
 
     def get_products(self):

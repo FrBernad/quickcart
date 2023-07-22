@@ -15,7 +15,7 @@ class ProductDao(ABC):
         pass
 
     @abstractmethod
-    def delete_product(self, product):
+    def delete_product(self, product_id):
         pass
 
     @abstractmethod

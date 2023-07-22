@@ -1,142 +1,109 @@
-import pytest
-from src.api.models.shopping_cart_product import ShoppingCartProduct
+from src.api.services.product_service_impl import ProductServiceImpl
+from src.tests.mocks import (
+    mock_product_map1,
+    mock_product_map2,
+    mock_product_map_post,
+    mock_product_map_put,
+    request_get_user_200,
+    request_get_category_200,
+    mock_tag1,
+    mock_tag2,
+    mock_product1,
+    mock_product2
+
+)
 import json
 
+## --------       CREATE PRODUCT     --------
+# def test_create_product(monkeypatch,test_client, test_database):
+#     def mock_create_product(self,user_id, name, price, category_id, tags, stock):
+#         return mock_product_map1
 
-def test_get_shopping_cart_products(test_client, test_database):
-    product = ShoppingCartProduct(user_id=1, product_id=1, quantity=1)
-    test_database.session.add(product)
+#     monkeypatch.setattr(ProductServiceImpl, "create_product", mock_create_product)
+    
+#     resp = test_client.post(
+#         "/products",
+#         data=json.dumps(
+#             mock_product_map_post
+#         ),
+#         content_type="application/json",
+#     )
+
+#     data = json.loads(resp.data)
+#     assert resp.status_code == 201
+#     assert data['id'] == mock_product_map_post['id']
+#     assert data['name'] == mock_product_map_post['name']
+#     assert data['category']['id'] == mock_product_map_post['category_id']
+#     assert data['stock'] == mock_product_map_post['stock']
+#     assert data['owner']['id'] == mock_product_map_post['user_id']
+#     assert data['tags'][0]['name'] == mock_product_map_post['tags'][0]
+#     assert data['tags'][1]['name'] == mock_product_map_post['tags'][1]
+
+
+
+## --------       GET PRODUCTS    --------
+
+def test_get_products(monkeypatch,test_client, test_database):
+    tag1 = mock_tag1
+    tag2 = mock_tag2
+    test_database.session.add(tag1)
+    test_database.session.add(tag2)
+    product1 = mock_product1
+    product2 = mock_product2
+    test_database.session.add(product1)
+    test_database.session.add(product2)
     test_database.session.commit()
+    products = [product1, product2]
+
+    import requests
+
+    def side_effect_get(url):
+        if "users" in url:
+            return request_get_user_200(url)
+        elif "categories" in url:
+            return request_get_category_200(url)
+        else:
+            raise ValueError("Unknown URL in get method")
+
+    monkeypatch.setattr(
+        requests,
+        "get",
+        side_effect_get
+    )
 
     resp = test_client.get(
-        "/shopping-cart/1",
-        content_type="application/json",
+        "/products",
     )
 
     data = json.loads(resp.data)
     assert resp.status_code == 200
-    assert len(data) == 1
-    assert product.product_id == data[0]["product_id"]
-    assert product.quantity == data[0]["quantity"]
+    assert len(data) == len(products)
 
 
-def test_update_shopping_cart_product_quantity(test_client, test_database):
-    product = ShoppingCartProduct(user_id=1, product_id=1, quantity=1)
-    test_database.session.add(product)
-    test_database.session.commit()
+# --------       GET PRODUCT BY ID    --------
 
-    resp = test_client.put(
-        "/shopping-cart/1/1",
-        content_type="application/json",
-        data=json.dumps(
-            {
-                "quantity": 2,
-            }
-        ),
-    )
-
-    assert resp.status_code == 204
+# def test_get_product_by_id(monkeypatch,test_client, test_database):
 
 
-def test_update_shopping_cart_product_with_invalid_quantity(test_client, test_database):
-    resp = test_client.put(
-        "/shopping-cart/1/1",
-        content_type="application/json",
-        data=json.dumps(
-            {
-                "quantity": -1,
-            }
-        ),
-    )
 
-    data = json.loads(resp.data)
-    assert resp.status_code == 400
-    assert "Invalid input" == data["error"]
+# ## --------       UPDATE PRODUCT     --------
+
+# def test_update_product(monkeypatch,test_client, test_database):
 
 
-def test_checkout_shopping_cart(test_client, test_database):
-    product = ShoppingCartProduct(user_id=1, product_id=1, quantity=1)
-    test_database.session.add(product)
-    test_database.session.commit()
 
-    resp = test_client.post(
-        "/shopping-cart/1/checkout",
-        data=json.dumps(
-            {
-                "payment_method": "CREDIT_CARD",
-                "card_number": "1234123412341234",
-                "expiration_year": 2023,
-                "expiration_month": 11,
-                "cvv": "123",
-                "card_type": "VISA",
-            }
-        ),
-        content_type="application/json",
-    )
+# ## --------       DELETE PRODUCT     --------
 
-    assert resp.status_code == 200
+# def test_delete_product(monkeypatch,test_client, test_database ):
 
 
-def test_checkout_shopping_cart_with_invalid_information(test_client, test_database):
-    resp = test_client.post(
-        "/shopping-cart/1/checkout",
-        data=json.dumps(
-            {
-                "payment_method": "CREDIT_CARDDD",
-                "card_number": "1234123412341234",
-                "expiration_year": 2023,
-                "expiration_month": 11,
-                "cvv": "123",
-                "card_type": "VISA",
-            }
-        ),
-        content_type="application/json",
-    )
+# ## --------       UPDATE PRODUCT SCORE     --------
 
-    data = json.loads(resp.data)
-    assert resp.status_code == 400
-    assert "Invalid input" == data["error"]
+# def test_update_product_score(monkeypatch,test_client, test_database):
 
 
-def test_checkout_shopping_cart_with_missing_fields(test_client, test_database):
-    resp = test_client.post(
-        "/shopping-cart/1/checkout",
-        data=json.dumps(
-            {
-                "payment_method": "CREDIT_CARDDD",
-                "card_number": "1234123412341234",
-                "expiration_month": 11,
-                "cvv": "123",
-                "card_type": "VISA",
-            }
-        ),
-        content_type="application/json",
-    )
 
-    data = json.loads(resp.data)
-    assert resp.status_code == 400
-    assert "Invalid input" == data["error"]
+# ## --------       UPDATE PRODUCT STOCK    --------
 
 
-def test_delete_shopping_cart_product(test_client, test_database):
-    product = ShoppingCartProduct(user_id=1, product_id=1, quantity=1)
-    test_database.session.add(product)
-    test_database.session.commit()
-
-    resp = test_client.delete(
-        "/shopping-cart/1/1",
-    )
-
-    assert resp.status_code == 204
-
-
-def test_empty_shopping(test_client, test_database):
-    product = ShoppingCartProduct(user_id=1, product_id=1, quantity=1)
-    test_database.session.add(product)
-    test_database.session.commit()
-
-    resp = test_client.delete(
-        "/shopping-cart/1",
-    )
-
-    assert resp.status_code == 204
+# def test_update_product_stock(monkeypatch,test_client, test_database):

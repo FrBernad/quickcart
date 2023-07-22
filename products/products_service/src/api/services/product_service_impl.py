@@ -45,16 +45,16 @@ class ProductServiceImpl(ProductService):
 
     def get_products(self):
         products = self.product_dao.get_products()
-        return [self._popualate_product(product) for product in products]
+        return [self._populate_product(product) for product in products]
 
     def get_product_by_id(self, product_id):
         product = self.product_dao.get_product_by_id(product_id)
         if not product:
             raise ProductNotFoundException()
-        return self._popualate_product(product)
+        return self._populate_product(product)
 
-    def delete_product(self, product):
-        self.product_dao.delete_product(product)
+    def delete_product(self, product_id):
+        self.product_dao.delete_product(product_id)
 
     def update_product(self, user_id, product_id, name, price, category_id, tags):
         self._validate_user(user_id)
@@ -77,7 +77,7 @@ class ProductServiceImpl(ProductService):
 
         self.product_dao.update_product_stock(product=product, stock=stock)
 
-    def _popualate_product(self, product):
+    def _populate_product(self, product):
         user = self._validate_user(product.user_id)
         product.owner = user
 
