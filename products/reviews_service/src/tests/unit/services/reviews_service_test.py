@@ -3,6 +3,14 @@ from src.api.models.reviews import Review
 from unittest.mock import MagicMock
 
 
+class MockResponse:
+    def __init__(self, json_data, status_code):
+        self.json_data = json_data
+        self.status_code = status_code
+
+    def json(self):
+        return self.json_data
+
 def test_get_reviews_by_product(test_review_service):
     mock_reviews = [Review(product_id=1, user_id=1, review_body="test", score=4)]
 
@@ -39,8 +47,19 @@ def test_get_review_by_id(test_review_service):
     assert review.score == mock_review.score
 
 
-def test_create_review(test_review_service):
+def test_create_review(monkeypatch, test_review_service):
     mock_review = Review(product_id=1, user_id=1, review_body="test", score=4)
+
+    import requests
+
+    def request_get_purchase_order(url):
+        return MockResponse([], 200)
+
+    monkeypatch.setattr(
+        requests,
+        "get",
+        request_get_purchase_order
+    )
 
     def mock_create_review(product_id, user_id, review_body, score):
         return mock_review
