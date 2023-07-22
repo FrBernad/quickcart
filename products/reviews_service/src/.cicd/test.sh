@@ -26,13 +26,13 @@ else
 
     ## Functional tests
     echo "Running functional tests and coverage for ${SERVICE_NAME} service"
-    # python -m pytest "./src/tests/functional" -p no:warnings --junitxml=functional_report.xml --cov="." --cov-report=xml:functional_report_coverage
-    # functional_tests_exit_status=$?
+    python -m pytest "./src/tests/functional" -p no:warnings --junitxml=functional_report.xml --cov="." --cov-report=xml:functional_report_coverage
+    functional_tests_exit_status=$?
 
-    # if [ $unit_tests_exit_status -eq 0 ] && [ $functional_tests_exit_status -eq 0 ]; then
-    #     exit 0
-    # else
-    #     exit 1
-    # fi
+    if [ $unit_tests_exit_status -eq 0 ] && [ $functional_tests_exit_status -eq 0 ]; then
+        exit 0
+    else
+        exit 1
+    fi
 
 fi
