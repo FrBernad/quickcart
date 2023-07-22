@@ -11,7 +11,11 @@ services:
       categories_db:
         condition: service_healthy
     healthcheck:
-      test: [ "CMD-SHELL", "curl -f http://localhost:5000/health" ]
+      test:
+        [
+          "CMD-SHELL",
+          "curl -f http://localhost:5000/categories_api/health"
+        ]
       interval: 10s
       timeout: 5s
       retries: 3
@@ -67,7 +71,11 @@ services:
       products_db:
         condition: service_healthy
     healthcheck:
-      test: [ "CMD-SHELL", "curl -f http://localhost:5000/health" ]
+      test:
+        [
+          "CMD-SHELL",
+          "curl -f http://localhost:5000/products_api/health"
+        ]
       interval: 10s
       timeout: 5s
       retries: 3
@@ -123,7 +131,11 @@ services:
       reviews_db:
         condition: service_healthy
     healthcheck:
-      test: [ "CMD-SHELL", "curl -f http://localhost:5000/health" ]
+      test:
+        [
+          "CMD-SHELL",
+          "curl -f http://localhost:5000/reviews_api/health"
+        ]
       interval: 10s
       timeout: 5s
       retries: 3
