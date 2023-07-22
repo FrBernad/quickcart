@@ -3,4 +3,4 @@ from src.api.interfaces.exceptions.generic_api_exception import GenericApiExcept
 
 class ProductNotFoundException(GenericApiException):
     def __init__(self, product_id):
-        super().__init__(f"""Product with id {product_id} not found.""", 400)
+        super().__init__(f"""Product with id {product_id} not found.""", 404)
