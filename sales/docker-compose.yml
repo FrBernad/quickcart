@@ -16,7 +16,7 @@ services:
       - POSTGRES_SERVICE=purchase_orders_db
       - EXPOSED_INTERFACES=${EXPOSED_INTERFACES}
     healthcheck:
-      test: [ "CMD-SHELL", "curl -f http://localhost:5000/purchase-orders/health" ]
+      test: [ "CMD-SHELL", "curl -f http://localhost:5000/health" ]
       interval: 10s
       timeout: 5s
       retries: 3

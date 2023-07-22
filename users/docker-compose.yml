@@ -11,7 +11,11 @@ services:
       users_db:
         condition: service_healthy
     healthcheck:
-      test: [ "CMD-SHELL", "curl -f http://localhost:5000/health" ]
+      test:
+        [
+          "CMD-SHELL",
+          "curl -f http://localhost:5000/users_api/health"
+        ]
       interval: 10s
       timeout: 5s
       retries: 3
@@ -67,7 +71,11 @@ services:
       shopping_cart_db:
         condition: service_healthy
     healthcheck:
-      test: [ "CMD-SHELL", "curl -f http://localhost:5000/health" ]
+      test:
+        [
+          "CMD-SHELL",
+          "curl -f http://localhost:5000/shopping_cart_api/health"
+        ]
       interval: 10s
       timeout: 5s
       retries: 3
