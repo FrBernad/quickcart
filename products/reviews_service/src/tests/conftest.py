@@ -28,7 +28,7 @@ def test_review_dao():
 
 
 @pytest.fixture(scope="module")
-def test_shopping_cart_service():
+def test_review_service():
     from src.api.services.review_service_impl import ReviewServiceImpl
     from src.api.persistence.review_dao_impl import ReviewDaoImpl
 

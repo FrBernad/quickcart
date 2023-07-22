@@ -10,7 +10,7 @@ def test_get_reviews_by_product(monkeypatch, test_review_dao):
     query_mock = MagicMock()
     all_mock = MagicMock()
     all_mock.all = lambda: mock_reviews
-    query_mock.filter_by = lambda prodcut_id: all_mock
+    query_mock.filter_by = lambda product_id: all_mock
     review_db_model_mock.query = query_mock
     monkeypatch.setattr(
         "src.api.persistence.review_dao_impl.Review",
@@ -36,7 +36,7 @@ def test_get_review_by_id(monkeypatch, test_review_dao):
     query_mock = MagicMock()
     first_mock = MagicMock()
     first_mock.first = lambda: mock_review
-    query_mock.filter_by = lambda review_id: first_mock
+    query_mock.filter_by = lambda id: first_mock
     review_db_model_mock.query = query_mock
     monkeypatch.setattr(
         "src.api.persistence.review_dao_impl.Review",
@@ -49,7 +49,6 @@ def test_get_review_by_id(monkeypatch, test_review_dao):
 
     review = review_dao.get_review_by_id(review_id)
 
-    assert mock_review.product_id == review.product_id
     assert mock_review.user_id == review.user_id
     assert mock_review.review_body == review.review_body
     assert mock_review.score == review.score

@@ -4,10 +4,10 @@ from src.api.models.reviews import Review
 import json
 
 
-def test_get_shopping_cart_products(test_client, monkeypatch):
+def test_get_reviews_by_product(test_client, monkeypatch):
     mock_reviews = [Review(product_id=1, user_id=1, review_body='test', score=4)]
 
-    def mock_get_reviews_by_product(self, user_id):
+    def mock_get_reviews_by_product(self, product_id):
         return mock_reviews
 
     monkeypatch.setattr(ReviewServiceImpl, "get_reviews_by_product", mock_get_reviews_by_product)
@@ -28,7 +28,7 @@ def test_get_shopping_cart_products(test_client, monkeypatch):
 def test_create_review(test_client, monkeypatch):
     mock_review = Review(product_id=1, user_id=1, review_body='test', score=4)
 
-    def mock_create_review(self, user_id, payment_info):
+    def mock_create_review(self, product_id, user_id, review_body, score):
         return mock_review
 
     monkeypatch.setattr(ReviewServiceImpl, "create_review", mock_create_review)
