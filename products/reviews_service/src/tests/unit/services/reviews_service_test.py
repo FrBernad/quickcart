@@ -1,73 +1,54 @@
 import pytest
-from src.api.models.shopping_cart_product import ShoppingCartProduct
+from src.api.models.reviews import Review
 from unittest.mock import MagicMock
 
 
-def test_get_products(test_shopping_cart_service):
-    mock_products = [ShoppingCartProduct(user_id=1, product_id=1, quantity=1)]
+def test_get_reviews_by_product(test_review_service):
+    mock_reviews = [Review(product_id=1, user_id=1, review_body="test", score=4)]
 
-    def mock_get_products(user_id):
-        return mock_products
+    def mock_get_reviews_by_product(product_id):
+        return mock_reviews
 
-    shopping_cart_service, shopping_cart_dao_mock = test_shopping_cart_service
+    review_service, review_dao_mock = test_review_service
 
-    shopping_cart_dao_mock.get_products = mock_get_products
+    review_dao_mock.get_reviews_by_product = mock_get_reviews_by_product
 
-    products = shopping_cart_service.get_products(1)
+    reviews = review_service.get_reviews_by_product(1)
 
-    assert len(products) == len(mock_products)
-    assert products[0].user_id == mock_products[0].user_id
-    assert products[0].product_id == mock_products[0].product_id
-    assert products[0].quantity == mock_products[0].quantity
+    assert len(reviews) == len(mock_reviews)
+    assert reviews[0].product_id == mock_reviews[0].product_id
+    assert reviews[0].user_id == mock_reviews[0].user_id
+    assert reviews[0].review_body == mock_reviews[0].review_body
+    assert reviews[0].score == mock_reviews[0].score
 
+def test_get_review_by_id(test_review_service):
+    mock_review = Review(product_id=1, user_id=1, review_body="test", score=4)
 
-def test_add_product(test_shopping_cart_service):
-    def mock_add_product(user_id, product_id, quantity):
-        return
+    def mock_get_review_by_id(review_id):
+        return mock_review
 
-    shopping_cart_service, shopping_cart_dao_mock = test_shopping_cart_service
+    review_service, review_dao_mock = test_review_service
 
-    shopping_cart_dao_mock.add_product = MagicMock(spec=mock_add_product)
+    review_dao_mock.get_review_by_id = mock_get_review_by_id
 
-    shopping_cart_service.add_product(1, 1, 1)
+    review = review_service.get_review_by_id(1)
 
-    shopping_cart_dao_mock.add_product.assert_called()
-
-
-def test_checkout(test_shopping_cart_service):
-    def mock_empty(user_id):
-        return
-
-    shopping_cart_service, shopping_cart_dao_mock = test_shopping_cart_service
-
-    shopping_cart_dao_mock.empty = MagicMock(spec=mock_empty)
-
-    shopping_cart_service.empty(1)
-
-    shopping_cart_dao_mock.empty.assert_called()
+    assert review.product_id == mock_review.product_id
+    assert review.user_id == mock_review.user_id
+    assert review.review_body == mock_review.review_body
+    assert review.score == mock_review.score
 
 
-def test_delete_product(test_shopping_cart_service):
-    def mock_delete_product(user_id, product_id):
-        return
+def test_create_review(test_review_service):
+    mock_review = Review(product_id=1, user_id=1, review_body="test", score=4)
 
-    shopping_cart_service, shopping_cart_dao_mock = test_shopping_cart_service
+    def mock_create_review(product_id, user_id, review_body, score):
+        return mock_review
 
-    shopping_cart_dao_mock.delete_product = MagicMock(spec=mock_delete_product)
+    review_service, review_dao_mock = test_review_service
 
-    shopping_cart_service.delete_product(1, 1)
+    review_dao_mock.add_product = MagicMock(spec=mock_create_review)
 
-    shopping_cart_dao_mock.delete_product.assert_called()
+    review_service.create_review(1, 1, "test", 4)
 
-
-def test_empty(test_shopping_cart_service):
-    def mock_empty(user_id):
-        return
-
-    shopping_cart_service, shopping_cart_dao_mock = test_shopping_cart_service
-
-    shopping_cart_dao_mock.empty = MagicMock(spec=mock_empty)
-
-    shopping_cart_service.empty(1)
-
-    shopping_cart_dao_mock.empty.assert_called()
+    review_dao_mock.create_review.assert_called()
