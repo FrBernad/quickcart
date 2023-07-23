@@ -17,6 +17,21 @@ deploy_qa_api_gateway:
   needs:
     - job: build_api_gateway
       artifacts: true
+    - job: deploy_qa_shopping_cart_service
+      artifacts: false
+      optional: true
+    - job: deploy_qa_products_service
+      artifacts: false
+      optional: true
+    - job: deploy_qa_categories_service
+      artifacts: false
+      optional: true
+    - job: deploy_qa_reviews_service
+      artifacts: false
+      optional: true
+    - job: deploy_qa_purchase_orders_service
+      artifacts: false
+      optional: true
 
 test_integration_and_functional_api_gateway:
   extends: .test_integration_and_functional_service
