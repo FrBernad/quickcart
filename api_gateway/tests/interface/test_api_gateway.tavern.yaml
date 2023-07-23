@@ -1,0 +1,152 @@
+###--------GET CATEGORIES-------
+
+---
+test_name: Get categories
+
+includes:
+  - !include tavern_api_gateway_variables.yaml
+
+stages:
+  - name: Get categories
+    request:
+      url: "{api_gateway_base_url:s}/categories"
+      method: GET
+    response:
+      status_code: 204
+
+###--------GET CATEGORY BY ID-------
+
+---
+test_name: Get category by id non existent
+
+includes:
+  - !include tavern_api_gateway_variables.yaml
+
+stages:
+  - name: Get category by id
+    request:
+      url: "{api_gateway_base_url:s}/categories/{non_existent_id:d}"
+      method: GET
+    response:
+      status_code: 404
+
+###--------CREATE CATEGORY -------
+
+---
+test_name: Create category
+
+includes:
+  - !include tavern_api_gateway_variables.yaml
+
+stages:
+  - name: Create category with category_name variable value
+    request:
+      url: "{api_gateway_base_url:s}/categories"
+      method: POST
+      json: 
+        name: "{category_name:s}"
+      headers:
+        content-type: application/json
+    response:
+      status_code: 201
+      json: 
+        id: !anyint
+        name: "{category_name:s}"
+      headers:
+        content-type: application/json
+
+
+---
+test_name: Create category and then return the category
+
+includes:
+  - !include tavern_api_gateway_variables.yaml
+
+stages:
+  - name: Create category with category_name variable value
+    request:
+      url: "{api_gateway_base_url:s}/categories"
+      method: POST
+      json: 
+        name: "{category_name:s}"
+      headers:
+        content-type: application/json
+    response:
+      status_code: 201
+      json: 
+        id: !anyint
+        name: "{category_name:s}"
+      headers:
+        content-type: application/json
+      save:
+        json:
+          new_category_id: id
+  - name: Get category with the id created
+    request:
+      url: "{api_gateway_base_url:s}/categories/{new_category_id:d}"
+      method: GET
+    response:
+      status_code: 200
+      json: 
+        id: !int "{new_category_id:d}"
+        name: "{category_name:s}"
+      headers:
+        content-type: application/json
+
+
+---
+test_name: Create category, get the category, update the category and return the category updated
+includes:
+  - !include tavern_api_gateway_variables.yaml
+
+stages:
+  - name: Create category with category_name variable value
+    request:
+      url: "{api_gateway_base_url:s}/categories"
+      method: POST
+      json: 
+        name: "{category_name:s}"
+      headers:
+        content-type: application/json
+    response:
+      status_code: 201
+      json: 
+        id: !anyint
+        name: "{category_name:s}"
+      headers:
+        content-type: application/json
+      save:
+        json:
+          new_category_id: id
+  - name: Get category with the id created
+    request:
+      url: "{api_gateway_base_url:s}/categories/{new_category_id:d}"
+      method: GET
+    response:
+      status_code: 200
+      json: 
+        id: !int "{new_category_id:d}"
+        name: "{category_name:s}"
+      headers:
+        content-type: application/json
+  - name: Update category
+    request:
+      url: "{api_gateway_base_url:s}/categories/{new_category_id:d}"
+      method: PUT
+      json: 
+        name: "{category_name_updated:s}"
+      headers:
+        content-type: application/json
+    response:
+      status_code: 204
+  - name: Get category with by id
+    request:
+      url: "{api_gateway_base_url:s}/categories/{new_category_id:d}"
+      method: GET
+    response:
+      status_code: 200
+      json: 
+        id: !int "{new_category_id:d}"
+        name: "{category_name_updated:s}"
+      headers:
+        content-type: application/json

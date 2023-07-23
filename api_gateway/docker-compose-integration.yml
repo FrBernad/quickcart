@@ -8,7 +8,7 @@ services:
     restart: always
     environment:
       - ENV=${ENV}
-      - SERVICE_NAME=categories_api
+      - SERVICE_NAME=api_gateway
     networks:
       - services
 

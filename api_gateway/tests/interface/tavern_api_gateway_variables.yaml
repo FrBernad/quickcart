@@ -1,0 +1,9 @@
+---
+name: Api Gateway Cart Variables
+description: Test variables for Api Gateway service
+
+variables:
+  api_gateway_base_url: http://api_gateway:80
+  non_existent_id: -1
+  category_name: "Categoria 1"
+  category_name_updated: "Categoria 1"
