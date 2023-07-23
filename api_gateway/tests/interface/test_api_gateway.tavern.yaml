@@ -4,7 +4,7 @@
 test_name: Get categories
 
 includes:
-  - !include tavern_category_variables.yaml
+  - !include tavern_api_gateway_variables.yaml
 
 stages:
   - name: Get categories
