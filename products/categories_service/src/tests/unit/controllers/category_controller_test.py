@@ -9,7 +9,6 @@ import json
 
 
 def test_get_categories(test_client, monkeypatch):
-    assert True == False
     mock_categories = [
         Category(id=1, name="Categoria 1"),
         Category(id=2, name="Categoria 2"),
