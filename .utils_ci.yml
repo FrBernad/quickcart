@@ -168,12 +168,12 @@
     - !reference [.run_if_service_changes, rules]
   script:
     - !reference [.login_to_gitlab_registry]
-    - docker compose -f ${DOMAIN_PATH}/docker-compose-integration.yml -p ${SERVICE_NAME}_${ENV} --env-file ${DOMAIN_PATH}/.env_files/.env.qa_test --profile ${SERVICE_NAME} pull
-    - docker compose -f ${DOMAIN_PATH}/docker-compose-integration.yml -p ${SERVICE_NAME}_${ENV} --env-file ${DOMAIN_PATH}/.env_files/.env.qa_test --profile ${SERVICE_NAME} stop
-    - docker compose -f ${DOMAIN_PATH}/docker-compose-integration.yml -p ${SERVICE_NAME}_${ENV} --env-file ${DOMAIN_PATH}/.env_files/.env.qa_test --profile ${SERVICE_NAME} rm
-    - docker compose -f ${DOMAIN_PATH}/docker-compose-integration.yml -p ${SERVICE_NAME}_${ENV} --env-file ${DOMAIN_PATH}/.env_files/.env.qa_test --profile ${SERVICE_NAME} up --abort-on-container-exit
-    - docker cp ${SERVICE_NAME}_${ENV}:/usr/app/integration_${SERVICE_NAME}_report.xml .
-    - docker cp ${SERVICE_NAME}_${ENV}:/usr/app/interface_${SERVICE_NAME}_report.xml .
+    - docker compose -f ${DOMAIN_PATH}/docker-compose-integration.yml -p ${SERVICE_NAME}_${ENV}_test_integration --env-file ${DOMAIN_PATH}/.env_files/.env.qa_test --profile ${SERVICE_NAME} pull
+    - docker compose -f ${DOMAIN_PATH}/docker-compose-integration.yml -p ${SERVICE_NAME}_${ENV}_test_integration --env-file ${DOMAIN_PATH}/.env_files/.env.qa_test --profile ${SERVICE_NAME} stop
+    - docker compose -f ${DOMAIN_PATH}/docker-compose-integration.yml -p ${SERVICE_NAME}_${ENV}_test_integration --env-file ${DOMAIN_PATH}/.env_files/.env.qa_test --profile ${SERVICE_NAME} rm
+    - docker compose -f ${DOMAIN_PATH}/docker-compose-integration.yml -p ${SERVICE_NAME}_${ENV}_test_integration --env-file ${DOMAIN_PATH}/.env_files/.env.qa_test --profile ${SERVICE_NAME} up --abort-on-container-exit
+    - docker cp ${SERVICE_NAME}_${ENV}_test_integration:/usr/app/integration_${SERVICE_NAME}_report.xml .
+    - docker cp ${SERVICE_NAME}_${ENV}_test_integration:/usr/app/interface_${SERVICE_NAME}_report.xml .
   artifacts:
     when: always
     paths:
