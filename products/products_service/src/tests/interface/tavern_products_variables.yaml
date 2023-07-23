@@ -1,9 +1,16 @@
 ---
-name: Shopping Cart Variables
-description: Test variables for shopping cart service
+name: Product Variables
+description: Test variables for product service
 
 variables:
-  shopping_cart_base_url: http://localhost:5000/shopping-cart
-  user_id: 1
-  product_id: 1
+  products_base_url: http://products_api:5000/products
+  category_base_url: http://categories_api:5000/categories
+  users_base_url: http://users_api:5000/users
+  category_name: "Categoria 1"
+  product_name: "Producto 1"
 
+  user_id: 1
+  user_name: "new_user"
+  email: "new_user@test.com"
+  password: "secret_password"
+  product_id: 1
