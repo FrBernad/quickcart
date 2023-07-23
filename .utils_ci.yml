@@ -130,19 +130,19 @@
 
     - docker cp ${SERVICE_NAME}_${ENV}:/usr/app/unit_${SERVICE_NAME}_report.xml .
     - docker cp ${SERVICE_NAME}_${ENV}:/usr/app/unit_${SERVICE_NAME}_report_coverage.xml .
-    - docker cp ${SERVICE_NAME}_${ENV}:/usr/app/functional${SERVICE_NAME}_report.xml .
+    - docker cp ${SERVICE_NAME}_${ENV}:/usr/app/functional_${SERVICE_NAME}_report.xml .
     - docker cp ${SERVICE_NAME}_${ENV}:/usr/app/functional_${SERVICE_NAME}_report_coverage.xml .
   artifacts:
     when: always
     paths:
       - unit_${SERVICE_NAME}_report.xml
       - unit_${SERVICE_NAME}_report_coverage.xml
-      - functional${SERVICE_NAME}_report.xml
+      - functional_${SERVICE_NAME}_report.xml
       - functional_${SERVICE_NAME}_report_coverage.xml
     reports:
       junit:
         - unit_${SERVICE_NAME}_report.xml
-        - functional${SERVICE_NAME}_report.xml
+        - functional_${SERVICE_NAME}_report.xml
 
 .deploy_qa:
   stage: qa
