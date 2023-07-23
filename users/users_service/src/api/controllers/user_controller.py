@@ -5,6 +5,7 @@ from src.api.interfaces.services.user_service import UserService
 from src.api.schemas.requests.request_schema import (
     create_user_schema,
     update_user_schema,
+    login_user_schema
 )
 from flask_expects_json import expects_json
 from jsonschema import ValidationError
@@ -26,6 +27,30 @@ def create_user(user_service: UserService):
     new_user = user_service.create_user(username, email, password)
 
     return jsonify(user_schema.dump(new_user)), 201
+
+@inject
+@users_bp.route("/login", methods=["POST"])
+@expects_json(login_user_schema)
+def login_user(user_service: UserService):
+    data = request.get_json()
+
+    email = data.get("email")
+    password = data.get("password")
+
+    user = user_service.get_user_by_email(email)
+
+    if not user or user.password != password :
+     return make_response(
+            jsonify(
+                {
+                    "message": "Invalid user or password",
+                    "error": "Invalid input",
+                },
+            ),
+            400,
+        )
+    
+    return jsonify(user_schema.dump(user)), 200
 
 
 @inject
