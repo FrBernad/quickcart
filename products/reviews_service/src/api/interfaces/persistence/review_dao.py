@@ -14,3 +14,7 @@ class ReviewDao(ABC):
     @abstractmethod
     def create_review(self, product_id, user_id, review_body, score):
         pass
+
+    @abstractmethod
+    def get_reviews_quantity_by_product(self,product_id):
+        pass

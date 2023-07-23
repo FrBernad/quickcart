@@ -1,93 +1,95 @@
-# ---
-# test_name: Create user, category and product
+---
+test_name: Create user, category and product
 
-# includes:
-#   - !include tavern_products_variables.yaml
+includes:
+  - !include tavern_products_variables.yaml
 
-# stages:
-#   - name: Create user
-#     request:
-#       url: "{users_base_url:s}"
-#       method: POST
-#       json: 
-#         username: "{user_name:s}"
-#         email: "{email:s}"
-#         password: "{password:s}"
-#       headers:
-#         content-type: application/json
-#     response:
-#       status_code: 201
-#       json: 
-#         id: !anyint
-#         username: "{user_name:s}"
-#         email: "{email:s}"
-#       headers:
-#         content-type: application/json
-#       save:
-#         json:
-#           new_user_id: id
+stages:
+  - name: Create user
+    request:
+      url: "{users_base_url:s}"
+      method: POST
+      json:
+        username: "{user_name:s}"
+        email: "{email:s}"
+        password: "{password:s}"
+      headers:
+        content-type: application/json
+    response:
+      status_code: 201
+      json:
+        id: !anyint
+        username: "{user_name:s}"
+        email: "{email:s}"
+      headers:
+        content-type: application/json
+      save:
+        json:
+          new_user_id: id
 
-#   - name: Create category
-#     request:
-#       url: "{categories_base_url:s}"
-#       method: POST
-#       json: 
-#         name: "{category_name:s}"
-#       headers:
-#         content-type: application/json
-#     response:
-#       status_code: 201
-#       json: 
-#         id: !anyint
-#         name: "{category_name:s}"
-#       headers:
-#         content-type: application/json
-#       save:
-#         json:
-#           new_category_id: id
+  - name: Create category
+    request:
+      url: "{categories_base_url:s}"
+      method: POST
+      json:
+        name: "{category_name:s}"
+      headers:
+        content-type: application/json
+    response:
+      status_code: 201
+      json:
+        id: !anyint
+        name: "{category_name:s}"
+      headers:
+        content-type: application/json
+      save:
+        json:
+          new_category_id: id
 
-#   - name: Create product value
-#     request:
-#       url: "{products_base_url:s}"
-#       method: POST
-#       json: 
-#         user_id: !int "{new_user_id:d}"
-#         name: "{product_name:s}"
-#         price: 20.40
-#         category_id: !int "{new_category_id:d}"
-#         tags: ["Tag 1", "Tag 2"]
-#         stock: 5
-#       headers:
-#         content-type: application/json
-#     response:
-#       status_code: 201
-#       json: 
-#         id: !anyint
-#         name: "{product_name:s}"
-#         category: !anydict
-#         price: 20.40
-#         stock: 5
-#         owner: !anydict
-#         tags: !anylist
-#        headers:
-#         content-type: application/json
-#       save:
-#         json:
-#           new_product_id: id
+  - name: Create product value
+    request:
+      url: "{products_base_url:s}"
+      method: POST
+      json:
+        user_id: !int "{new_user_id:d}"
+        name: "{product_name:s}"
+        price: 20.40
+        category_id: !int "{new_category_id:d}"
+        tags: ["Tag 1", "Tag 2"]
+        stock: 5
+      headers:
+        content-type: application/json
+    response:
+      status_code: 201
+      json:
+        id: !anyint
+        name: "{product_name:s}"
+        category: !anydict
+        price: 20.40
+        stock: 5
+        score: 0
+        owner: !anydict
+        tags: !anylist
+      headers:
+        content-type: application/json
+      save:
+        json:
+          new_product_id: id
 
-#   - name: Get product value
-#     request:
-#       url: "{products_base_url:s}/{new_product_id:d}"
-#       method: GET
-#     response:
-#       status_code: 200
-#       json: 
-#         id: "{new_product_id:d}"
-#         name: "{product_name:s}"
-#         category: !anydict
-#         price: 20.40
-#         stock: 5
-#         owner: !anydict
-#         tags: !anylist
-#        headers:
-#         content-type: application/json
+  - name: Get product value
+    request:
+      url: "{products_base_url:s}/{new_product_id:d}"
+      method: GET
+    response:
+      status_code: 200
+      json: 
+        id: "{new_product_id:d}"
+        name: "{product_name:s}"
+        category: !anydict
+        price: 20.40
+        stock: 5
+        score: 0
+        owner: !anydict
+        tags: !anylist
+       headers:
+        content-type: application/json

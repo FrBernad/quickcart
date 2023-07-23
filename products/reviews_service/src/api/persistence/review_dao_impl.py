@@ -20,3 +20,6 @@ class ReviewDaoImpl(ReviewDao):
         self.db.session.add(review)
         self.db.session.commit()
         return review
+    
+    def get_reviews_quantity_by_product(self,product_id):
+        return Review.query.filter_by(product_id=product_id).count()
