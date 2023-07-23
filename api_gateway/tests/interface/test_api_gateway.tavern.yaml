@@ -20,7 +20,7 @@ stages:
 test_name: Get category by id non existent
 
 includes:
-  - !include tavern_category_variables.yaml
+  - !include tavern_api_gateway_variables.yaml
 
 stages:
   - name: Get category by id
@@ -36,7 +36,7 @@ stages:
 test_name: Create category
 
 includes:
-  - !include tavern_category_variables.yaml
+  - !include tavern_api_gateway_variables.yaml
 
 stages:
   - name: Create category with category_name variable value
@@ -60,7 +60,7 @@ stages:
 test_name: Create category and then return the category
 
 includes:
-  - !include tavern_category_variables.yaml
+  - !include tavern_api_gateway_variables.yaml
 
 stages:
   - name: Create category with category_name variable value
@@ -97,7 +97,7 @@ stages:
 ---
 test_name: Create category, get the category, update the category and return the category updated
 includes:
-  - !include tavern_category_variables.yaml
+  - !include tavern_api_gateway_variables.yaml
 
 stages:
   - name: Create category with category_name variable value
