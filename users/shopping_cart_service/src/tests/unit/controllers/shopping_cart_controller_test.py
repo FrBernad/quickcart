@@ -12,7 +12,6 @@ import json
 
 ## --------       GET SHOPPING CART     --------
 
-
 def test_get_shopping_cart_products(test_client, monkeypatch):
     mock_products = [ShoppingCartProduct(user_id=1, product_id=1, quantity=1)]
 

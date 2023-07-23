@@ -3,5 +3,9 @@ name: Category Cart Variables
 description: Test variables for category service
 
 variables:
-  categories_base_url: http://localhost:5000/categories
+  categories_base_url: http://categories_api:5000/categories
+  non_existent_id: 90
+  category_name: "Categoria 1"
+  category_name_updated: "Categoria 1"
+
 

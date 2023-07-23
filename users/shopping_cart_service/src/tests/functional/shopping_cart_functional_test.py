@@ -1,17 +1,12 @@
 import pytest
 from src.api.models.shopping_cart_product import ShoppingCartProduct
 from src.tests.mocks import (
-    mock_product1,
-    mock_product2,
     mock_shopping_cart_product1,
     mock_shopping_cart_product2,
-    mock_payment_info,
-    mock_comment,
     request_get_user_200,
     request_get_product_200,
     request_get_product_404,
     request_get_user_404,
-
     request_decrease_stock_product_204,
     request_create_purchase_order_200
 )
