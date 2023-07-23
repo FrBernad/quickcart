@@ -3,15 +3,15 @@ name: Purchase Order Variables
 description: Test variables for purchase orders service
 
 variables:
-  purchase_order_base_url: http://purchase_order_api:5000/purchase-orders
+  purchase_order_base_url: http://purchase_orders_api:5000/purchase-orders
   products_base_url: http://products_api:5000/products
-  category_base_url: http://categories_api:5000/categories
+  categories_base_url: http://categories_api:5000/categories
   users_base_url: http://users_api:5000/users
   category_name: "Categoria 1"
   product_name: "Producto 1"
   user_id: 1
-  user_name: "new_user"
-  email: "new_user@test.com"
+  user_name: "new_user_{tavern.env_vars.BUILD_ID}"
+  email: "new_user_{tavern.env_vars.BUILD_ID}@test.com"
   password: "secret_password"
   product_id: 1
 

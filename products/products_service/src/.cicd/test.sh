@@ -7,6 +7,7 @@ if [[ "${ENV:-}" =~ ^qa ]]; then
     integration_tests_exit_status=$?
 
     echo "Running interface tests for ${SERVICE_NAME}"
+    export BUILD_ID=$(date +%Y%m%d%H%M%S)
     python -m pytest "./src/tests/interface" -p no:warnings
     interface_tests_exit_status=$?
 

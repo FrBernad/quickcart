@@ -4,11 +4,6 @@ test_name: Shopping Cart get, update and checkout interface test
 includes:
   - !include tavern_shopping_cart_variables.yaml
 
-marks:
-  - usefixtures:
-      - test_client
-      - test_database
-
 stages:
   - name: Get empty shopping cart
     request:

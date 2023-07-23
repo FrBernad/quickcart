@@ -2,13 +2,13 @@ create_purchase_order_schema = {
     "type": "object",
     "properties": {
         "comments": {"type": "string"},
-        "user_id": {"type": "string"},
+        "user_id": {"type": "integer"},
         "products": {
             "type": "array",
             "items": {
                 "type": "object",
                 "properties": {
-                    "product_id": {"type": "string"},
+                    "product_id": {"type": "integer"},
                     "product_price": {
                         "type": "number",
                         "minimum": 0,

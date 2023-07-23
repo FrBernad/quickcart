@@ -4,11 +4,6 @@ test_name: Users creation, get and update interface test.
 includes:
   - !include tavern_users_variables.yaml
 
-marks:
-  - usefixtures:
-      - test_client
-      - test_database
-
 stages:
   - name: Get non existing user
     request:

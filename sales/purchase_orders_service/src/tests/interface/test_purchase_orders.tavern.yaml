@@ -2,13 +2,14 @@
 test_name: Purchase orders
 
 includes:
- - !include tavern_purchase_orders_variables.yaml
+  - !include tavern_purchase_orders_variables.yaml
 
-- name: Create user
+stages:
+  - name: Create user
     request:
       url: "{users_base_url:s}"
       method: POST
-      json: 
+      json:
         username: "{user_name:s}"
         email: "{email:s}"
         password: "{password:s}"
@@ -16,7 +17,7 @@ includes:
         content-type: application/json
     response:
       status_code: 201
-      json: 
+      json:
         id: !anyint
         username: "{user_name:s}"
         email: "{email:s}"
@@ -30,13 +31,13 @@ includes:
     request:
       url: "{categories_base_url:s}"
       method: POST
-      json: 
+      json:
         name: "{category_name:s}"
       headers:
         content-type: application/json
     response:
       status_code: 201
-      json: 
+      json:
         id: !anyint
         name: "{category_name:s}"
       headers:
@@ -49,7 +50,7 @@ includes:
     request:
       url: "{products_base_url:s}"
       method: POST
-      json: 
+      json:
         user_id: !int "{new_user_id:d}"
         name: "{product_name:s}"
         price: 20.40
@@ -60,15 +61,16 @@ includes:
         content-type: application/json
     response:
       status_code: 201
-      json: 
+      json:
         id: !anyint
         name: "{product_name:s}"
         category: !anydict
         price: 20.40
         stock: 5
+        score: 0
         owner: !anydict
         tags: !anylist
-       headers:
+      headers:
         content-type: application/json
       save:
         json:
@@ -78,20 +80,20 @@ includes:
     request:
       url: "{purchase_order_base_url:s}"
       method: POST
-      json: 
+      json:
         comments: "Comentario"
         user_id: !int "{new_user_id:d}"
-        products: 
+        products:
           - product_id: !int "{new_product_id:d}"
             product_price: 20.40
-            product_quantity": 1
+            product_quantity: 1
         total_price: 20.40
-        payment_details: 
-          payment_method: CREDIT_CARD,
-          card_number: "123456789012345",
-          expiration_year: 2022,
-          expiration_month: 3,
-          cvv: "123",
+        payment_details:
+          payment_method: CREDIT_CARD
+          card_number: "123456789012345"
+          expiration_year: 2022
+          expiration_month: 3
+          cvv: "123"
           card_type: "VISA"
       headers:
         content-type: application/json
@@ -101,13 +103,4 @@ includes:
         json:
           new_purchase_order_id: purchase_order_id
 
-  - name: Get purchase order
-    request:
-      url: "{purchase_order_base_url:s}/{new_purchase_order_id:d}"
-      method: GET
-      headers:
-        content-type: application/json
-    response:
-      status_code: 200
-      json: 
-        purchase_order_id: !int "{new_purchase_order_id:d}"
+# TODO: checkear si existe una orden para el usuario y producto

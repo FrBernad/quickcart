@@ -3,8 +3,9 @@ test_name: Create user, product, category, create purchase order and create revi
 
 includes:
   - !include tavern_reviews_variables.yaml
-
-- name: Create user
+  
+stages:
+  - name: Create user
     request:
       url: "{users_base_url:s}"
       method: POST
