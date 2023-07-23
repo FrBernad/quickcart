@@ -14,6 +14,12 @@ services:
       - "80"
     networks:
       - services
+    healthcheck:
+      test: [ "CMD-SHELL", "service nginx status" ]
+      interval: 4s
+      timeout: 5s
+      start_period: 10s
+      retries: 5
 
 networks:
   services:

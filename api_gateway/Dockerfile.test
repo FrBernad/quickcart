@@ -4,12 +4,13 @@ FROM ${BASE_IMAGE}
 
 RUN apt-get update
 RUN apt-get install -y python3
+RUN apt-get install -y python3-venv
 
 # Create a non-root user for the container
 RUN groupadd -g 999 python \
     && useradd -r -u 999 -g python python \
     && mkdir -p /usr/app \
-    && python -m venv /usr/app/.venv \
+    && python3 -m venv /usr/app/.venv \
     && chown -R python:python /usr/app
 
 ENV PATH="/usr/app/.venv/bin:$PATH"
@@ -20,7 +21,7 @@ WORKDIR /usr/app
 
 # Add and install requirements
 COPY --chown=python:python requirements.test.txt ./requirements.test.txt
-RUN python -m pip install -r .requirements.test.txt
+RUN python3 -m pip install -r ./requirements.test.txt
 
 # Add app
 COPY --chown=python:python tests ./tests
