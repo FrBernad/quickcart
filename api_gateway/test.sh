@@ -14,6 +14,7 @@ if [[ "${ENV:-}" =~ ^qa ]]; then
     if [ $integration_tests_exit_status -eq 0 ] && [ $interface_tests_exit_status -eq 0 ]; then
         exit 0
     else
+        echo "error!!"
         exit 1
     fi
 
