@@ -10,6 +10,7 @@ if [[ "${ENV:-}" =~ ^qa ]]; then
     export BUILD_ID=$(date +%Y%m%d%H%M%S)
     python -m pytest "./tests/interface" -p no:warnings --junitxml=interface_${SERVICE_NAME}_report.xml
     interface_tests_exit_status=$?
+    echo $interface_tests_exit_status
 
     if [ $integration_tests_exit_status -eq 0 ] && [ $interface_tests_exit_status -eq 0 ]; then
         exit 0
