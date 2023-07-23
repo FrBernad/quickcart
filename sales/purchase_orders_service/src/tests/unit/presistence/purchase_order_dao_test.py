@@ -10,30 +10,30 @@ from src.api.persistence.purchase_order_dao_impl import PurchaseOrderDaoImpl
 from unittest.mock import MagicMock
 
 purchase_order = PurchaseOrders(comments="Comentario",
-                                user_id=1,
-                                total_price=328.32,
-                                payment_method=PaymentMethod.CREDIT_CARD,
-                                card_number="1234567891012345",
-                                expiration_year=2023,
-                                expiration_month=12,
-                                cvv=123,
-                                card_type=CardType.VISA,
-                                purchase_order_id=1)
+                                    user_id=1,
+                                    total_price=254.42,
+                                    payment_method=PaymentMethod.CREDIT_CARD,
+                                    card_number="1234567890123456",
+                                    expiration_year=2023,
+                                    expiration_month=12,
+                                    cvv=123,
+                                    card_type=CardType.VISA,
+                                    purchase_order_id=1)
 
 p1 = ProductsPurchased(purchase_order=purchase_order,
-                        product_id=1,
+                        product_id="1",
                         product_price=127.21,
                         product_quantity=2)
 
 p2 = ProductsPurchased(purchase_order=purchase_order,
-                        product_id=2,
-                        product_price=148.21,
+                        product_id="2",
+                        product_price=127.21,
                         product_quantity=1)
 
 payment_details = PaymentDetails(
     payment_method=PaymentMethod.CREDIT_CARD,
     card_number="1234567890123456",
-    expiration_year=2025,
+    expiration_year=2023,
     expiration_month=12,
     cvv="123",
     card_type=CardType.VISA
@@ -56,9 +56,9 @@ def test_get_purchase_orders(monkeypatch, test_purchase_order_dao):
     orders = purchase_dao.get_purchase_orders()
 
     assert orders[0].user_id == 1
-    assert orders[0].total_price==328.32
-    assert orders[0].payment_method==PaymentMethod.CREDIT_CARD
-    assert orders[0].card_number == "1234567891012345"
+    assert orders[0].total_price == 254.42
+    assert orders[0].payment_method == PaymentMethod.CREDIT_CARD
+    assert orders[0].card_number == "1234567890123456"
     assert orders[0].expiration_year == 2023
     assert orders[0].expiration_month == 12
     assert orders[0].cvv == 123
@@ -88,9 +88,9 @@ def test_get_purchase_order_by_user_id(monkeypatch, test_purchase_order_dao):
     orders = purchase_dao.get_purchase_order_by_user_id(mock_user_id, mock_product_id)
 
     assert orders[0].user_id == 1
-    assert orders[0].total_price==328.32
+    assert orders[0].total_price == 254.42
     assert orders[0].payment_method==PaymentMethod.CREDIT_CARD
-    assert orders[0].card_number == "1234567891012345"
+    assert orders[0].card_number == "1234567890123456"
     assert orders[0].expiration_year == 2023
     assert orders[0].expiration_month == 12
     assert orders[0].cvv == 123

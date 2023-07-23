@@ -8,11 +8,12 @@ from src.api.models.payment_details import PaymentDetails
 from src.api.models.card_type import CardType
 from src.api.services.purchase_order_service_impl import PurchaseOrderServiceImpl
 
+
 purchase_order = PurchaseOrders(comments="Comentario",
                                     user_id=1,
-                                    total_price=328.32,
+                                    total_price=254.42,
                                     payment_method=PaymentMethod.CREDIT_CARD,
-                                    card_number="1234567891012345",
+                                    card_number="1234567890123456",
                                     expiration_year=2023,
                                     expiration_month=12,
                                     cvv=123,
@@ -26,13 +27,13 @@ p1 = ProductsPurchased(purchase_order=purchase_order,
 
 p2 = ProductsPurchased(purchase_order=purchase_order,
                         product_id="2",
-                        product_price=148.21,
+                        product_price=127.21,
                         product_quantity=1)
 
 payment_details = PaymentDetails(
     payment_method=PaymentMethod.CREDIT_CARD,
     card_number="1234567890123456",
-    expiration_year=2025,
+    expiration_year=2023,
     expiration_month=12,
     cvv="123",
     card_type=CardType.VISA
@@ -40,7 +41,6 @@ payment_details = PaymentDetails(
 
 purchase_order.products.append(p1)
 purchase_order.products.append(p2)
-
 
 def test_create_purchase_order(test_client, monkeypatch):
     
@@ -57,17 +57,17 @@ def test_create_purchase_order(test_client, monkeypatch):
         "/purchase-orders",
         data=json.dumps(
             {
-                "comments": "asd",
+                "comments": "Comentario",
                 "user_id": "1",
                 "products": [
                     {
                         "product_id": "1",
-                        "product_price": 2.24,
+                        "product_price": 127.21,
                         "product_quantity": 1
                     },
                     {
                         "product_id": "2",
-                        "product_price": 0.93,
+                        "product_price": 127.21,
                         "product_quantity": 1
                     }
 

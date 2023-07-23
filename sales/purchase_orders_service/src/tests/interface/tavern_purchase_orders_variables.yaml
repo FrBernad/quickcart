@@ -1,7 +1,9 @@
-#---
-#name: Purchase Order Variables
-#description: Test variables for purchase orders service
-#
-#variables:
-#  purchase_orders_base_url: http://localhost:5000/purchase-orders
-#
+---
+name: Purchase Order Variables
+description: Test variables for purchase orders service
+
+variables:
+  purchase_orders_base_url: http://purchase_orders_api/purchase-orders
+
+
+

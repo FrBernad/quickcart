@@ -39,8 +39,7 @@ def test_purchase_order_service():
 
 @pytest.fixture(scope="function")
 def test_database():
-    # FIXME
-    # from src.api.models.purchase_orders import PurchaseOrders
+    from src.api.models.purchase_orders import PurchaseOrders
 
     db.drop_all()
     db.create_all()
