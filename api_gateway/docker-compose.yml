@@ -14,6 +14,7 @@ services:
       - "80"
     networks:
       - services
+      - frontend
     healthcheck:
       test: [ "CMD-SHELL", "service nginx status" ]
       interval: 4s
@@ -25,3 +26,7 @@ networks:
   services:
     name: services_${ENV}
     external: true
+  frontend:
+    name: frontend_${ENV}
+    external: true
+

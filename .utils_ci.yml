@@ -83,6 +83,8 @@
     - echo "BUILD_ID=${BUILD_ID}" > context.env
     - docker network inspect services_prod >/dev/null 2>&1 || docker network create --driver bridge services_prod
     - docker network inspect services_qa >/dev/null 2>&1 || docker network create --driver bridge services_qa
+    - docker network inspect frontend_prod >/dev/null 2>&1 || docker network create --driver bridge frontend_prod
+    - docker network inspect frontend_qa >/dev/null 2>&1 || docker network create --driver bridge frontend_qa
     - docker network inspect services_test >/dev/null 2>&1 || docker network create --driver bridge services_test
   artifacts:
     reports:

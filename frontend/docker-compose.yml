@@ -1,21 +1,22 @@
 version: "3.3"
 services:
-  api_gateway:
-    container_name: api_gateway_${ENV}
-    image: "${API_GATEWAY_IMAGE}"
+  frontend:
+    container_name: frontend_${ENV}
+    image: "${FRONTEND_IMAGE}"
     profiles:
       - all
-      - api_gateway
+      - frontend
     restart: always
     environment:
       - ENV=${ENV}
-      - SERVICE_NAME=categories_api
+      - SERVICE_NAME=frontend
     ports:
       - "80"
     networks:
       - services
+      - frontend
     healthcheck:
-      test: [ "CMD-SHELL", "service nginx status" ]
+      test: [ "CMD-SHELL", "curl -f http://localhost:80" ]
       interval: 4s
       timeout: 5s
       start_period: 10s
@@ -24,4 +25,7 @@ services:
 networks:
   services:
     name: services_${ENV}
+    external: true
+  frontend:
+    name: frontend_${ENV}
     external: true
