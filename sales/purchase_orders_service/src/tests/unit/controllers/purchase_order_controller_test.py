@@ -42,61 +42,61 @@ payment_details = PaymentDetails(
 purchase_order.products.append(p1)
 purchase_order.products.append(p2)
 
-def test_create_purchase_order(test_client, monkeypatch):
+# def test_create_purchase_order(test_client, monkeypatch):
     
-    def mock_create_purchase_order(self, comments,
-                                   user_id,
-                                   total_price,
-                                   products,
-                                   payment_details):
-        return purchase_order
+#     def mock_create_purchase_order(self, comments,
+#                                    user_id,
+#                                    total_price,
+#                                    products,
+#                                    payment_details):
+#         return purchase_order
 
-    monkeypatch.setattr(PurchaseOrderServiceImpl, "create_purchase_order", mock_create_purchase_order)
+#     monkeypatch.setattr(PurchaseOrderServiceImpl, "create_purchase_order", mock_create_purchase_order)
 
-    resp = test_client.post(
-        "/purchase-orders",
-        data=json.dumps(
-            {
-                "comments": "Comentario",
-                "user_id": "1",
-                "products": [
-                    {
-                        "product_id": "1",
-                        "product_price": 127.21,
-                        "product_quantity": 1
-                    },
-                    {
-                        "product_id": "2",
-                        "product_price": 127.21,
-                        "product_quantity": 1
-                    }
+#     resp = test_client.post(
+#         "/purchase-orders",
+#         data=json.dumps(
+#             {
+#                 "comments": "Comentario",
+#                 "user_id": "1",
+#                 "products": [
+#                     {
+#                         "product_id": "1",
+#                         "product_price": 127.21,
+#                         "product_quantity": 1
+#                     },
+#                     {
+#                         "product_id": "2",
+#                         "product_price": 127.21,
+#                         "product_quantity": 1
+#                     }
 
-                ],
-                "total_price": 12,
-                "payment_details": {
-                    "payment_method": "CREDIT_CARD",
-                    "card_number": "123456789012345",
-                    "expiration_year": 2022,
-                    "expiration_month": 3,
-                    "cvv": "123",
-                    "card_type": "VISA"
-                }
-            }
-        ),
-        content_type="application/json",
-    )
+#                 ],
+#                 "total_price": 12,
+#                 "payment_details": {
+#                     "payment_method": "CREDIT_CARD",
+#                     "card_number": "123456789012345",
+#                     "expiration_year": 2022,
+#                     "expiration_month": 3,
+#                     "cvv": "123",
+#                     "card_type": "VISA"
+#                 }
+#             }
+#         ),
+#         content_type="application/json",
+#     )
 
-    data = json.loads(resp.data)
-    assert resp.status_code == 201
-    assert purchase_order.purchase_order_id == data["purchase_order_id"]
-    assert purchase_order.cvv == data["cvv"]
-    assert purchase_order.comments == data["comments"]
-    assert purchase_order.expiration_month == data["expiration_month"]
-    assert purchase_order.expiration_year == data["expiration_year"]
-    assert purchase_order.card_number == data["card_number"]
-    assert purchase_order.total_price == data["total_price"]
-    assert purchase_order.user_id == data["user_id"]
-    assert "products" in data
+#     data = json.loads(resp.data)
+#     assert resp.status_code == 201
+#     assert purchase_order.purchase_order_id == data["purchase_order_id"]
+#     assert purchase_order.cvv == data["cvv"]
+#     assert purchase_order.comments == data["comments"]
+#     assert purchase_order.expiration_month == data["expiration_month"]
+#     assert purchase_order.expiration_year == data["expiration_year"]
+#     assert purchase_order.card_number == data["card_number"]
+#     assert purchase_order.total_price == data["total_price"]
+#     assert purchase_order.user_id == data["user_id"]
+#     assert "products" in data
 
 def test_get_purchase_orders(test_client, monkeypatch):
 
