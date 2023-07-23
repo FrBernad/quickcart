@@ -4,55 +4,110 @@ test_name: Purchase orders
 includes:
  - !include tavern_purchase_orders_variables.yaml
 
-marks:
- - usefixtures:
-     - test_client
-     - test_database
-
-stages:
-  - name: Non-existing order should return 404
+- name: Create user
     request:
-      url: "{purchase_orders_base_url:s}/4"
-      method: GET
-    response:
-      status_code: 404
-
-  - name: Create a new purchase order
-    request:
-      url: "{purchase_orders_base_url:s}/"
+      url: "{users_base_url:s}"
       method: POST
-       json:
+      json: 
+        username: "{user_name:s}"
+        email: "{email:s}"
+        password: "{password:s}"
+      headers:
+        content-type: application/json
+    response:
+      status_code: 201
+      json: 
+        id: !anyint
+        username: "{user_name:s}"
+        email: "{email:s}"
+      headers:
+        content-type: application/json
+      save:
+        json:
+          new_user_id: id
+
+  - name: Create category
+    request:
+      url: "{categories_base_url:s}"
+      method: POST
+      json: 
+        name: "{category_name:s}"
+      headers:
+        content-type: application/json
+    response:
+      status_code: 201
+      json: 
+        id: !anyint
+        name: "{category_name:s}"
+      headers:
+        content-type: application/json
+      save:
+        json:
+          new_category_id: id
+
+  - name: Create product value
+    request:
+      url: "{products_base_url:s}"
+      method: POST
+      json: 
+        user_id: !int "{new_user_id:d}"
+        name: "{product_name:s}"
+        price: 20.40
+        category_id: !int "{new_category_id:d}"
+        tags: ["Tag 1", "Tag 2"]
+        stock: 5
+      headers:
+        content-type: application/json
+    response:
+      status_code: 201
+      json: 
+        id: !anyint
+        name: "{product_name:s}"
+        category: !anydict
+        price: 20.40
+        stock: 5
+        owner: !anydict
+        tags: !anylist
+       headers:
+        content-type: application/json
+      save:
+        json:
+          new_product_id: id
+
+  - name: Create purchase order
+    request:
+      url: "{purchase_order_base_url:s}"
+      method: POST
+      json: 
         comments: "Comentario"
-        user_id: "1"
-        products:
-          - product_id: "1"
-            product_price: 127.21
-            product_quantity: 1
-          - product_id: "2"
-            product_price: 127.21
-            product_quantity: 1
-        total_price: 300
-        payment_details:
-          payment_method: "CREDIT_CARD"
-          card_number: "123456789012345"
-          expiration_year: 2022
-          expiration_month: 3
-          cvv: "123"
+        user_id: !int "{new_user_id:d}"
+        products: 
+          - product_id: !int "{new_product_id:d}"
+            product_price: 20.40
+            product_quantity": 1
+        total_price: 20.40
+        payment_details: 
+          payment_method: CREDIT_CARD,
+          card_number: "123456789012345",
+          expiration_year: 2022,
+          expiration_month: 3,
+          cvv: "123",
           card_type: "VISA"
+      headers:
+        content-type: application/json
     response:
       status_code: 201
       save:
         json:
-          order_id: id
+          new_purchase_order_id: purchase_order_id
 
-  # - name: Get the created order
-  #   request:
-  #     url: http://your-api-url/api/orders/{order_id}
-  #     method: GET
-  #   response:
-  #     status_code: 200
-  #     json:
-  #       id: "{order_id}"
-  #       comments: "Test order"
-  #       user_id: 1
-  #       total_price: 300
+  - name: Get purchase order
+    request:
+      url: "{purchase_order_base_url:s}/{new_purchase_order_id:d}"
+      method: GET
+      headers:
+        content-type: application/json
+    response:
+      status_code: 200
+      json: 
+        purchase_order_id: !int "{new_purchase_order_id:d}"

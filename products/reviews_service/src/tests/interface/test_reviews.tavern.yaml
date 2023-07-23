@@ -1,34 +1,129 @@
 ---
-test_name: Reviews interface test
+test_name: Create user, product, category, create purchase order and create review
 
 includes:
   - !include tavern_reviews_variables.yaml
 
-marks:
-  - usefixtures:
-      - test_client
-      - test_database
-
-stages:
-  - name: Get reviews by product
+- name: Create user
     request:
-      url: "{reviews_base_url:s}?product_id={product_id:d}"
-      method: GET
-    response:
-      status_code: 200
-  - name: Get reviews by product withoud product_id
-    request:
-      url: "{reviews_base_url:s}?product_id="
-      method: GET
-    response:
-      status_code: 400
-  - name: Create review
-    request:
-      url: "{reviews_base_url:s}/{product_id:d}"
+      url: "{users_base_url:s}"
       method: POST
-      json:
-        description: "test"
-        user_id: 1
-        score: 4
+      json: 
+        username: "{user_name:s}"
+        email: "{email:s}"
+        password: "{password:s}"
+      headers:
+        content-type: application/json
     response:
       status_code: 201
+      json: 
+        id: !anyint
+        username: "{user_name:s}"
+        email: "{email:s}"
+      headers:
+        content-type: application/json
+      save:
+        json:
+          new_user_id: id
+
+  - name: Create category
+    request:
+      url: "{categories_base_url:s}"
+      method: POST
+      json: 
+        name: "{category_name:s}"
+      headers:
+        content-type: application/json
+    response:
+      status_code: 201
+      json: 
+        id: !anyint
+        name: "{category_name:s}"
+      headers:
+        content-type: application/json
+      save:
+        json:
+          new_category_id: id
+
+  - name: Create product value
+    request:
+      url: "{products_base_url:s}"
+      method: POST
+      json: 
+        user_id: !int "{new_user_id:d}"
+        name: "{product_name:s}"
+        price: 20.40
+        category_id: !int "{new_category_id:d}"
+        tags: ["Tag 1", "Tag 2"]
+        stock: 5
+      headers:
+        content-type: application/json
+    response:
+      status_code: 201
+      json: 
+        id: !anyint
+        name: "{product_name:s}"
+        category: !anydict
+        price: 20.40
+        stock: 5
+        owner: !anydict
+        tags: !anylist
+       headers:
+        content-type: application/json
+      save:
+        json:
+          new_product_id: id
+
+  - name: Create purchase order
+    request:
+      url: "{purchase_order_base_url:s}"
+      method: POST
+      json: 
+        comments: "Comentario"
+        user_id: !int "{new_user_id:d}"
+        products: 
+          - product_id: !int "{new_product_id:d}"
+            product_price: 20.40
+            product_quantity": 1
+        total_price: 20.40
+        payment_details: 
+          payment_method: CREDIT_CARD,
+          card_number: "123456789012345",
+          expiration_year: 2022,
+          expiration_month: 3,
+          cvv: "123",
+          card_type: "VISA"
+      headers:
+        content-type: application/json
+    response:
+      status_code: 201
+
+  - name: Get purchase order
+    request:
+      url: "{reviews_base_url:s}"
+      method: POST
+      json: 
+        description: "Descripcion"
+        user_id: !int "{new_user_id:d}"
+        score: 1
+      headers:
+        content-type: application/json
+    response:
+      status_code: 201
+      save:
+        json:
+          new_review_id: id
+
+  - name: Get review
+    request:
+      url: "{reviews_base_url:s}"
+      method: GET
+      headers:
+        content-type: application/json
+    response:
+      status_code: 200
+      json: 
+        id: !int "{new_review_id:d}"
+        product_id: !int "{new_product_id:d}"
+        category: !anydict
+        score: 1
