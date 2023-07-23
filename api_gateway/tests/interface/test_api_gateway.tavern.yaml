@@ -1,5 +1,4 @@
 ###--------GET CATEGORIES-------
-
 ---
 test_name: Get categories
 
@@ -43,18 +42,17 @@ stages:
     request:
       url: "{api_gateway_base_url:s}/categories"
       method: POST
-      json: 
+      json:
         name: "{category_name:s}"
       headers:
         content-type: application/json
     response:
       status_code: 201
-      json: 
+      json:
         id: !anyint
         name: "{category_name:s}"
       headers:
         content-type: application/json
-
 
 ---
 test_name: Create category and then return the category
@@ -67,13 +65,13 @@ stages:
     request:
       url: "{api_gateway_base_url:s}/categories"
       method: POST
-      json: 
+      json:
         name: "{category_name:s}"
       headers:
         content-type: application/json
     response:
       status_code: 201
-      json: 
+      json:
         id: !anyint
         name: "{category_name:s}"
       headers:
@@ -87,12 +85,11 @@ stages:
       method: GET
     response:
       status_code: 200
-      json: 
+      json:
         id: !int "{new_category_id:d}"
         name: "{category_name:s}"
       headers:
         content-type: application/json
-
 
 ---
 test_name: Create category, get the category, update the category and return the category updated
@@ -104,13 +101,13 @@ stages:
     request:
       url: "{api_gateway_base_url:s}/categories"
       method: POST
-      json: 
+      json:
         name: "{category_name:s}"
       headers:
         content-type: application/json
     response:
       status_code: 201
-      json: 
+      json:
         id: !anyint
         name: "{category_name:s}"
       headers:
@@ -124,7 +121,7 @@ stages:
       method: GET
     response:
       status_code: 200
-      json: 
+      json:
         id: !int "{new_category_id:d}"
         name: "{category_name:s}"
       headers:
@@ -133,7 +130,7 @@ stages:
     request:
       url: "{api_gateway_base_url:s}/categories/{new_category_id:d}"
       method: PUT
-      json: 
+      json:
         name: "{category_name_updated:s}"
       headers:
         content-type: application/json
@@ -145,7 +142,7 @@ stages:
       method: GET
     response:
       status_code: 200
-      json: 
+      json:
         id: !int "{new_category_id:d}"
         name: "{category_name_updated:s}"
       headers:
