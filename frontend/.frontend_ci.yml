@@ -1,7 +1,7 @@
 .frontend_domain_variables: &frontend_domain_variables
   DOMAIN_PATH: "frontend"
   SERVICE_NAME: "frontend"
-  SERVICE_PATH: "frontend"
+  SERVICE_PATH: "frontend/src"
 
 build_frontend:
   extends: .build_service
