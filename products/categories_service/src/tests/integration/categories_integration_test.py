@@ -1,6 +1,7 @@
 import requests
 
 def test_services_up():
+    # Categories Service
     response = requests.get("http://categories_api:5000/categories/health", timeout=10)
     assert response.status_code == 200
     
