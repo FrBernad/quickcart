@@ -1,6 +1,6 @@
 #!/bin/bash
 
-if [[ "${ENV:-}" =~ ^qa ]]; then
+if [[ "${ENV:-}" =~ ^qa ]]; then 
 
     echo "Running integration tests for ${SERVICE_NAME}"
     python -m pytest "./src/tests/integration" -p no:warnings --junitxml=integration_${SERVICE_NAME}_report.xml
