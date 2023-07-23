@@ -16,17 +16,17 @@ stages:
       url: "{users_base_url:s}"
       method: POST
       json: 
-        username: "new_user"
-        email: "new_user@test.com"
-        password: "secret_password"
+        username: "{user_name:s}"
+        email: "{email:s}"
+        password: "{password:s}"
       headers:
         content-type: application/json
     response:
       status_code: 201
-      json: 
+      json:
         id: !anyint
-        username: "new_user"
-        email: "new_user@test.com"
+        username: "{user_name:s}"
+        email: "{email:s}"
       headers:
         content-type: application/json
       save:
@@ -40,8 +40,8 @@ stages:
       status_code: 200
       json: 
         id: !int "{new_user_id:d}"
-        username: "new_user"
-        email: "new_user@test.com"
+        username: "{user_name:s}"
+        email: "{email:s}"
       headers:
         content-type: application/json
   - name: Update created user
@@ -64,6 +64,6 @@ stages:
       json: 
         id: !int "{new_user_id:d}"
         username: "new_user_updated"
-        email: "new_user@test.com"
+        email: "{email:s}"
       headers:
         content-type: application/json

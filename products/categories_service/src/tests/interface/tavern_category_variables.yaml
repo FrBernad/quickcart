@@ -4,7 +4,7 @@ description: Test variables for category service
 
 variables:
   categories_base_url: http://categories_api:5000/categories
-  non_existent_id: 90
+  non_existent_id: -1
   category_name: "Categoria 1"
   category_name_updated: "Categoria 1"
 

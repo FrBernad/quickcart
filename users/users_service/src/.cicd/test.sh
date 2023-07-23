@@ -3,12 +3,12 @@
 if [[ "${ENV:-}" =~ ^qa ]]; then
 
     echo "Running integration tests for ${SERVICE_NAME}"
-    python -m pytest "./src/tests/integration" -p no:warnings
+    python -m pytest "./src/tests/integration" -p no:warnings --junitxml=integration_${SERVICE_NAME}_report.xml
     integration_tests_exit_status=$?
 
     echo "Running interface tests for ${SERVICE_NAME}"
     export BUILD_ID=$(date +%Y%m%d%H%M%S)
-    python -m pytest "./src/tests/interface" -p no:warnings
+    python -m pytest "./src/tests/interface" -p no:warnings --junitxml=interface_${SERVICE_NAME}_report.xml
     interface_tests_exit_status=$?
 
     if [ $integration_tests_exit_status -eq 0 ] && [ $interface_tests_exit_status -eq 0 ]; then
@@ -22,12 +22,12 @@ else
     
     ## Unit tests 
     echo "Running unit tests and coverage for ${SERVICE_NAME} service"
-    python -m pytest "./src/tests/unit" -p no:warnings --junitxml=unit_report.xml --cov="." --cov-report=xml:unit_report_coverage
+    python -m pytest "./src/tests/unit" -p no:warnings --junitxml=unit_${SERVICE_NAME}_report.xml --cov="." --cov-report=xml:unit_${SERVICE_NAME}_report_coverage
     unit_tests_exit_status=$?
 
     ## Functional tests
     echo "Running functional tests and coverage for ${SERVICE_NAME} service"
-    python -m pytest "./src/tests/functional" -p no:warnings --junitxml=functional_report.xml --cov="." --cov-report=xml:functional_report_coverage
+    python -m pytest "./src/tests/functional" -p no:warnings --junitxml=functional${SERVICE_NAME}_report.xml --cov="." --cov-report=xml:functional_${SERVICE_NAME}_report_coverage
     functional_tests_exit_status=$?
 
     if [ $unit_tests_exit_status -eq 0 ] && [ $functional_tests_exit_status -eq 0 ]; then

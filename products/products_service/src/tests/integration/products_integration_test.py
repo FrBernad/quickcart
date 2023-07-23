@@ -16,4 +16,4 @@ def test_users_api_health():
 
 
 def test_categories_api_health():
-    _test_api_health("categories_api", "categores")
+    _test_api_health("categories_api", "categories")

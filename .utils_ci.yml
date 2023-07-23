@@ -128,15 +128,21 @@
     - docker compose -f ${DOMAIN_PATH}/docker-compose.yml -p ${SERVICE_NAME}_${ENV} --env-file ${DOMAIN_PATH}/.env_files/.env.test --profile ${SERVICE_NAME} up --abort-on-container-exit
     - docker compose -f ${DOMAIN_PATH}/docker-compose.yml -p ${SERVICE_NAME}_${ENV} --env-file ${DOMAIN_PATH}/.env_files/.env.test --profile ${SERVICE_NAME} rm
 
-    # - docker cp ${SERVICE_NAME}_${ENV}:/usr/app/coverage.xml .
-    # - docker cp ${SERVICE_NAME}_${ENV}:/usr/app/report.xml .
-  # artifacts:
-  #   when: always
-  #   paths:
-  #     - unit_report_coverage.xml
-  #     - unit_report.xml
-  #     - functional_report_coverage.xml
-  #     - functional_report.xml
+    - docker cp ${SERVICE_NAME}_${ENV}:/usr/app/unit_${SERVICE_NAME}_report.xml .
+    - docker cp ${SERVICE_NAME}_${ENV}:/usr/app/unit_${SERVICE_NAME}_report_coverage.xml .
+    - docker cp ${SERVICE_NAME}_${ENV}:/usr/app/functional${SERVICE_NAME}_report.xml .
+    - docker cp ${SERVICE_NAME}_${ENV}:/usr/app/functional_${SERVICE_NAME}_report_coverage.xml .
+  artifacts:
+    when: always
+    paths:
+      - unit_${SERVICE_NAME}_report.xml
+      - unit_${SERVICE_NAME}_report_coverage.xml
+      - functional${SERVICE_NAME}_report.xml
+      - functional_${SERVICE_NAME}_report_coverage.xml
+    reports:
+      junit:
+        - unit_${SERVICE_NAME}_report.xml
+        - functional${SERVICE_NAME}_report.xml
 
 .deploy_qa:
   stage: qa
@@ -168,6 +174,17 @@
     - docker compose -f ${DOMAIN_PATH}/docker-compose-integration.yml -p ${SERVICE_NAME}_${ENV} --env-file ${DOMAIN_PATH}/.env_files/.env.qa_test --profile ${SERVICE_NAME} stop
     - docker compose -f ${DOMAIN_PATH}/docker-compose-integration.yml -p ${SERVICE_NAME}_${ENV} --env-file ${DOMAIN_PATH}/.env_files/.env.qa_test --profile ${SERVICE_NAME} rm
     - docker compose -f ${DOMAIN_PATH}/docker-compose-integration.yml -p ${SERVICE_NAME}_${ENV} --env-file ${DOMAIN_PATH}/.env_files/.env.qa_test --profile ${SERVICE_NAME} up --abort-on-container-exit
+    - docker cp ${SERVICE_NAME}_${ENV}:/usr/app/integration_${SERVICE_NAME}_report.xml .
+    - docker cp ${SERVICE_NAME}_${ENV}:/usr/app/interface_${SERVICE_NAME}_report.xml .
+  artifacts:
+    when: always
+    paths:
+      - integration_${SERVICE_NAME}_report.xml
+      - interface_${SERVICE_NAME}_report.xml
+    reports:
+      junit:
+        - integration_${SERVICE_NAME}_report.xml
+        - interface_${SERVICE_NAME}_report.xml
 
 .deliver_dockerhub:
   stage: deliver

@@ -4,4 +4,8 @@ description: Test variables for user service
 
 variables:
   users_base_url: http://users_api:5000/users
+  user_name: "new_user_{tavern.env_vars.BUILD_ID}"
+  email: "new_user_{tavern.env_vars.BUILD_ID}@test.com"
+  password: "secret_password"
+
 
