@@ -67,6 +67,7 @@ deliver_api_gateway_dockerhub:
 
 deploy_prod_api_gateway:
   extends: .deploy_prod
+  variables: *api_gateway_domain_variables
   needs:
     - job: deliver_api_gateway_dockerhub
       artifacts: false
