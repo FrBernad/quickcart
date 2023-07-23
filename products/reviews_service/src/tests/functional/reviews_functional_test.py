@@ -1,6 +1,13 @@
 import pytest
 from src.api.models.reviews import Review
+from src.tests.mocks import (
+    request_get_user_200,
+    request_get_product_200,
+    request_get_purchase_order_200,
+    request_update_product_score_204,
+)
 import json
+
 
 class MockResponse:
     def __init__(self, json_data, status_code):
@@ -36,13 +43,33 @@ def test_create_review(monkeypatch, test_client, test_database):
 
     import requests
 
-    def request_get_purchase_order(url):
-        return MockResponse([], 200)
 
+    def side_effect_get(url):
+        if "users" in url:
+            return request_get_user_200(url)
+        elif "products" in url:
+            return request_get_product_200(url)
+        elif "purchase-orders" in url:
+            return request_get_purchase_order_200(url)
+        else:
+            raise ValueError("Unknown URL in get method")
+   
     monkeypatch.setattr(
         requests,
         "get",
-        request_get_purchase_order
+        side_effect_get
+    )
+
+    def side_effect_put(url,json):
+        if "score" in url:
+            return request_update_product_score_204(url,json)
+        else:
+            raise ValueError("Unknown URL in put method")
+
+    monkeypatch.setattr(
+        requests,
+        "put",
+        side_effect_put
     )
 
     resp = test_client.post(

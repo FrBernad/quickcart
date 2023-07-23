@@ -40,10 +40,9 @@ class ReviewServiceImpl(ReviewService):
         if self.__user_has_orders_for_product(user_id, product_id):
             reviews_quantity = self.review_dao.get_reviews_quantity_by_product(product_id)
             review = self.review_dao.create_review(product_id=product_id, user_id=user_id, review_body=review_body, score=score)
-            new_score = ((product['score'] * reviews_quantity) + score) / (reviews_quantity+1)
+            new_score = ((product.get('score') * reviews_quantity) + score) / (reviews_quantity+1)
             self.__update_product_score(product_id,new_score)
             return review
-
     def __user_has_orders_for_product(self, user_id, product_id):
         try:
             response = requests.get(f"http://purchase_orders_api:5000/purchase-orders/{user_id}?product-id={product_id}")
