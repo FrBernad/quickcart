@@ -1,17 +1,14 @@
 version: "3.3"
 services:
-  api_gateway:
-    container_name: api_gateway_${ENV}
+  api_gateway_test:
+    container_name: api_gateway_test_integration
     image: "${API_GATEWAY_IMAGE}"
     profiles:
-      - all
       - api_gateway
     restart: always
     environment:
       - ENV=${ENV}
       - SERVICE_NAME=categories_api
-    ports:
-      - "80"
     networks:
       - services
 

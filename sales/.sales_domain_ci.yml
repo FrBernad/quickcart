@@ -8,6 +8,3 @@ deploy_prod_sales_domain:
     - job: deliver_purchase_orders_dockerhub
       optional: true
       artifacts: false
-    - job: deploy_prod_api_gateway
-      artifacts: false
-      optional: true
