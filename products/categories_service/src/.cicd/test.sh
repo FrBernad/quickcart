@@ -22,12 +22,12 @@ else
     
     ## Unit tests 
     echo "Running unit tests and coverage for ${SERVICE_NAME} service"
-    python -m pytest "./src/tests/unit" -p no:warnings --junitxml=unit_${SERVICE_NAME}_report.xml --cov="." --cov-report=xml:unit_${SERVICE_NAME}_report_coverage
+    python -m pytest "./src/tests/unit" -p no:warnings --junitxml=unit_${SERVICE_NAME}_report.xml --cov="." --cov-report=xml:unit_${SERVICE_NAME}_report_coverage.xml
     unit_tests_exit_status=$?
 
     ## Functional tests
     echo "Running functional tests and coverage for ${SERVICE_NAME} service"
-    python -m pytest "./src/tests/functional" -p no:warnings --junitxml=functional_${SERVICE_NAME}_report.xml --cov="." --cov-report=xml:functional_${SERVICE_NAME}_report_coverage
+    python -m pytest "./src/tests/functional" -p no:warnings --junitxml=functional_${SERVICE_NAME}_report.xml --cov="." --cov-report=xml:functional_${SERVICE_NAME}_report_coverage.xml
     functional_tests_exit_status=$?
 
     if [ $unit_tests_exit_status -eq 0 ] && [ $functional_tests_exit_status -eq 0 ]; then
