@@ -1,0 +1,27 @@
+version: "3.3"
+services:
+  api_gateway:
+    container_name: api_gateway_${ENV}
+    image: "${API_GATEWAY_IMAGE}"
+    profiles:
+      - all
+      - api_gateway
+    restart: always
+    environment:
+      - ENV=${ENV}
+      - SERVICE_NAME=categories_api
+    ports:
+      - "80"
+    networks:
+      - services
+    healthcheck:
+      test: [ "CMD-SHELL", "service nginx status" ]
+      interval: 4s
+      timeout: 5s
+      start_period: 10s
+      retries: 5
+
+networks:
+  services:
+    name: services_${ENV}
+    external: true

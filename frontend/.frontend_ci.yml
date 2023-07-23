@@ -1,0 +1,82 @@
+# .api_gateway_domain_variables: &api_gateway_domain_variables
+#   DOMAIN_PATH: "api_gateway"
+#   SERVICE_NAME: "api_gateway"
+#   SERVICE_PATH: "api_gateway"
+
+# build_api_gateway:
+#   extends: .build_service
+#   variables: *api_gateway_domain_variables
+
+# deploy_qa_api_gateway:
+#   extends: .deploy_qa
+#   variables: *api_gateway_domain_variables
+#   needs:
+#     - job: build_api_gateway
+#       artifacts: true
+#     - job: deploy_qa_shopping_cart_service
+#       artifacts: false
+#       optional: true
+#     - job: deploy_qa_products_service
+#       artifacts: false
+#       optional: true
+#     - job: deploy_qa_categories_service
+#       artifacts: false
+#       optional: true
+#     - job: deploy_qa_reviews_service
+#       artifacts: false
+#       optional: true
+#     - job: deploy_qa_purchase_orders_service
+#       artifacts: false
+#       optional: true
+
+# test_integration_and_functional_api_gateway:
+#   extends: .test_integration_and_functional_service
+#   variables: *api_gateway_domain_variables
+#   needs:
+#     - job: build_api_gateway
+#       artifacts: true
+#     - job: deploy_qa_api_gateway
+#       artifacts: false
+#     - job: deploy_qa_users_service
+#       artifacts: false
+#       optional: true
+#     - job: deploy_qa_shopping_cart_service
+#       artifacts: false
+#       optional: true
+#     - job: deploy_qa_products_service
+#       artifacts: false
+#       optional: true
+#     - job: deploy_qa_categories_service
+#       artifacts: false
+#       optional: true
+#     - job: deploy_qa_reviews_service
+#       artifacts: false
+#       optional: true
+#     - job: deploy_qa_purchase_orders_service
+#       artifacts: false
+#       optional: true
+
+# deliver_api_gateway_dockerhub:
+#   extends: .deliver_dockerhub
+#   variables: *api_gateway_domain_variables
+#   needs:
+#     - job: build_api_gateway
+#       artifacts: true
+#     - job: test_integration_and_functional_api_gateway
+#       artifacts: false
+
+# deploy_prod_api_gateway:
+#   extends: .deploy_prod
+#   needs:
+#     - job: deliver_api_gateway_dockerhub
+#       artifacts: false
+#       optional: true
+#     - job: deploy_prod_users_domain
+#       artifacts: false
+#       optional: true
+#     - job: deploy_prod_sales_domain
+#       artifacts: false
+#       optional: true
+#     - job: deploy_prod_products_domain
+#       artifacts: false
+#       optional: true
