@@ -2,7 +2,7 @@ version: "3.3"
 services:
   api_gateway:
     container_name: api_gateway_api_${ENV}
-    image: "${DOCKERHUB_IMAGE_BASE}/api_gateway:prod-latest"
+    image: "${API_GATEWAY_IMAGE}"
     restart: always
     ports:
       - "80"

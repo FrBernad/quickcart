@@ -1,13 +1,11 @@
 import requests
 
 
-def test_services_up():
-
-    # Users service
-    response = requests.get("http://users_api:5000/users/health", timeout=10)
+def _test_api_health(service_name, path):
+    response = requests.get(f"http://{service_name}:5000/{path}/health", timeout=5)
     assert response.status_code == 200
+    assert response.json()["status"] == "OK"
 
 
-
-def test_database_up():
-    assert True
+def test_user_api_health():
+    _test_api_health("users_api", "users")
