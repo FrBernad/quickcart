@@ -48,7 +48,7 @@ def update_shopping_cart_product_quantity(
 
 
 @inject
-@shopping_cart_bp.route("/<user_id>/checkout", methods=["POST"])
+@shopping_cart_bp.route("/<int:user_id>/checkout", methods=["POST"])
 @expects_json(checkout_shopping_cart_schema)
 def checkout_shopping_cart(user_id, shopping_cart_service: ShoppingCartService):
     data = request.get_json()

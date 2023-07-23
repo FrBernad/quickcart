@@ -5,9 +5,9 @@ description: Test variables for reviews service
 variables:
   reviews_base_url: http://reviews_api:5000/reviews
   products_base_url: http://products_api:5000/products
-  category_base_url: http://categories_api:5000/categories
+  categories_base_url: http://categories_api:5000/categories
   users_base_url: http://users_api:5000/users
-  purchase_order_base_url: http://purchase_order_api:5000/purchase-orders
+  purchase_order_base_url: http://purchase_orders_api:5000/purchase-orders
   category_name: "Categoria 1"
   product_name: "Producto 1"
   user_id: 1

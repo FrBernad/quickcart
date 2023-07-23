@@ -82,8 +82,8 @@ stages:
       method: GET
     response:
       status_code: 200
-      json: 
-        id: "{new_product_id:d}"
+      json:
+        id: !int "{new_product_id:d}"
         name: "{product_name:s}"
         category: !anydict
         price: 20.40
@@ -91,5 +91,5 @@ stages:
         score: 0
         owner: !anydict
         tags: !anylist
-       headers:
+      headers:
         content-type: application/json

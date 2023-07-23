@@ -114,11 +114,11 @@ stages:
       headers:
         content-type: application/json
     response:
-      status_code: 200
+      status_code: 201
       json: 
         id: !anyint
         product_id: !int "{new_product_id:d}"
-        category: !int "{new_user_id:d}"
+        user_id: !int "{new_user_id:d}"
         score: 1
         review_body: !anystr
         creation_date: !anystr
@@ -132,7 +132,7 @@ stages:
     response:
       status_code: 200
       json: 
-        id: "{new_product_id:d}"
+        id: !int "{new_product_id:d}"
         name: "{product_name:s}"
         category: !anydict
         price: 20.40

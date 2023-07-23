@@ -4,8 +4,11 @@ description: Test variables for shopping cart service
 
 variables:
   shopping_cart_base_url: http://shopping_cart_api:5000/shopping-cart
+  users_base_url: http://users_api:5000/users
+  products_base_url: http://products_api:5000/products
+  categories_base_url: http://categories_api:5000/categories
+  category_name: "Categoria 1"
+  product_name: "Producto 1"
   user_name: "new_user_{tavern.env_vars.BUILD_ID}"
   email: "new_user_{tavern.env_vars.BUILD_ID}@test.com"
-  user_id: 1
-  product_id: 1
-
+  password: "secret_password"

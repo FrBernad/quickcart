@@ -12,7 +12,7 @@ stages:
       url: "{api_gateway_base_url:s}/categories"
       method: GET
     response:
-      status_code: 204
+      status_code: 200
 
 ###--------GET CATEGORY BY ID-------
 
