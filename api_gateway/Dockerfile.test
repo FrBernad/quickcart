@@ -25,4 +25,4 @@ COPY --chown=python:python tests ./tests
 COPY --chown=python:python test.sh .
 RUN chmod +x /usr/app/test.sh
 
-CMD ["/bin/bash", "-c", "exec ./test.sh"]
+CMD ["./test.sh"]
