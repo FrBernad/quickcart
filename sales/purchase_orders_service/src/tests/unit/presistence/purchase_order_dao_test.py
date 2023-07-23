@@ -108,8 +108,5 @@ def test_create_purchase_order_with_products(monkeypatch, test_purchase_order_da
                                                                 purchase_order.total_price, 
                                                                 purchase_order.products,
                                                                 payment_details)
-    assert db_mock.session.add.call_count == 1
     db_mock.session.add.assert_called_once()
-    # FIXME: commit problem
-    # db_mock.session.commit.assert_called_once()
 
