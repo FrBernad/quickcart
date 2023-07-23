@@ -13,7 +13,7 @@ build_api_gateway:
 
 deploy_qa_api_gateway:
   extends: .deploy_qa
-  variables: *api_gateway_variables
+  variables: *api_gateway_domain_variables
   needs:
     - job: build_api_gateway
       artifacts: true
@@ -22,7 +22,7 @@ deploy_qa_api_gateway:
   
 test_integration_and_functional_api_gateway:
   extends: .test_integration_and_functional_service
-  variables: *api_gateway_variables
+  variables: *api_gateway_domain_variables
   needs:
     - job: build_api_gateway
       artifacts: true
