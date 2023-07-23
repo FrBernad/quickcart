@@ -15,3 +15,12 @@ update_user_schema = {
         'password': {'type': 'string'}
     },
 }
+
+login_user_schema = {
+    'type': 'object',
+    'properties': {
+        'email': {'type': 'string'},
+        'password': {'type': 'string'}
+    },
+    'required': ['email', 'password']
+}
