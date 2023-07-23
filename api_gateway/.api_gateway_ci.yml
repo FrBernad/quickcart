@@ -70,7 +70,6 @@ deploy_prod_api_gateway:
   needs:
     - job: deliver_api_gateway_dockerhub
       artifacts: false
-      optional: true
     - job: deploy_prod_users_domain
       artifacts: false
       optional: true
