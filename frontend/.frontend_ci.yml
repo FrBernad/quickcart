@@ -32,6 +32,7 @@ deploy_prod_frontend:
   needs:
     - job: deliver_frontend_dockerhub
       artifacts: false
+      optional: true
     - job: deploy_prod_api_gateway_domain
       artifacts: false
       optional: true
