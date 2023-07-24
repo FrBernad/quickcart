@@ -1,4 +1,4 @@
-import { apiAxios } from '@/config/api';
+import { apiAxios } from '@/config/axiosConfig';
 import { Product } from '@/models/Product';
 import { wait } from '@/utils';
 

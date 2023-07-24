@@ -9,15 +9,15 @@ interface Props {
 export const OrderCard: FC<Props> = ({ order }) => {
   return (
     <div className="glass p-5">
-      <h1 className="text-2xl font-bold">#{order.id}</h1>
+      <h1 className="text-2xl font-bold">#{order.purchase_order_id}</h1>
       <div className="flex flex-col">
-        {order.products.map((product: Product) => (
-          <p key={product.id}>
-            {product.name} - {product.price} $
+        {order.products.map((product) => (
+          <p key={product.product_id}>
+            {product.product_id} - {product.product_price} $
           </p>
         ))}
         <p>
-          <span className="font-bold">Total:</span> {order.total} $
+          <span className="font-bold">Total:</span> {order.total_price} $
         </p>
       </div>
     </div>

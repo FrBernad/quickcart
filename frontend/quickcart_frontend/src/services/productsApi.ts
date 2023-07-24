@@ -1,35 +1,23 @@
-import { apiAxios } from '@/config/api';
+import { apiAxios } from '@/config/axiosConfig';
 import { Product } from '@/models/Product';
 import { wait } from '@/utils';
 
 export const productsApi = {
   getProducts: async (signal: AbortSignal): Promise<Product[]> => {
-    // const response = await apiAxios.get<Product[]>(
-    //   'http://localhost:80/products',
-    //   {
-    //     params: {
-    //       product
-    //     },
-    //     signal
-    //   }
-    // );
-    // return response.data;
-    await wait(1000);
-    return products;
+    const response = await apiAxios.get<Product[]>('/products', {
+      signal
+    });
+    return response.data;
   },
 
   getProductById: async (
     product_id: string,
     signal: AbortSignal
   ): Promise<Product> => {
-    // const response = await apiAxios.get<Product[]>(
-    //   `http://localhost:80/products/${product_id}`,
-    //   {
-    //     signal
-    //   }
-    // );
-    await wait(1000);
-    return products[0];
+    const response = await apiAxios.get<Product>(`/products/${product_id}`, {
+      signal
+    });
+    return response.data;
   }
 };
 

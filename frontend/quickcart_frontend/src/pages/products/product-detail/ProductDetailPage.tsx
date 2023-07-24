@@ -30,13 +30,13 @@ export const ProductDetailPage: FC = () => {
             <span className="font-bold">Price:</span> {product.price}
           </p>
           <p>
-            <span className="font-bold">Stock:</span> {product.stock}/10
+            <span className="font-bold">Stock:</span> {product.stock}
           </p>
           <p>
-            <span className="font-bold">Seller:</span> {product.seller}
+            <span className="font-bold">Seller:</span> {product.owner.username}
           </p>
           <p>
-            <span className="font-bold">Score:</span> {product.score}
+            <span className="font-bold">Score:</span> {product.score}/5
           </p>
           <Button className="mt-4" onClick={() => addProductToCart(product)}>
             {/*<Loader2 className="mr-2 h-4 w-4 animate-spin" />*/}

@@ -21,7 +21,7 @@ export const OrdersPage = () => {
           <>
             <div className="grid grid-cols-4 gap-4">
               {orders.map((order) => (
-                <OrderCard key={order.id} order={order} />
+                <OrderCard key={order.purchase_order_id} order={order} />
               ))}
             </div>
           </>
