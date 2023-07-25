@@ -25,7 +25,6 @@ class ProductsSchema(Schema):
     stock = fields.Int(required=True)
     score = fields.Float(required=True)
     owner = fields.Nested(OwnerSchema, required=True)
-    # creation_date = fields.Date(required=True)
 
 
 product_schema = ProductsSchema()

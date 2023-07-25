@@ -14,7 +14,6 @@ class ShoppingCartService(ABC):
     def checkout(self, username, payment_info):
         pass
 
-
     @abstractmethod
     def delete_product(self, user_id, product_id):
         pass
@@ -22,11 +21,3 @@ class ShoppingCartService(ABC):
     @abstractmethod
     def empty(self, user_id):
         pass
-
-    # @abstractmethod
-    # def get_user_by_id(self, user_id):
-    #     pass
-
-    # @abstractmethod
-    # def get_product_by_id(self, product_id):
-    #     pass

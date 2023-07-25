@@ -131,24 +131,3 @@ def test_get_products(monkeypatch, test_client, test_database):
     data = json.loads(resp.data)
     assert resp.status_code == 200
     assert len(data) == len(products)
-
-
-# ## --------       UPDATE PRODUCT     --------
-
-# def test_update_product(monkeypatch,test_client, test_database):
-
-
-# ## --------       DELETE PRODUCT     --------
-
-# def test_delete_product(monkeypatch,test_client, test_database ):
-
-
-# ## --------       UPDATE PRODUCT SCORE     --------
-
-# def test_update_product_score(monkeypatch,test_client, test_database):
-
-
-# ## --------       UPDATE PRODUCT STOCK    --------
-
-
-# def test_update_product_stock(monkeypatch,test_client, test_database):

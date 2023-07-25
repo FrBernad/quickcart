@@ -169,7 +169,6 @@ class ShoppingCartServiceImpl(ShoppingCartService):
         return products
 
     def __pay(self, user_id, payment_info, shopping_cart):
-        # TODO: API (Payment API) - Simular pago de productos.
         return True
 
     def __decrease_stock_product_by_id(self, product_id, quantity, current_stock):

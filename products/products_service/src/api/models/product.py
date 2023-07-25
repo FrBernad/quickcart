@@ -20,4 +20,3 @@ class Product(db.Model):
     score = db.Column(db.Float, nullable=False, default=0)
     tags = db.relationship("Tag", secondary=product_tag)
     creation_date = db.Column(db.DateTime, default=func.now(), nullable=False)
-    # ownwer

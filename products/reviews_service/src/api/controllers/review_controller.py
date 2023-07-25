@@ -27,7 +27,6 @@ def create_review(product_id, review_service: ReviewService):
     return jsonify(review_schema.dump(new_review)), 201
 
 
-# /reviews?product_id=
 @inject
 @reviews_bp.route("", methods=["GET"])
 def get_reviews_by_product(review_service: ReviewService):
@@ -48,17 +47,6 @@ def get_reviews_by_product(review_service: ReviewService):
         )
 
     return jsonify(reviews_schema.dump(reviews)), 200
-
-
-# @inject
-# @reviews_bp.route("/<review_id>", methods=["GET"])
-# def get_review_by_id(review_id, review_service: ReviewService):
-#     review = review_service.get_review_by_id(review_id=review_id)
-
-#     if not review:
-#         return jsonify({"message": f"Review with id {review_id} not found"}), 404
-
-#    return jsonify(reviews_schema.dump(review)), 200
 
 
 @reviews_bp.route("/health", methods=["GET"])
