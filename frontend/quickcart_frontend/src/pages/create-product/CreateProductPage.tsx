@@ -42,9 +42,12 @@ export const CreateProductPage = () => {
     initialData: []
   });
 
-  const categoriesOptions =
+  const categoriesOptions: ReadonlyArray<{
+    value: string;
+    label: string;
+  }> =
     categories?.map((category) => ({
-      value: category.id,
+      value: category.id.toString(),
       label: category.name
     })) ?? [];
 
