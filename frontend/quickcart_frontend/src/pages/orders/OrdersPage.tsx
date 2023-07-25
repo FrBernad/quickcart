@@ -4,7 +4,7 @@ import { OrderCard } from '@/components/orders/OrderCard';
 import { ordersApi } from '@/services/ordersApi';
 
 export const OrdersPage = () => {
-  const { data: orders, isFetching } = useQuery({
+  const { data: orders, isLoading } = useQuery({
     queryKey: [`orders`],
     queryFn: async ({ signal }) => {
       return await ordersApi.getUserOrders('user_id', signal!);
@@ -17,7 +17,7 @@ export const OrdersPage = () => {
       <h1 className="mb-5 text-5xl font-bold">Orders</h1>
 
       <div className="flex flex-col gap-5">
-        {!isFetching && !!orders && (
+        {!isLoading && !!orders && (
           <>
             <div className="grid grid-cols-4 gap-4">
               {orders.map((order) => (
@@ -26,7 +26,7 @@ export const OrdersPage = () => {
             </div>
           </>
         )}
-        {isFetching && (
+        {isLoading && (
           <div className="flex h-48 flex-row items-center justify-center">
             <HashLoader color="#36d7b7" />
           </div>

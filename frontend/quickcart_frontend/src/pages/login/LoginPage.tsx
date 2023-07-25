@@ -13,6 +13,13 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { Button } from '@/components/ui/button';
 import { useUserStore } from '@/hooks/stores/use-user-store.hook';
 import { useNavigate } from 'react-router-dom';
+import { usersApi } from '@/services/usersApi';
+import { useMutation } from '@tanstack/react-query';
+import React from 'react';
+import { Loader2 } from 'lucide-react';
+import { useToast } from '@/components/ui/use-toast';
+import { AxiosError } from 'axios';
+import { ResponseError } from '@/models/ResponseError';
 
 const loginSchema = z.object({
   email: z.string().nonempty('The email is required'),
@@ -28,14 +35,26 @@ export const LoginPage = () => {
     }
   });
 
+  const { toast } = useToast();
+
+  const loginUpMutation = useMutation({
+    mutationFn: async (signUpData: z.infer<typeof loginSchema>) => {
+      return await usersApi.login(signUpData.email, signUpData.password);
+    },
+    onSuccess(user) {
+      useUserStore.getState().setUser(user);
+      navigate('/products');
+    },
+    onError({ response }: AxiosError<ResponseError>) {
+      toast({
+        variant: 'destructive',
+        title: 'Uh oh! Something went wrong.',
+        description: response?.data.message
+      });
+    }
+  });
+
   const navigate = useNavigate();
-
-  const setUser = useUserStore((state) => state.setUser);
-
-  const onSubmit = async (loginForm: z.infer<typeof loginSchema>) => {
-    setUser({ email: loginForm.email, id: 1 });
-    navigate('/products');
-  };
 
   // justify-content align-items
   return (
@@ -43,7 +62,13 @@ export const LoginPage = () => {
       <h1 className="mb-5 text-5xl font-bold">Login</h1>
 
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+        <form
+          onSubmit={form.handleSubmit(
+            (signUpData: z.infer<typeof loginSchema>) =>
+              loginUpMutation.mutate(signUpData)
+          )}
+          className="space-y-8"
+        >
           <FormField
             control={form.control}
             name="email"
@@ -76,7 +101,16 @@ export const LoginPage = () => {
               </FormItem>
             )}
           />
-          <Button type="submit">Login</Button>
+          <Button
+            type="submit"
+            className="inline-flex justify-center"
+            disabled={loginUpMutation.isLoading}
+          >
+            Login
+            {loginUpMutation.isLoading && (
+              <Loader2 className="ml-2 h-4 w-4 animate-spin" />
+            )}
+          </Button>
         </form>
       </Form>
     </div>

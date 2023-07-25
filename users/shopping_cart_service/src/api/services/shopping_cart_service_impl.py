@@ -141,7 +141,7 @@ class ShoppingCartServiceImpl(ShoppingCartService):
             if response.status_code == 404:
                 raise ProductNotFoundException(product_id)
             else:
-                raise ServiceInternalException("product")
+                raise ServiceInternalException(f"{response.json()['message']} product")
         except GenericApiException:
             raise
         except Exception as e:

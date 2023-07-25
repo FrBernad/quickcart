@@ -1,53 +1,43 @@
 import { apiAxios } from '@/config/axiosConfig';
 import { Product } from '@/models/Product';
-import { wait } from '@/utils';
 
 export const shoppingCartApi = {
   getShoppingCart: async (
-    userId: string = '',
+    userId: number,
     signal: AbortSignal
   ): Promise<Product[]> => {
-    // const response = await apiAxios.get<Product[]>(
-    //   'http://localhost:80/products',
-    //   {
-    //     params: {
-    //       product
-    //     },
-    //     signal
-    //   }
-    // );
-    // return response.data;
-    await wait(1000);
-    return [];
+    const response = await apiAxios.get<Product[]>(`/shopping-cart/${userId}`, {
+      signal
+    });
+    if (response.status === 204) return [];
+
+    return response.data;
   },
 
-  addProduct: async (
-    product: string = '',
-    signal: AbortSignal
-  ): Promise<void> => {
-    // const response = await apiAxios.get<Product[]>(
-    //   'http://localhost:80/products',
-    //   {
-    //     params: {
-    //       product
-    //     },
-    //     signal
-    //   }
-    // );
-    // return response.data;
-    await wait(1000);
+  addProduct: async (userId: number, productId: number): Promise<void> => {
+    await apiAxios.put<void>(`/shopping-cart/${userId}/${productId}`, {
+      quantity: 1
+    });
   },
 
-  removeProduct: async (
-    product_id: string,
-    signal: AbortSignal
+  removeProduct: async (userId: number, productId: number): Promise<void> => {
+    await apiAxios.delete<void>(`/shopping-cart/${userId}/${productId}`);
+  },
+
+  checkout: async (
+    userId: number,
+    checkoutData: {
+      card_number: string;
+      expiration_year: number;
+      expiration_month: number;
+      cvv: number;
+      comments: string;
+    }
   ): Promise<void> => {
-    // const response = await apiAxios.get<Product[]>(
-    //   `http://localhost:80/products/${product_id}`,
-    //   {
-    //     signal
-    //   }
-    // );
-    await wait(1000);
+    await apiAxios.post<void>(`/shopping-cart/${userId}/checkout`, {
+      card_type: 'VISA',
+      payment_method: 'CREDIT_CARD',
+      ...checkoutData
+    });
   }
 };

@@ -3,6 +3,7 @@ from src.api.models.product import Product
 from src.api.models.tag import Tag
 from injector import inject
 from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy.exc import NoResultFound
 
 
 class ProductDaoImpl(ProductDao):

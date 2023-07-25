@@ -1,144 +1,114 @@
 import { useForm } from 'react-hook-form';
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage
-} from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-import * as z from 'zod';
-import { zodResolver } from '@hookform/resolvers/zod';
 import { Button } from '@/components/ui/button';
+import { cn } from '@/utils';
 import { useNavigate } from 'react-router-dom';
+import { useMutation, useQuery } from '@tanstack/react-query';
+import { productsApi } from '@/services/productsApi';
+import { AxiosError } from 'axios';
+import { ResponseError } from '@/models/ResponseError';
+import { toast } from '@/components/ui/use-toast';
+import { ErrorField } from '@/components/forms/ErrorField';
+import { categoriesApi } from '@/services/categoriesApi';
+import Select from 'react-select';
 
-const createProductSchema = z
-  .object({
-    name: z.string().nonempty('The email is required'),
-    stock: z.number().gte(1, 'The stock must be greater than 0'),
-    price: z.number().gte(1, 'The price must be greater than 0')
-    // tags: z
-    //   .array(z.string().nonempty('The tag must be non-empty'))
-    //   .nonempty("The tags can't be empty")
-  })
-  .required();
+export interface CreateProductFormInput {
+  name: string;
+  price: number;
+  category_id: number;
+  tags: string[];
+  stock: number;
+  user_id: number;
+}
 
 export const CreateProductPage = () => {
-  const form = useForm<z.infer<typeof createProductSchema>>({
-    resolver: zodResolver(createProductSchema),
-    defaultValues: {
-      name: '',
-      stock: 0,
-      price: 0
-      // tags: []
-    }
+  const {
+    register,
+    handleSubmit,
+    formState: { errors }
+  } = useForm<CreateProductFormInput>();
+
+  const navigate = useNavigate();
+
+  const { data: categories } = useQuery({
+    queryKey: [`categories`],
+    queryFn: async ({ signal }) => {
+      return await categoriesApi.getCategories(signal!);
+    },
+    initialData: []
   });
 
-  // const navigate = useNavigate();
+  console.log(categories);
 
-  const onSubmit = async (loginForm: z.infer<typeof createProductSchema>) => {
-    console.log(loginForm);
-    // navigate('/products/1');
-  };
-
-  const handleSubmit = () => {
-    const stockStr = form.getValues('stock');
-    const price = form.getValues('price');
-
-    console.log(price);
-    console.log(stockStr);
-
-    form.handleSubmit(onSubmit);
-  };
+  const createProductMutation = useMutation({
+    mutationFn: async (createProductData: CreateProductFormInput) => {
+      return await productsApi.createProduct(createProductData);
+    },
+    onSuccess(product) {
+      navigate(`/products/${product.id}`);
+    },
+    onError({ response }: AxiosError<ResponseError>) {
+      toast({
+        variant: 'destructive',
+        title: 'Uh oh! Something went wrong.',
+        description: response?.data.message
+      });
+    }
+  });
 
   // justify-content align-items
   return (
     <div>
       <h1 className="mb-5 text-5xl font-bold">Create Product</h1>
 
-      <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-          <FormField
-            control={form.control}
-            name="name"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Name</FormLabel>
-                <FormControl>
-                  <Input
-                    placeholder="Product Name"
-                    className="w-1/4 rounded border-2 border-gray-400/50 bg-transparent"
-                    {...field}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
+      <div className={cn('m-2 grow container')}>
+        <form
+          className={'m-8 space-y-4'}
+          onSubmit={handleSubmit((formData) =>
+            createProductMutation.mutate(formData)
+          )}
+        >
+          <div className={cn('flex flex-col space-y-1.5')}>
+            <label htmlFor="name">Name</label>
+            <Input
+              id="name"
+              {...register('name', { required: true })}
+              className={cn('border-2')}
+            />
+            {errors.name && <ErrorField error={'This field is required'} />}
+          </div>
+          <div className={cn('flex flex-col space-y-1.5')}>
+            <label htmlFor="price">Price</label>
+            <Input
+              id="price"
+              type="number"
+              {...register('price', { required: true })}
+              className={cn('border-2')}
+            />
+            {errors.price && <ErrorField error={'This field is required'} />}
+          </div>
+          <div className={cn('flex flex-col space-y-1.5')}>
+            <label htmlFor="stock">Stock</label>
+            <Input
+              id="stock"
+              type="number"
+              {...register('stock', { required: true })}
+              className={cn('border-2')}
+            />
+            {errors.stock && <ErrorField error={'This is a required field'} />}
+          </div>
+          <div className={cn('flex flex-col space-y-1.5')}>
+            <label htmlFor="stock">Stock</label>
+            <Select options={categories.map((category) => category.name)} />
+            {errors.category_id && (
+              <ErrorField error={'This is a required field'} />
             )}
-          />
-          <FormField
-            control={form.control}
-            name="price"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Price</FormLabel>
-                <FormControl>
-                  <Input
-                    className="w-1/4 rounded border-2 border-gray-400/50 bg-transparent"
-                    type="number"
-                    {...field}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="stock"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Stock</FormLabel>
-                <FormControl>
-                  <Input
-                    className="w-1/4 rounded border-2 border-gray-400/50 bg-transparent"
-                    type="number"
-                    {...field}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          {/*<label htmlFor="tags">Tags</label>*/}
-          {/*{form.getValues().tags.map((tag, index) => (*/}
-          {/*  <div key={index}>*/}
-          {/*    <input*/}
-          {/*      type="text"*/}
-          {/*      value={tag}*/}
-          {/*      onChange={(e) => handleTagChange(index, e.target.value)}*/}
-          {/*    />*/}
-          {/*    <button type="button" onClick={() => handleRemoveTag(index)}>*/}
-          {/*      Remove*/}
-          {/*    </button>*/}
-          {/*  </div>*/}
-          {/*))}*/}
-          {/*<button type="button" onClick={handleAddTag}>*/}
-          {/*  Add Tag*/}
-          {/*</button>*/}
-          {/*<FormItem>*/}
-          {/*  <FormLabel>Tags</FormLabel>*/}
-          {/*  <FormControl>*/}
-          {/*    <Input*/}
-          {/*      placeholder="Add a tag"*/}
-          {/*      className="w-1/4 rounded border-2 border-gray-400/50 bg-transparent"*/}
-          {/*    />*/}
-          {/*  </FormControl>*/}
-          {/*  <FormMessage />*/}
-          {/*</FormItem>*/}
-          <Button type="submit">Create</Button>
+          </div>
+          <Button type="submit" className={cn('rounded-md p-2')}>
+            Create Product
+          </Button>
         </form>
-      </Form>
+      </div>
     </div>
   );
 };

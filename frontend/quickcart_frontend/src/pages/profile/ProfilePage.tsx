@@ -22,11 +22,10 @@ export const ProfilePage = () => {
         {user!.email}
       </h1>
       <h1 className="mb-5 text-2xl">
-        <span className="font-bold">Id: </span>
-        {user!.id}
+        <span className="font-bold">Username: </span>
+        {user!.username}
       </h1>
       <Button className="mt-4" onClick={() => logoutHandler()}>
-        {/*<Loader2 className="mr-2 h-4 w-4 animate-spin" />*/}
         Logout
       </Button>
     </>

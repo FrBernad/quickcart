@@ -29,4 +29,3 @@ networks:
   frontend:
     name: frontend_${ENV}
     external: true
-
