@@ -106,6 +106,11 @@ def bad_request(error):
     return error
 
 
+@shopping_cart_bp.errorhandler(500)
+def internal_error(error):
+    return jsonify({"message": f"Shopping cart internal error: {str(error)}"}), 500
+
+
 @shopping_cart_bp.errorhandler(GenericApiException)
 def generic_api_exception(e):
     return jsonify(e.to_dict()), e.status_code

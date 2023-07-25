@@ -3,6 +3,7 @@ from src.api.models.product import Product
 from src.api.models.tag import Tag
 from injector import inject
 from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy.exc import NoResultFound
 
 
 class ProductDaoImpl(ProductDao):
@@ -34,9 +35,12 @@ class ProductDaoImpl(ProductDao):
         return self.db.session.scalars(self.db.select(Product)).all()
 
     def get_product_by_id(self, product_id):
-        return self.db.session.execute(
-            self.db.select(Product).where(Product.id == product_id)
-        ).scalar_one()
+        try:
+            return self.db.session.execute(
+                self.db.select(Product).where(Product.id == product_id)
+            ).scalar_one()
+        except NoResultFound:
+            return None
 
     def update_product(self, product, name, price, category_id, tags):
         product.name = name
