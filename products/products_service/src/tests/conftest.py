@@ -44,6 +44,7 @@ def test_database():
 
     db.drop_all()
     db.create_all()
-    yield db 
+    yield db
     db.session.remove()
+    db.session.rollback()  # Rollback any uncommitted transactions
     db.drop_all()

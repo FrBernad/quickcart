@@ -8,7 +8,23 @@ from src.api.models.card_type import CardType
 from src.api.models.payment_method import PaymentMethod
 from src.api.models.payment_details import PaymentDetails
 
-def test_get_purchase_orders(test_purchase_order_service):
+from src.tests.mocks import (
+    request_get_product_200,
+)
+
+def test_get_purchase_orders(monkeypatch,test_purchase_order_service):
+
+    
+    import requests
+
+    def side_effect_get(url):
+        if "products" in url:
+            return request_get_product_200(url)
+        else:
+            raise ValueError("Unknown URL in get method")
+
+    monkeypatch.setattr(requests, "get", side_effect_get)
+
     
     purchase_order1 = PurchaseOrders(comments="Comentario",
                                      user_id="1",
@@ -67,7 +83,17 @@ def test_get_purchase_orders(test_purchase_order_service):
     assert len(purchase_orders) == 2
 
 
-def test_get_purchase_order_by_user_id(test_purchase_order_service):
+def test_get_purchase_order_by_user_id(monkeypatch,test_purchase_order_service):
+
+    import requests
+
+    def side_effect_get(url):
+        if "products" in url:
+            return request_get_product_200(url)
+        else:
+            raise ValueError("Unknown URL in get method")
+
+    monkeypatch.setattr(requests, "get", side_effect_get)
 
     mock_user_id = "1"
     purchase_order1 = PurchaseOrders(comments="Comentario",
@@ -89,7 +115,7 @@ def test_get_purchase_order_by_user_id(test_purchase_order_service):
     purchase_order1.products.append(p1)
 
     def mock_get_purchase_order_by_user_id(user_id, product_id):
-        return purchase_order1
+        return [purchase_order1]
     
     purchase_service, purchase_dao_mock = test_purchase_order_service
 
@@ -97,18 +123,29 @@ def test_get_purchase_order_by_user_id(test_purchase_order_service):
 
     purchase_orders = purchase_service.get_purchase_order_by_user_id(mock_user_id)
 
-    assert purchase_orders.user_id == mock_user_id
-    assert purchase_orders.comments == "Comentario"
-    assert purchase_orders.total_price == 328.32
-    assert purchase_orders.card_number == "1234567891012345"
-    assert purchase_orders.expiration_year == 2023
-    assert purchase_orders.expiration_month == 12
-    assert purchase_orders.cvv == 123
-    assert purchase_orders.purchase_order_id == 1
+    assert purchase_orders[0].user_id == mock_user_id
+    assert purchase_orders[0].comments == "Comentario"
+    assert purchase_orders[0].total_price == 328.32
+    assert purchase_orders[0].card_number == "1234567891012345"
+    assert purchase_orders[0].expiration_year == 2023
+    assert purchase_orders[0].expiration_month == 12
+    assert purchase_orders[0].cvv == 123
+    assert purchase_orders[0].purchase_order_id == 1
 
 
 
-def test_create_purchase_order(test_purchase_order_service):
+def test_create_purchase_order(monkeypatch,test_purchase_order_service):
+
+    import requests
+
+    def side_effect_get(url):
+        if "products" in url:
+            return request_get_product_200(url)
+        else:
+            raise ValueError("Unknown URL in get method")
+
+    monkeypatch.setattr(requests, "get", side_effect_get)
+
     purchase_order1 = PurchaseOrders(comments="Comentario",
                                      user_id=1,
                                      total_price=328.32,

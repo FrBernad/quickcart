@@ -35,12 +35,7 @@ class ProductDaoImpl(ProductDao):
         return self.db.session.scalars(self.db.select(Product)).all()
 
     def get_product_by_id(self, product_id):
-        try:
-            return self.db.session.execute(
-                self.db.select(Product).where(Product.id == product_id)
-            ).scalar_one()
-        except NoResultFound:
-            return None
+        return Product.query.filter_by(id=product_id).first()
 
     def update_product(self, product, name, price, category_id, tags):
         product.name = name

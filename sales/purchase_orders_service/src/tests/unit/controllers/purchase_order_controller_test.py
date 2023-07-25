@@ -63,12 +63,14 @@ def test_create_purchase_order(test_client, monkeypatch):
                     {
                         "product_id": 1,
                         "product_price": 127.21,
-                        "product_quantity": 1
+                        "product_quantity": 1,
+                        "product_name": "Producto 1"
                     },
                     {
                         "product_id": 2,
                         "product_price": 127.21,
-                        "product_quantity": 1
+                        "product_quantity": 1,
+                        "product_name": "Producto 2"
                     }
 
                 ],
@@ -120,7 +122,7 @@ def test_get_purchase_order_by_id(test_client, monkeypatch):
     
     mock_user_id = 1
     mock_product_id = 1
-    resp = test_client.get(f"/purchase-orders/{mock_user_id}?product-id={mock_product_id}")
+    resp = test_client.get(f"/purchase-orders/{mock_user_id}?product_id={mock_product_id}")
 
     data = json.loads(resp.data)
     assert resp.status_code == 200

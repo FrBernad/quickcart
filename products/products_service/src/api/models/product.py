@@ -1,7 +1,5 @@
 from src.api.persistence.db import db
 from sqlalchemy.sql import func
-from src.api.models.tag import Tag
-
 
 product_tag = db.Table(
     "product_tag",
