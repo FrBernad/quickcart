@@ -2,12 +2,15 @@ import { useQuery } from '@tanstack/react-query';
 import { HashLoader } from 'react-spinners';
 import { OrderCard } from '@/components/orders/OrderCard';
 import { ordersApi } from '@/services/ordersApi';
+import { useUserStore } from '@/hooks/stores/use-user-store.hook';
 
 export const OrdersPage = () => {
+  const user = useUserStore((state) => state.user);
+
   const { data: orders, isLoading } = useQuery({
-    queryKey: [`orders`],
+    queryKey: [`orders-${user!.id}`],
     queryFn: async ({ signal }) => {
-      return await ordersApi.getUserOrders('user_id', signal!);
+      return await ordersApi.getUserOrders(user!.id, signal!);
     }
   });
 

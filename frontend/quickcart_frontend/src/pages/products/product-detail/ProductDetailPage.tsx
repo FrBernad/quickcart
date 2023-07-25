@@ -9,14 +9,26 @@ import { toast } from '@/components/ui/use-toast';
 import { AxiosError } from 'axios';
 import { ResponseError } from '@/models/ResponseError';
 import { Loader2 } from 'lucide-react';
+import { reviewsApi } from '@/services/reviewsApi';
+import { ReviewCard } from '@/components/products/ReviewCard';
+import { ReviewDialog } from '@/components/products/ReviewDialog';
+import { ProductTagBadge } from '@/components/products/ProductTagBadge';
 
 export const ProductDetailPage: FC = () => {
-  const { productId } = useParams();
+  const { productId: productIdStr } = useParams();
+  const productId = parseInt(productIdStr!);
 
-  const { data: product, isLoading } = useQuery({
-    queryKey: [`product-${productId}`],
+  const { data: product, isLoading: productIsLoading } = useQuery({
+    queryKey: [`product-${productId!}`],
     queryFn: async ({ signal }) => {
       return await productsApi.getProductById(productId!, signal!);
+    }
+  });
+
+  const { data: reviews, isLoading: reviewsIsLoading } = useQuery({
+    queryKey: [`reviews-${productId!}`],
+    queryFn: async ({ signal }) => {
+      return await reviewsApi.getProductReviews(productId!, signal!);
     }
   });
 
@@ -46,7 +58,7 @@ export const ProductDetailPage: FC = () => {
 
   return (
     <>
-      {!isLoading && !!product && (
+      {!productIsLoading && !!product && (
         <div>
           <h1 className="mb-4 text-4xl font-bold">{product.name}</h1>
           <p>
@@ -61,9 +73,14 @@ export const ProductDetailPage: FC = () => {
           <p>
             <span className="font-bold">Score:</span> {product.score}/5
           </p>
+          <div className="mt-2 flex flex-row gap-2">
+            {product.tags.map((tag) => (
+              <ProductTagBadge key={tag.id} tag={tag.name} />
+            ))}
+          </div>
           {!!user && (
             <Button
-              className="mt-4 inline-flex justify-center"
+              className="mr-2 mt-4 inline-flex justify-center"
               onClick={() => addProductMutation.mutate()}
               disabled={addProductMutation.isLoading}
             >
@@ -72,6 +89,16 @@ export const ProductDetailPage: FC = () => {
                 <Loader2 className="ml-2 h-4 w-4 animate-spin" />
               )}
             </Button>
+          )}
+          {!!user && <ReviewDialog productId={product.id}></ReviewDialog>}
+          <h1 className="my-4 text-4xl font-bold">Reviews</h1>
+          {!reviewsIsLoading &&
+            reviews!.length > 0 &&
+            reviews!.map((review) => (
+              <ReviewCard key={review.id} review={review}></ReviewCard>
+            ))}
+          {!reviewsIsLoading && reviews!.length === 0 && (
+            <h1 className="text-2xl">No reviews yet</h1>
           )}
         </div>
       )}

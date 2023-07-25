@@ -21,19 +21,21 @@ export const NavBar: FC = () => {
       >
         Products
       </NavLink>
-      <NavLink
-        to="/orders"
-        className={({ isActive }) =>
-          cn(
-            isActive
-              ? 'text-primary'
-              : 'text-muted-foreground transition-colors hover:text-primary/75',
-            'text-lg font-medium'
-          )
-        }
-      >
-        Orders
-      </NavLink>
+      {!!user && (
+        <NavLink
+          to="/orders"
+          className={({ isActive }) =>
+            cn(
+              isActive
+                ? 'text-primary'
+                : 'text-muted-foreground transition-colors hover:text-primary/75',
+              'text-lg font-medium'
+            )
+          }
+        >
+          Orders
+        </NavLink>
+      )}
       {!!user && (
         <NavLink
           to="/shopping-cart"

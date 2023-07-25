@@ -1,15 +1,17 @@
 import { apiAxios } from '@/config/axiosConfig';
-import { wait } from '@/utils';
 import { Order } from '@/models/Order';
 
 export const ordersApi = {
   getUserOrders: async (
-    userId: string = '',
+    userId: number,
     signal: AbortSignal
   ): Promise<Order[]> => {
-    const response = await apiAxios.get<Order[]>('/purchase-orders', {
+    const response = await apiAxios.get<Order[]>(`/purchase-orders/${userId}`, {
       signal
     });
+
+    if (response.status === 204) return [];
+
     return response.data;
   }
 };

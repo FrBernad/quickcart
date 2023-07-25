@@ -1,4 +1,4 @@
-import { useForm } from 'react-hook-form';
+import { Controller, useForm } from 'react-hook-form';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/utils';
@@ -11,24 +11,28 @@ import { toast } from '@/components/ui/use-toast';
 import { ErrorField } from '@/components/forms/ErrorField';
 import { categoriesApi } from '@/services/categoriesApi';
 import Select from 'react-select';
+import { useUserStore } from '@/hooks/stores/use-user-store.hook';
+import { Loader2 } from 'lucide-react';
 
 export interface CreateProductFormInput {
   name: string;
-  price: number;
-  category_id: number;
-  tags: string[];
-  stock: number;
-  user_id: number;
+  price: string;
+  category: { label: string; value: string };
+  tags: string;
+  stock: string;
 }
 
 export const CreateProductPage = () => {
   const {
     register,
     handleSubmit,
+    control,
     formState: { errors }
   } = useForm<CreateProductFormInput>();
 
   const navigate = useNavigate();
+
+  const user = useUserStore((state) => state.user);
 
   const { data: categories } = useQuery({
     queryKey: [`categories`],
@@ -38,11 +42,15 @@ export const CreateProductPage = () => {
     initialData: []
   });
 
-  console.log(categories);
+  const categoriesOptions =
+    categories?.map((category) => ({
+      value: category.id,
+      label: category.name
+    })) ?? [];
 
   const createProductMutation = useMutation({
     mutationFn: async (createProductData: CreateProductFormInput) => {
-      return await productsApi.createProduct(createProductData);
+      return await productsApi.createProduct(user!.id, createProductData);
     },
     onSuccess(product) {
       navigate(`/products/${product.id}`);
@@ -55,6 +63,33 @@ export const CreateProductPage = () => {
       });
     }
   });
+
+  const customStyles = {
+    control: (styles: any) => ({
+      ...styles,
+      backgroundColor: 'transparent',
+      borderColor: '#1E293B',
+      borderWidth: '2px'
+    }),
+    menu: (styles: any) => ({
+      ...styles,
+      backgroundColor: 'white'
+    }),
+    option: (styles: any) => {
+      return {
+        ...styles,
+        // backgroundColor:
+        color: 'black'
+      };
+    },
+    input: (styles: any) => ({ ...styles, color: 'white' }),
+    placeholder: (styles: any) => ({ ...styles, color: 'white' }),
+    singleValue: (provided: any) => ({
+      ...provided,
+      fontSize: '0.875rem',
+      color: 'white'
+    })
+  };
 
   // justify-content align-items
   return (
@@ -98,14 +133,40 @@ export const CreateProductPage = () => {
             {errors.stock && <ErrorField error={'This is a required field'} />}
           </div>
           <div className={cn('flex flex-col space-y-1.5')}>
-            <label htmlFor="stock">Stock</label>
-            <Select options={categories.map((category) => category.name)} />
-            {errors.category_id && (
+            <label htmlFor="stock">Categoría</label>
+            <Controller
+              name="category"
+              control={control}
+              render={({ field }) => (
+                <Select
+                  {...field}
+                  options={categoriesOptions}
+                  styles={customStyles}
+                />
+              )}
+            />
+            {errors.category && (
               <ErrorField error={'This is a required field'} />
             )}
           </div>
-          <Button type="submit" className={cn('rounded-md p-2')}>
+          <div className={cn('flex flex-col space-y-1.5')}>
+            <label htmlFor="stock">Tags</label>
+            <Input
+              id="tags"
+              {...register('tags', { required: true })}
+              className={cn('border-2')}
+            />
+            {errors.tags && <ErrorField error={'This is a required field'} />}
+          </div>
+          <Button
+            type="submit"
+            className="inline-flex justify-center rounded-md p-2"
+            disabled={createProductMutation.isLoading}
+          >
             Create Product
+            {createProductMutation.isLoading && (
+              <Loader2 className="ml-2 h-4 w-4 animate-spin" />
+            )}
           </Button>
         </form>
       </div>
