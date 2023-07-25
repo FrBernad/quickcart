@@ -8,7 +8,23 @@ from src.api.models.card_type import CardType
 from src.api.models.payment_method import PaymentMethod
 from src.api.models.payment_details import PaymentDetails
 
-def test_get_purchase_orders(test_purchase_order_service):
+from src.tests.mocks import (
+    request_get_product_200,
+)
+
+def test_get_purchase_orders(monkeypatch,test_purchase_order_service):
+
+    
+    import requests
+
+    def side_effect_get(url):
+        if "products" in url:
+            return request_get_product_200(url)
+        else:
+            raise ValueError("Unknown URL in get method")
+
+    monkeypatch.setattr(requests, "get", side_effect_get)
+
     
     purchase_order1 = PurchaseOrders(comments="Comentario",
                                      user_id="1",
@@ -67,7 +83,17 @@ def test_get_purchase_orders(test_purchase_order_service):
     assert len(purchase_orders) == 2
 
 
-def test_get_purchase_order_by_user_id(test_purchase_order_service):
+def test_get_purchase_order_by_user_id(monkeypatch,test_purchase_order_service):
+
+    import requests
+
+    def side_effect_get(url):
+        if "products" in url:
+            return request_get_product_200(url)
+        else:
+            raise ValueError("Unknown URL in get method")
+
+    monkeypatch.setattr(requests, "get", side_effect_get)
 
     mock_user_id = "1"
     purchase_order1 = PurchaseOrders(comments="Comentario",
@@ -89,7 +115,7 @@ def test_get_purchase_order_by_user_id(test_purchase_order_service):
     purchase_order1.products.append(p1)
 
     def mock_get_purchase_order_by_user_id(user_id, product_id):
-        return purchase_order1
+        return [purchase_order1]
     
     purchase_service, purchase_dao_mock = test_purchase_order_service
 
@@ -108,7 +134,18 @@ def test_get_purchase_order_by_user_id(test_purchase_order_service):
 
 
 
-def test_create_purchase_order(test_purchase_order_service):
+def test_create_purchase_order(monkeypatch,test_purchase_order_service):
+
+    import requests
+
+    def side_effect_get(url):
+        if "products" in url:
+            return request_get_product_200(url)
+        else:
+            raise ValueError("Unknown URL in get method")
+
+    monkeypatch.setattr(requests, "get", side_effect_get)
+
     purchase_order1 = PurchaseOrders(comments="Comentario",
                                      user_id=1,
                                      total_price=328.32,

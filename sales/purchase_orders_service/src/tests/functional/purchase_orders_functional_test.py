@@ -7,6 +7,10 @@ from src.api.models.payment_details import PaymentDetails
 from src.api.models.card_type import CardType
 from src.api.models.purchase_order_details import PurchaseOrderDetails
 
+from src.tests.mocks import (
+    request_get_product_200,
+)
+
 purchase_order = PurchaseOrders(comments="Comentario",
                                     user_id=1,
                                     total_price=254.42,
@@ -40,7 +44,18 @@ payment_details = PaymentDetails(
 purchase_order.products.append(p1)
 purchase_order.products.append(p2)
 
-def test_create_purchase_order(test_client, test_database):
+def test_create_purchase_order(monkeypatch,test_client, test_database):
+
+    import requests
+
+    def side_effect_get(url):
+        if "products" in url:
+            return request_get_product_200(url)
+        else:
+            raise ValueError("Unknown URL in get method")
+
+    monkeypatch.setattr(requests, "get", side_effect_get)
+
 
     resp = test_client.post(
         "/purchase-orders",
@@ -88,9 +103,21 @@ def test_create_purchase_order(test_client, test_database):
     assert "products" in data
 
 
-def test_get_purchase_order_by_user_id(test_client, test_database):
+def test_get_purchase_order_by_user_id(monkeypatch,test_client, test_database):
     test_database.session.add(purchase_order)
     test_database.session.commit()
+
+    import requests
+
+    def side_effect_get(url):
+        if "products" in url:
+            return request_get_product_200(url)
+        else:
+            raise ValueError("Unknown URL in get method")
+
+    monkeypatch.setattr(requests, "get", side_effect_get)
+
+
 
     resp = test_client.get("/purchase-orders/1")
 

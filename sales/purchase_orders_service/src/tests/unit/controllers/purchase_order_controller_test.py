@@ -63,12 +63,14 @@ def test_create_purchase_order(test_client, monkeypatch):
                     {
                         "product_id": 1,
                         "product_price": 127.21,
-                        "product_quantity": 1
+                        "product_quantity": 1,
+                        "product_name": "Producto 1"
                     },
                     {
                         "product_id": 2,
                         "product_price": 127.21,
-                        "product_quantity": 1
+                        "product_quantity": 1,
+                        "product_name": "Producto 2"
                     }
 
                 ],
