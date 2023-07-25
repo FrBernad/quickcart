@@ -50,7 +50,7 @@ class ProductServiceImpl(ProductService):
     def get_product_by_id(self, product_id):
         product = self.product_dao.get_product_by_id(product_id)
         if not product:
-            raise ProductNotFoundException()
+            raise ProductNotFoundException(product_id=product_id)
         return self._populate_product(product)
 
     def delete_product(self, product_id):
