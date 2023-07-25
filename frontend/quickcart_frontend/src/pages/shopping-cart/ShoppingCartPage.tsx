@@ -1,9 +1,10 @@
 import { useUserStore } from '@/hooks/stores/use-user-store.hook';
-import { Product } from '@/models/Product';
 import { shoppingCartApi } from '@/services/shoppingCartApi';
 import { useQuery } from '@tanstack/react-query';
 import { HashLoader } from 'react-spinners';
 import { CheckoutDialog } from '@/components/shopping-cart/CheckoutDialog';
+import { ShoppingCartProductCard } from '@/components/shopping-cart/ShoppingCartProductCard';
+import { ShoppingCartProduct } from '@/models/ShoppingCartProduct';
 
 export const ShoppingCartPage = () => {
   const user = useUserStore((state) => state.user);
@@ -14,7 +15,10 @@ export const ShoppingCartPage = () => {
     }
   });
 
-  const total = shoppingCart?.reduce((acc, curr) => acc + curr.price, 0) ?? 0;
+  const total =
+    shoppingCart
+      ?.reduce((acc, curr) => acc + curr.price * curr.quantity, 0)
+      .toFixed(2) ?? 0;
 
   return (
     <div>
@@ -26,12 +30,13 @@ export const ShoppingCartPage = () => {
       )}
 
       {!isLoading && shoppingCart != undefined && (
-        <>
+        <div className="flex flex-col">
           <h1 className="mb-5 text-4xl font-bold">Items</h1>
-          {shoppingCart.map((product: Product) => (
-            <p key={product.id}>
-              {product.name} - {product.price} $
-            </p>
+          {shoppingCart.map((product: ShoppingCartProduct) => (
+            <ShoppingCartProductCard
+              key={product.product_id}
+              product={product}
+            />
           ))}
           {shoppingCart.length == 0 && (
             <p className="text-lg">Your shopping cart is empty</p>
@@ -39,10 +44,12 @@ export const ShoppingCartPage = () => {
           {shoppingCart.length > 0 && (
             <>
               <h2 className="mb-5 text-xl font-bold">Total: {total} $</h2>
-              <CheckoutDialog />
+              <div>
+                <CheckoutDialog />
+              </div>
             </>
           )}
-        </>
+        </div>
       )}
     </div>
   );

@@ -1,22 +1,29 @@
 import { apiAxios } from '@/config/axiosConfig';
-import { Product } from '@/models/Product';
+import { ShoppingCartProduct } from '@/models/ShoppingCartProduct';
 
 export const shoppingCartApi = {
   getShoppingCart: async (
     userId: number,
     signal: AbortSignal
-  ): Promise<Product[]> => {
-    const response = await apiAxios.get<Product[]>(`/shopping-cart/${userId}`, {
-      signal
-    });
+  ): Promise<ShoppingCartProduct[]> => {
+    const response = await apiAxios.get<ShoppingCartProduct[]>(
+      `/shopping-cart/${userId}`,
+      {
+        signal
+      }
+    );
     if (response.status === 204) return [];
 
     return response.data;
   },
 
-  addProduct: async (userId: number, productId: number): Promise<void> => {
+  addProduct: async (
+    userId: number,
+    productId: number,
+    quantity: number
+  ): Promise<void> => {
     await apiAxios.put<void>(`/shopping-cart/${userId}/${productId}`, {
-      quantity: 1
+      quantity
     });
   },
 
@@ -28,16 +35,20 @@ export const shoppingCartApi = {
     userId: number,
     checkoutData: {
       card_number: string;
-      expiration_year: number;
-      expiration_month: number;
-      cvv: number;
+      expiration_year: string;
+      expiration_month: string;
+      cvv: string;
       comments: string;
     }
   ): Promise<void> => {
     await apiAxios.post<void>(`/shopping-cart/${userId}/checkout`, {
       card_type: 'VISA',
       payment_method: 'CREDIT_CARD',
-      ...checkoutData
+      card_number: checkoutData.card_number,
+      expiration_year: parseInt(checkoutData.expiration_year),
+      expiration_month: parseInt(checkoutData.expiration_month),
+      cvv: checkoutData.cvv,
+      comments: checkoutData.comments
     });
   }
 };

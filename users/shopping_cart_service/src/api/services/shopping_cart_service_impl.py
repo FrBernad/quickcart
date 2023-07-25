@@ -213,7 +213,7 @@ class ShoppingCartServiceImpl(ShoppingCartService):
                 "product_price": price,
                 "product_quantity": p.quantity,
             }
-            total_price += price
+            total_price += price * p.quantity
             products.append(product)
 
         try:

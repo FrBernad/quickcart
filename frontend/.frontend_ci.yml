@@ -17,7 +17,7 @@ deploy_qa_frontend:
   needs:
     - job: build_frontend
       artifacts: true
-    - job: deploy_qa_api_gateway_service
+    - job: test_integration_and_functional_api_gateway
       artifacts: false
       optional: true
 
@@ -37,6 +37,6 @@ deploy_prod_frontend:
     - job: deliver_frontend_dockerhub
       artifacts: false
       optional: true
-    - job: deploy_prod_api_gateway_domain
+    - job: deploy_prod_api_gateway
       artifacts: false
       optional: true

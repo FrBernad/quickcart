@@ -2,7 +2,7 @@ import { apiAxios } from '@/config/axiosConfig';
 import { User } from '@/models/User';
 
 export const usersApi = {
-  getUserById: async (userId: string, signal: AbortSignal): Promise<User> => {
+  getUserById: async (userId: number, signal: AbortSignal): Promise<User> => {
     const response = await apiAxios.get<User>(`/users/${userId}`, {
       signal
     });

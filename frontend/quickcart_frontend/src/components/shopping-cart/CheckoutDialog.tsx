@@ -3,58 +3,48 @@ import {
   Dialog,
   DialogContent,
   DialogDescription,
-  DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger
 } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useUserStore } from '@/hooks/stores/use-user-store.hook';
 import { shoppingCartApi } from '@/services/shoppingCartApi';
 import { toast } from '@/components/ui/use-toast';
 import { AxiosError } from 'axios';
 import { ResponseError } from '@/models/ResponseError';
 import { Loader2 } from 'lucide-react';
-import { z } from 'zod';
-import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage
-} from '@/components/ui/form';
+import { cn } from '@/utils';
+import { ErrorField } from '@/components/forms/ErrorField';
 
-const checkoutSchema = z.object({
-  card_number: z.string().nonempty('The card number is required'),
-  expiration_year: z.number(),
-  expiration_month: z.number(),
-  cvv: z.number(),
-  comments: z.string()
-});
+export interface CheckoutFormInput {
+  card_number: string;
+  expiration_year: string;
+  expiration_month: string;
+  cvv: string;
+  comments: string;
+}
 
 export function CheckoutDialog() {
-  const form = useForm<z.infer<typeof checkoutSchema>>({
-    resolver: zodResolver(checkoutSchema),
-    defaultValues: {
-      card_number: '',
-      expiration_year: 0,
-      expiration_month: 0,
-      cvv: 0,
-      comments: ' '
-    }
-  });
+  const {
+    register,
+    handleSubmit,
+    formState: { errors }
+  } = useForm<CheckoutFormInput>();
 
   const user = useUserStore((state) => state.user);
+  const queryClient = useQueryClient();
 
   const checkoutMutation = useMutation({
-    mutationFn: async (checkoutData: z.infer<typeof checkoutSchema>) => {
+    mutationFn: async (checkoutData: CheckoutFormInput) => {
       return await shoppingCartApi.checkout(user!.id!, checkoutData);
     },
     onSuccess() {
+      queryClient.invalidateQueries({
+        queryKey: [`shoppingCart-${user!.id}`]
+      });
       toast({
         title: 'Products checked out!'
       });
@@ -79,111 +69,86 @@ export function CheckoutDialog() {
             Enter your payment details and checkout.
           </DialogDescription>
         </DialogHeader>
-        <Form {...form}>
-          <form
-            onSubmit={form.handleSubmit(
-              (checkoutData: z.infer<typeof checkoutSchema>) =>
-                checkoutMutation.mutate(checkoutData)
+        <form
+          className={'m-8 space-y-4'}
+          onSubmit={handleSubmit((formData) =>
+            checkoutMutation.mutate(formData)
+          )}
+        >
+          <div className={cn('flex flex-col space-y-1.5')}>
+            <label htmlFor="card_number">Card Number</label>
+            <Input
+              id="card_number"
+              {...register('card_number', { required: true })}
+              className={cn('border-2')}
+            />
+            {errors.card_number && (
+              <ErrorField error={'This field is required'} />
             )}
-            className="space-y-8"
+          </div>
+          <div className={cn('flex flex-col space-y-1.5')}>
+            <label htmlFor="expiration_month">Expiration Month</label>
+            <Input
+              id="expiration_month"
+              type="number"
+              {...register('expiration_month', {
+                required: true
+              })}
+              className={cn('border-2')}
+            />
+            {errors.expiration_month && (
+              <ErrorField error={'This field is required'} />
+            )}
+          </div>
+          <div className={cn('flex flex-col space-y-1.5')}>
+            <label htmlFor="expiration_year">Expiration Year</label>
+            <Input
+              id="expiration_year"
+              type="number"
+              {...register('expiration_year', {
+                required: true
+              })}
+              className={cn('border-2')}
+            />
+            {errors.expiration_year && (
+              <ErrorField error={'This field is required'} />
+            )}
+          </div>
+          <div className={cn('flex flex-col space-y-1.5')}>
+            <label htmlFor="cvv">CVV</label>
+            <Input
+              id="cvv"
+              type="number"
+              {...register('cvv', {
+                required: true
+              })}
+              className={cn('border-2')}
+            />
+            {errors.cvv && <ErrorField error={'This field is required'} />}
+          </div>
+          <div className={cn('flex flex-col space-y-1.5')}>
+            <label htmlFor="comments">Comments</label>
+            <Input
+              id="comments"
+              type="string"
+              {...register('comments', {
+                required: true
+              })}
+              className={cn('border-2')}
+            />
+            {errors.comments && <ErrorField error={'This field is required'} />}
+          </div>
+          <Button
+            className="mt-4 inline-flex justify-center rounded-md p-2"
+            type="submit"
+            disabled={checkoutMutation.isLoading}
           >
-            <FormField
-              control={form.control}
-              name="card_number"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Card number</FormLabel>
-                  <FormControl>
-                    <Input
-                      className="w-1/4 rounded border-2 border-gray-400/50 bg-transparent"
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="expiration_year"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Expiration year</FormLabel>
-                  <FormControl>
-                    <Input
-                      type="number"
-                      className="w-1/4 rounded border-2 border-gray-400/50 bg-transparent"
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="expiration_month"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Expiration month</FormLabel>
-                  <FormControl>
-                    <Input
-                      type="number"
-                      className="w-1/4 rounded border-2 border-gray-400/50 bg-transparent"
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="cvv"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>cvv</FormLabel>
-                  <FormControl>
-                    <Input
-                      type="number"
-                      className="w-1/4 rounded border-2 border-gray-400/50 bg-transparent"
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="comments"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Comments</FormLabel>
-                  <FormControl>
-                    <Input
-                      className="w-1/4 rounded border-2 border-gray-400/50 bg-transparent"
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <DialogFooter>
-              <Button
-                className="mt-4 inline-flex justify-center"
-                type="submit"
-                disabled={checkoutMutation.isLoading}
-              >
-                Checkout
-                {checkoutMutation.isLoading && (
-                  <Loader2 className="ml-2 h-4 w-4 animate-spin" />
-                )}
-              </Button>
-            </DialogFooter>
-          </form>
-        </Form>
+            Checkout
+            {checkoutMutation.isLoading && (
+              <Loader2 className="ml-2 h-4 w-4 animate-spin" />
+            )}
+          </Button>
+        </form>
       </DialogContent>
     </Dialog>
   );

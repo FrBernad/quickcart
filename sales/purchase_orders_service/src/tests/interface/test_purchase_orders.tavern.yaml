@@ -87,6 +87,7 @@ stages:
           - product_id: !int "{new_product_id:d}"
             product_price: 20.40
             product_quantity: 1
+            product_name : "{product_name:s}"
         total_price: 20.40
         payment_details:
           payment_method: CREDIT_CARD
@@ -102,5 +103,3 @@ stages:
       save:
         json:
           new_purchase_order_id: purchase_order_id
-
-# TODO: checkear si existe una orden para el usuario y producto
