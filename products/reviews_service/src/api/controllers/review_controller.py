@@ -43,8 +43,8 @@ def get_reviews_by_product(review_service: ReviewService):
 
     if not reviews:
         return (
-            jsonify({"message": f"Reviews for product id {product_id} not found"}),
-            404,
+            jsonify(reviews_schema.dump(reviews)),
+            204,
         )
 
     return jsonify(reviews_schema.dump(reviews)), 200
