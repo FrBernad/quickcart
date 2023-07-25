@@ -76,9 +76,29 @@ stages:
         json:
           new_product_id: id
 
-  - name: Create purchase order
+  - name: Consultar todos los productos
     request:
-      url: "{api_gateway_base_url:s}/purchase-orders"
+      url: "{api_gateway_base_url:s}/products"
+      method: GET
+    response:
+      status_code: 200
+      json:
+        - type: array 
+
+  - name: Agregar un producto al shopping cart
+    request:
+      url: "{api_gateway_base_url:s}/shopping-cart/{new_user_id:d}/{new_product_id:d}"
+      method: PUT
+      json:
+        quantity: 2
+      headers:
+        content-type: application/json
+    response:
+      status_code: 204
+
+- name: Realiza la compra de los productos que se encuentran en el shopping cart
+    request:
+      url: "{api_gateway_base_url:s}/shopping-cart/{new_user_id:d}/checkout"
       method: POST
       json:
         comments: "Comentario"
@@ -98,10 +118,17 @@ stages:
       headers:
         content-type: application/json
     response:
-      status_code: 201
-      save:
-        json:
-          new_purchase_order_id: purchase_order_id
+      status_code: 204
+
+  - name: El usuario revisa sus ordenes de compra
+    request:
+      url: "{api_gateway_base_url:s}/purchase-orders/{new_user_id:d}"
+      method: GET
+    response:
+      status_code: 200
+      json:
+        - type: array 
+          minItems: 1
 
   - name: Create Review
     request:
@@ -122,6 +149,18 @@ stages:
         score: 1
         review_body: !anystr
         creation_date: !anystr
+      headers:
+        content-type: application/json
+
+ - name: El usuario obtiene las reseñas del producto del que realizo una reseña.
+    request:
+      url: "{api_gateway_base_url:s}/reviews?product-id={new_product_id:d}"
+      method: GET
+    response:
+      status_code: 200
+      json:
+        - type: array 
+          minItems: 1
       headers:
         content-type: application/json
 
