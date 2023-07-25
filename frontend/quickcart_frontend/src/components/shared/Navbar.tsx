@@ -66,6 +66,21 @@ export const NavBar: FC = () => {
       )}
       {!!user && (
         <NavLink
+          to="/admin"
+          className={({ isActive }) =>
+            cn(
+              isActive
+                ? 'text-primary'
+                : 'text-muted-foreground transition-colors hover:text-primary/75',
+              'text-lg font-medium'
+            )
+          }
+        >
+          Admin
+        </NavLink>
+      )}
+      {!!user && (
+        <NavLink
           to="/profile"
           className={({ isActive }) =>
             cn(

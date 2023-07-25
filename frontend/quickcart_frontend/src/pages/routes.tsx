@@ -8,6 +8,9 @@ import { SignupPage } from '@/pages/signup/SignupPage';
 import { ProductDetailPage } from '@/pages/products/product-detail/ProductDetailPage';
 import { ProfilePage } from '@/pages/profile/ProfilePage';
 import { ShoppingCartPage } from '@/pages/shopping-cart/ShoppingCartPage';
+import { AdminPage } from '@/pages/admin/AdminPage';
+import { AuthGuard } from '@/components/auth/AuthGuard';
+import { UnauthGuard } from '@/components/auth/UnauthGuard';
 import { CreateProductPage } from '@/pages/create-product/CreateProductPage';
 
 const routes: RouteObject[] = [
@@ -24,19 +27,43 @@ const routes: RouteObject[] = [
       },
       {
         path: '/login',
-        element: <LoginPage />
+        element: (
+          <UnauthGuard>
+            <LoginPage />
+          </UnauthGuard>
+        )
       },
       {
         path: '/signup',
-        element: <SignupPage />
+        element: (
+          <UnauthGuard>
+            <SignupPage />
+          </UnauthGuard>
+        )
       },
       {
         path: '/profile',
-        element: <ProfilePage />
+        element: (
+          <AuthGuard>
+            <ProfilePage />
+          </AuthGuard>
+        )
       },
       {
         path: '/shopping-cart',
-        element: <ShoppingCartPage />
+        element: (
+          <AuthGuard>
+            <ShoppingCartPage />
+          </AuthGuard>
+        )
+      },
+      {
+        path: '/categories',
+        element: (
+          <AuthGuard>
+            <AdminPage />
+          </AuthGuard>
+        )
       },
       {
         path: '/products',
@@ -44,7 +71,19 @@ const routes: RouteObject[] = [
       },
       {
         path: '/create-product',
-        element: <CreateProductPage />
+        element: (
+          <AuthGuard>
+            <CreateProductPage />
+          </AuthGuard>
+        )
+      },
+      {
+        path: '/admin',
+        element: (
+          <AuthGuard>
+            <AdminPage />
+          </AuthGuard>
+        )
       },
       {
         path: '/products/:productId',
@@ -52,7 +91,11 @@ const routes: RouteObject[] = [
       },
       {
         path: '/orders',
-        element: <OrdersPage />
+        element: (
+          <AuthGuard>
+            <OrdersPage />
+          </AuthGuard>
+        )
       }
     ]
   }
