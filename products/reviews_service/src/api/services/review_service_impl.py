@@ -45,7 +45,7 @@ class ReviewServiceImpl(ReviewService):
             return review
     def __user_has_orders_for_product(self, user_id, product_id):
         try:
-            response = requests.get(f"http://purchase_orders_api:5000/purchase-orders/{user_id}?product-id={product_id}")
+            response = requests.get(f"http://purchase_orders_api:5000/purchase-orders/{user_id}?product_id={product_id}")
             if response.status_code == 200:
                 return True
 

@@ -27,15 +27,15 @@ def create_review(product_id, review_service: ReviewService):
     return jsonify(review_schema.dump(new_review)), 201
 
 
-# /reviews?product-id=
+# /reviews?product_id=
 @inject
 @reviews_bp.route("", methods=["GET"])
 def get_reviews_by_product(review_service: ReviewService):
-    product_id = request.args.get("product-id")
+    product_id = request.args.get("product_id")
 
     if product_id == None:
         return (
-            jsonify({"message": f"query parameter product-id needed"}),
+            jsonify({"message": f"query parameter product_id needed"}),
             400,
         )
 

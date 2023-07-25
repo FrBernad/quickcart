@@ -23,7 +23,7 @@ def test_get_reviews_by_product(test_client, test_database):
     test_database.session.commit()
 
     resp = test_client.get(
-        "/reviews?product-id=1",
+        "/reviews?product_id=1",
         content_type="application/json",
     )
 

@@ -13,7 +13,7 @@ def test_get_reviews_by_product(test_client, monkeypatch):
     monkeypatch.setattr(ReviewServiceImpl, "get_reviews_by_product", mock_get_reviews_by_product)
 
     resp = test_client.get(
-        "/reviews?product-id=1",
+        "/reviews?product_id=1",
         content_type="application/json",
     )
 
