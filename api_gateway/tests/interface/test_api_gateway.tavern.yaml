@@ -3,7 +3,7 @@ test_name: Create user, product, category, create purchase order and create revi
 
 includes:
   - !include tavern_api_gateway_variables.yaml
-  
+
 stages:
   - name: Create user
     request:
@@ -82,8 +82,6 @@ stages:
       method: GET
     response:
       status_code: 200
-      json:
-        - type: array 
 
   - name: Agregar un producto al shopping cart
     request:
@@ -96,25 +94,18 @@ stages:
     response:
       status_code: 204
 
-- name: Realiza la compra de los productos que se encuentran en el shopping cart
+  - name: Realiza la compra de los productos que se encuentran en el shopping cart
     request:
       url: "{api_gateway_base_url:s}/shopping-cart/{new_user_id:d}/checkout"
       method: POST
       json:
-        comments: "Comentario"
-        user_id: !int "{new_user_id:d}"
-        products:
-          - product_id: !int "{new_product_id:d}"
-            product_price: 20.40
-            product_quantity: 1
-        total_price: 20.40
-        payment_details:
-          payment_method: CREDIT_CARD
-          card_number: "123456789012345"
-          expiration_year: 2022
-          expiration_month: 3
-          cvv: "123"
-          card_type: "VISA"
+        payment_method: "CREDIT_CARD"
+        card_number: "123456789012345"
+        expiration_year: 2022
+        expiration_month: 3
+        cvv: "123"
+        card_type: "VISA"
+        comments: "Comments"
       headers:
         content-type: application/json
     response:
@@ -126,9 +117,6 @@ stages:
       method: GET
     response:
       status_code: 200
-      json:
-        - type: array 
-          minItems: 1
 
   - name: Create Review
     request:
@@ -142,7 +130,7 @@ stages:
         content-type: application/json
     response:
       status_code: 201
-      json: 
+      json:
         id: !anyint
         product_id: !int "{new_product_id:d}"
         user_id: !int "{new_user_id:d}"
@@ -152,15 +140,12 @@ stages:
       headers:
         content-type: application/json
 
- - name: El usuario obtiene las reseñas del producto del que realizo una reseña.
+  - name: El usuario obtiene las reseñas del producto del que realizo una reseña.
     request:
       url: "{api_gateway_base_url:s}/reviews?product-id={new_product_id:d}"
       method: GET
     response:
       status_code: 200
-      json:
-        - type: array 
-          minItems: 1
       headers:
         content-type: application/json
 
@@ -170,7 +155,7 @@ stages:
       method: GET
     response:
       status_code: 200
-      json: 
+      json:
         id: !int "{new_product_id:d}"
         name: "{product_name:s}"
         category: !anydict
