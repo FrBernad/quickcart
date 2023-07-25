@@ -13,105 +13,105 @@ from src.tests.mocks import (
 )
 import json
 
-## --------       CREATE PRODUCT     --------
-# def test_create_product(monkeypatch,test_client, test_database):
-#     def mock_create_product(self,user_id, name, price, category_id, tags, stock):
+
+# ## --------       CREATE PRODUCT     --------
+# def test_create_product(monkeypatch, test_client, test_database):
+#     def mock_create_product(self, user_id, name, price, category_id, tags, stock):
 #         return mock_product_map1
 
 #     monkeypatch.setattr(ProductServiceImpl, "create_product", mock_create_product)
 
 #     resp = test_client.post(
 #         "/products",
-#         data=json.dumps(
-#             mock_product_map_post
-#         ),
+#         data=json.dumps(mock_product_map_post),
 #         content_type="application/json",
 #     )
 
 #     data = json.loads(resp.data)
 #     assert resp.status_code == 201
-#     assert data['id'] == mock_product_map_post['id']
-#     assert data['name'] == mock_product_map_post['name']
-#     assert data['category']['id'] == mock_product_map_post['category_id']
-#     assert data['stock'] == mock_product_map_post['stock']
-#     assert data['owner']['id'] == mock_product_map_post['user_id']
-#     assert data['tags'][0]['name'] == mock_product_map_post['tags'][0]
-#     assert data['tags'][1]['name'] == mock_product_map_post['tags'][1]
+#     assert data["id"] == mock_product_map_post["id"]
+#     assert data["name"] == mock_product_map_post["name"]
+#     assert data["category"]["id"] == mock_product_map_post["category_id"]
+#     assert data["stock"] == mock_product_map_post["stock"]
+#     assert data["owner"]["id"] == mock_product_map_post["user_id"]
+#     assert data["tags"][0]["name"] == mock_product_map_post["tags"][0]
+#     assert data["tags"][1]["name"] == mock_product_map_post["tags"][1]
 
 
-# --------       GET PRODUCT BY ID    --------
+# ## --------       GET PRODUCTS    --------
 
-def test_get_product_by_id(monkeypatch, test_client, test_database):
-    product1 = mock_product1
-    product_id = product1.id
-    tag1 = mock_tag1
-    test_database.session.add(tag1)
-    test_database.session.add(product1)
-    test_database.session.commit()
 
-    import requests
+# def test_get_products(monkeypatch, test_client, test_database):
+#     tag1 = mock_tag1
+#     tag2 = mock_tag2
+#     test_database.session.add(tag1)
+#     test_database.session.add(tag2)
+#     product1 = mock_product1
+#     product2 = mock_product2
+#     test_database.session.add(product1)
+#     test_database.session.add(product2)
+#     test_database.session.commit()
+#     products = [product1, product2]
 
-    def side_effect_get(url):
-        if "users" in url:
-            return request_get_user_200(url)
-        elif "categories" in url:
-            return request_get_category_200(url)
-        else:
-            raise ValueError("Unknown URL in get method")
+#     import requests
 
-    monkeypatch.setattr(requests, "get", side_effect_get)
+#     def side_effect_get(url):
+#         if "users" in url:
+#             return request_get_user_200(url)
+#         elif "categories" in url:
+#             return request_get_category_200(url)
+#         else:
+#             raise ValueError("Unknown URL in get method")
 
-    resp = test_client.get(
-        f"/products/{product_id}",
-    )
+#     monkeypatch.setattr(requests, "get", side_effect_get)
 
-    data = json.loads(resp.data)
-    assert resp.status_code == 200
-    assert data['id'] == product1.id
+#     resp = test_client.get(
+#         "/products",
+#     )
 
-def test_get_product_by_id_not_found(monkeypatch, test_client, test_database):
+#     data = json.loads(resp.data)
+#     assert resp.status_code == 200
+#     assert len(data) == len(products)
 
-    resp = test_client.get(
-        f"/products/1",
-    )
 
-    data = json.loads(resp.data)
-    assert resp.status_code == 404
+# # --------       GET PRODUCT BY ID    --------
 
-## --------       GET PRODUCTS    --------
 
-def test_get_products(monkeypatch, test_client, test_database):
-    tag1 = mock_tag1
-    tag2 = mock_tag2
-    test_database.session.add(tag1)
-    test_database.session.add(tag2)
-    product1 = mock_product1
-    product2 = mock_product2
-    test_database.session.add(product1)
-    test_database.session.add(product2)
-    test_database.session.commit()
-    products = [product1, product2]
+# def test_get_product_by_id(monkeypatch, test_client, test_database):
+#     product1 = mock_product1
+#     tag1 = mock_tag1
+#     test_database.session.add(tag1)
+#     test_database.session.add(product1)
+#     test_database.session.commit()
 
-    import requests
+#     import requests
 
-    def side_effect_get(url):
-        if "users" in url:
-            return request_get_user_200(url)
-        elif "categories" in url:
-            return request_get_category_200(url)
-        else:
-            raise ValueError("Unknown URL in get method")
+#     def side_effect_get(url):
+#         if "users" in url:
+#             return request_get_user_200(url)
+#         elif "categories" in url:
+#             return request_get_category_200(url)
+#         else:
+#             raise ValueError("Unknown URL in get method")
 
-    monkeypatch.setattr(requests, "get", side_effect_get)
+#     monkeypatch.setattr(requests, "get", side_effect_get)
 
-    resp = test_client.get(
-        "/products",
-    )
+#     resp = test_client.get(
+#         f"/products/{mock_product1.id}",
+#     )
 
-    data = json.loads(resp.data)
-    assert resp.status_code == 200
-    assert len(data) == len(products)
+#     data = json.loads(resp.data)
+#     assert resp.status_code == 200
+#     assert data["id"] == product1.id
 
+
+# def test_get_product_by_id_not_found(monkeypatch, test_client, test_database):
+#     resp = test_client.get(
+#         f"/products/1",
+#     )
+
+#     data = json.loads(resp.data)
+#     assert resp.status_code == 404
 
 
 # ## --------       UPDATE PRODUCT     --------

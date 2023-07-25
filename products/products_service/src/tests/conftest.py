@@ -44,6 +44,6 @@ def test_database():
 
     db.drop_all()
     db.create_all()
-    yield db 
+    yield db
     db.session.remove()
     db.drop_all()
