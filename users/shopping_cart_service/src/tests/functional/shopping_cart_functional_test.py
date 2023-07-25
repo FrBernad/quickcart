@@ -1,8 +1,6 @@
 import pytest
 from src.api.models.shopping_cart_product import ShoppingCartProduct
 from src.tests.mocks import (
-    mock_shopping_cart_product1,
-    mock_shopping_cart_product2,
     request_get_user_200,
     request_get_product_200,
     request_get_product_404,
@@ -16,7 +14,7 @@ import json
 
 
 def test_get_shopping_cart_products(monkeypatch, test_client, test_database):
-    product = mock_shopping_cart_product1
+    product = ShoppingCartProduct(user_id=1, product_id=1, quantity=1)
     test_database.session.add(product)
     test_database.session.commit()
 
@@ -48,7 +46,7 @@ def test_get_shopping_cart_products(monkeypatch, test_client, test_database):
 
 
 def test_update_shopping_cart_product_quantity(monkeypatch, test_client, test_database):
-    product = mock_shopping_cart_product1
+    product = ShoppingCartProduct(user_id=1, product_id=1, quantity=1)
     test_database.session.add(product)
     test_database.session.commit()
 
@@ -80,7 +78,7 @@ def test_update_shopping_cart_product_quantity(monkeypatch, test_client, test_da
 def test_update_shopping_cart_product_quantity_out_of_stock(
     monkeypatch, test_client, test_database
 ):
-    product = mock_shopping_cart_product1
+    product = ShoppingCartProduct(user_id=1, product_id=1, quantity=1)
     test_database.session.add(product)
     test_database.session.commit()
 
@@ -140,7 +138,7 @@ def test_update_shopping_cart_product_missing_quantity(test_client, test_databas
 def test_update_shopping_cart_product_quantity_invalid_product_id(
     monkeypatch, test_client, test_database
 ):
-    product = mock_shopping_cart_product1
+    product = ShoppingCartProduct(user_id=1, product_id=1, quantity=1)
     test_database.session.add(product)
     test_database.session.commit()
 
@@ -172,7 +170,7 @@ def test_update_shopping_cart_product_quantity_invalid_product_id(
 def test_update_shopping_cart_product_quantity_invalid_user_id(
     monkeypatch, test_client, test_database
 ):
-    product = mock_shopping_cart_product1
+    product = ShoppingCartProduct(user_id=1, product_id=1, quantity=1)
     test_database.session.add(product)
     test_database.session.commit()
 
@@ -205,10 +203,10 @@ def test_update_shopping_cart_product_quantity_invalid_user_id(
 
 
 def test_checkout_shopping_cart(monkeypatch, test_client, test_database):
-    product1 = mock_shopping_cart_product1
+    product1 = ShoppingCartProduct(user_id=1, product_id=1, quantity=1)
     test_database.session.add(product1)
     test_database.session.commit()
-    product2 = mock_shopping_cart_product2
+    product2 = ShoppingCartProduct(user_id=1, product_id=2, quantity=1)
     test_database.session.add(product2)
     test_database.session.commit()
 

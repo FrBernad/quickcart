@@ -142,7 +142,7 @@ stages:
 
   - name: El usuario obtiene las reseñas del producto del que realizo una reseña.
     request:
-      url: "{api_gateway_base_url:s}/reviews?product-id={new_product_id:d}"
+      url: "{api_gateway_base_url:s}/reviews?product_id={new_product_id:d}"
       method: GET
     response:
       status_code: 200
