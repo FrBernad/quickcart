@@ -1,3 +1,5 @@
+from src.api.models.product import Product
+from src.api.models.tag import Tag
 from src.api.services.product_service_impl import ProductServiceImpl
 from src.tests.mocks import (
     mock_product_map1,
@@ -6,10 +8,6 @@ from src.tests.mocks import (
     mock_product_map_put,
     request_get_user_200,
     request_get_category_200,
-    mock_tag1,
-    mock_tag2,
-    mock_product1,
-    mock_product2,
 )
 import json
 
@@ -42,6 +40,12 @@ import json
 # --------       GET PRODUCT BY ID    --------
 
 def test_get_product_by_id(monkeypatch, test_client, test_database):
+    mock_tag1 = Tag(id=1,name="Tag 1")
+    mock_tag2 = Tag(id=2,name="Tag 2")
+
+    mock_product1 = Product(id = 1, user_id = 1, category_id = 1, name = "Producto 1", \
+                            stock = 4, price = 120.0, score = 0.0, tags = [mock_tag1, mock_tag2])
+
     product1 = mock_product1
     product_id = product1.id
     tag1 = mock_tag1
@@ -81,6 +85,15 @@ def test_get_product_by_id_not_found(monkeypatch, test_client, test_database):
 ## --------       GET PRODUCTS    --------
 
 def test_get_products(monkeypatch, test_client, test_database):
+    mock_tag1 = Tag(id=1,name="Tag 1")
+    mock_tag2 = Tag(id=2,name="Tag 2")
+
+    mock_product1 = Product(id = 1, user_id = 1, category_id = 1, name = "Producto 1", \
+                            stock = 4, price = 120.0, score = 0.0, tags = [mock_tag1, mock_tag2])
+
+    mock_product2 = Product(id = 2, user_id = 1, category_id = 1, name = "Producto 2", \
+                            stock = 4, price = 120.0, score = 0.0, tags = [])
+
     tag1 = mock_tag1
     tag2 = mock_tag2
     test_database.session.add(tag1)
