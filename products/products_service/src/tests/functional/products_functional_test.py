@@ -39,8 +39,46 @@ import json
 #     assert data['tags'][1]['name'] == mock_product_map_post['tags'][1]
 
 
-## --------       GET PRODUCTS    --------
+# --------       GET PRODUCT BY ID    --------
 
+def test_get_product_by_id(monkeypatch, test_client, test_database):
+    product1 = mock_product1
+    product_id = product1.id
+    tag1 = mock_tag1
+    test_database.session.add(tag1)
+    test_database.session.add(product1)
+    test_database.session.commit()
+
+    import requests
+
+    def side_effect_get(url):
+        if "users" in url:
+            return request_get_user_200(url)
+        elif "categories" in url:
+            return request_get_category_200(url)
+        else:
+            raise ValueError("Unknown URL in get method")
+
+    monkeypatch.setattr(requests, "get", side_effect_get)
+
+    resp = test_client.get(
+        f"/products/{product_id}",
+    )
+
+    data = json.loads(resp.data)
+    assert resp.status_code == 200
+    assert data['id'] == product1.id
+
+def test_get_product_by_id_not_found(monkeypatch, test_client, test_database):
+
+    resp = test_client.get(
+        f"/products/1",
+    )
+
+    data = json.loads(resp.data)
+    assert resp.status_code == 404
+
+## --------       GET PRODUCTS    --------
 
 def test_get_products(monkeypatch, test_client, test_database):
     tag1 = mock_tag1
@@ -74,10 +112,6 @@ def test_get_products(monkeypatch, test_client, test_database):
     assert resp.status_code == 200
     assert len(data) == len(products)
 
-
-# --------       GET PRODUCT BY ID    --------
-
-# def test_get_product_by_id(monkeypatch,test_client, test_database):
 
 
 # ## --------       UPDATE PRODUCT     --------
