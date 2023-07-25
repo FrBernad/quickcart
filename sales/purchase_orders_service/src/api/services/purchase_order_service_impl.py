@@ -23,13 +23,11 @@ class PurchaseOrderServiceImpl(PurchaseOrderService):
         self.purchase_order_dao = purchase_order_dao
 
     def get_purchase_orders(self):
-        
-        self.purchase_order_dao.get_purchase_orders()
+        return self.purchase_order_dao.get_purchase_orders()
 
     def get_purchase_order_by_user_id(self, user_id, product_id = None):
 
         purchase_orders = self.purchase_order_dao.get_purchase_order_by_user_id(user_id=user_id, product_id=product_id)
-        
         for po in purchase_orders:
             products = po.products
             for p in products:

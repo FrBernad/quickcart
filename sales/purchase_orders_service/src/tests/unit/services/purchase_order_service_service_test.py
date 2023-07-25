@@ -123,14 +123,14 @@ def test_get_purchase_order_by_user_id(monkeypatch,test_purchase_order_service):
 
     purchase_orders = purchase_service.get_purchase_order_by_user_id(mock_user_id)
 
-    assert purchase_orders.user_id == mock_user_id
-    assert purchase_orders.comments == "Comentario"
-    assert purchase_orders.total_price == 328.32
-    assert purchase_orders.card_number == "1234567891012345"
-    assert purchase_orders.expiration_year == 2023
-    assert purchase_orders.expiration_month == 12
-    assert purchase_orders.cvv == 123
-    assert purchase_orders.purchase_order_id == 1
+    assert purchase_orders[0].user_id == mock_user_id
+    assert purchase_orders[0].comments == "Comentario"
+    assert purchase_orders[0].total_price == 328.32
+    assert purchase_orders[0].card_number == "1234567891012345"
+    assert purchase_orders[0].expiration_year == 2023
+    assert purchase_orders[0].expiration_month == 12
+    assert purchase_orders[0].cvv == 123
+    assert purchase_orders[0].purchase_order_id == 1
 
 
 
