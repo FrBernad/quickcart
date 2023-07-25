@@ -135,6 +135,11 @@ def bad_request(error):
     return error
 
 
+@products_bp.errorhandler(500)
+def internal_error(error):
+    return jsonify({"message": f"Products internal error: {str(error)}"}), 500
+
+
 @products_bp.errorhandler(GenericApiException)
 def generic_api_exception(e):
     return jsonify(e.to_dict()), e.status_code
