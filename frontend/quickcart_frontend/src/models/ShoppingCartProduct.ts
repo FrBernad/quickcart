@@ -1,6 +1,6 @@
 export interface ShoppingCartProduct {
   product_id: number;
-  quantity: string;
+  quantity: number;
   category: string;
   name: string;
   price: 0;

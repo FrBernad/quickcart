@@ -62,7 +62,10 @@ export const ReviewDialog: FC<Props> = ({ productId }) => {
         queryKey: [`reviews-${productId!}`]
       });
       queryClient.invalidateQueries({
-        queryKey: [`products-${productId!}`]
+        queryKey: [`product-${productId!}`]
+      });
+      queryClient.invalidateQueries({
+        queryKey: [`products`]
       });
     },
     onError({ response }: AxiosError<ResponseError>) {

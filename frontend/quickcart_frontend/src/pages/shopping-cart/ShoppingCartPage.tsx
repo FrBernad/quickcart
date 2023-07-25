@@ -15,7 +15,10 @@ export const ShoppingCartPage = () => {
     }
   });
 
-  const total = shoppingCart?.reduce((acc, curr) => acc + curr.price, 0) ?? 0;
+  const total =
+    shoppingCart
+      ?.reduce((acc, curr) => acc + curr.price * curr.quantity, 0)
+      .toFixed(2) ?? 0;
 
   return (
     <div>
@@ -27,7 +30,7 @@ export const ShoppingCartPage = () => {
       )}
 
       {!isLoading && shoppingCart != undefined && (
-        <>
+        <div className="flex flex-col">
           <h1 className="mb-5 text-4xl font-bold">Items</h1>
           {shoppingCart.map((product: ShoppingCartProduct) => (
             <ShoppingCartProductCard
@@ -41,10 +44,12 @@ export const ShoppingCartPage = () => {
           {shoppingCart.length > 0 && (
             <>
               <h2 className="mb-5 text-xl font-bold">Total: {total} $</h2>
-              <CheckoutDialog />
+              <div>
+                <CheckoutDialog />
+              </div>
             </>
           )}
-        </>
+        </div>
       )}
     </div>
   );

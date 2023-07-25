@@ -18,6 +18,8 @@ export const ProductDetailPage: FC = () => {
   const { productId: productIdStr } = useParams();
   const productId = parseInt(productIdStr!);
 
+  const user = useUserStore((state) => state.user);
+
   const { data: product, isLoading: productIsLoading } = useQuery({
     queryKey: [`product-${productId!}`],
     queryFn: async ({ signal }) => {
@@ -32,12 +34,25 @@ export const ProductDetailPage: FC = () => {
     }
   });
 
-  const user = useUserStore((state) => state.user);
   const queryClient = useQueryClient();
+
+  const { data: shoppingCart } = useQuery({
+    queryKey: [`shoppingCart-${user?.id}`],
+    queryFn: async ({ signal }) => {
+      return await shoppingCartApi.getShoppingCart(user!.id, signal!);
+    },
+    enabled: !!user
+  });
 
   const addProductMutation = useMutation({
     mutationFn: async () => {
-      return await shoppingCartApi.addProduct(user!.id!, product!.id);
+      let quantity = 1;
+      shoppingCart?.forEach((product) => {
+        if (product.product_id === productId) {
+          quantity += product.quantity;
+        }
+      });
+      return await shoppingCartApi.addProduct(user!.id!, product!.id, quantity);
     },
     onSuccess() {
       toast({
@@ -62,7 +77,7 @@ export const ProductDetailPage: FC = () => {
         <div>
           <h1 className="mb-4 text-4xl font-bold">{product.name}</h1>
           <p>
-            <span className="font-bold">Price:</span> {product.price}
+            <span className="font-bold">Price:</span> {product.price} $
           </p>
           <p>
             <span className="font-bold">Stock:</span> {product.stock}

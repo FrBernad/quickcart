@@ -37,9 +37,10 @@ export function ShoppingCartProductCard({
     }
   });
   return (
-    <div className="inline-flex">
+    <div className="my-2 inline-flex">
       <p key={product.product_id}>
-        {product.name} - {product.price} $
+        {product.name} - {product.quantity}x{product.price} $ ={' '}
+        {(product.price * product.quantity).toFixed(2)} $
       </p>
       <div
         className={cn('ml-2 cursor-pointer')}

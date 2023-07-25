@@ -8,7 +8,7 @@ import {
   DialogTrigger
 } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useUserStore } from '@/hooks/stores/use-user-store.hook';
 import { shoppingCartApi } from '@/services/shoppingCartApi';
 import { toast } from '@/components/ui/use-toast';
@@ -35,12 +35,16 @@ export function CheckoutDialog() {
   } = useForm<CheckoutFormInput>();
 
   const user = useUserStore((state) => state.user);
+  const queryClient = useQueryClient();
 
   const checkoutMutation = useMutation({
     mutationFn: async (checkoutData: CheckoutFormInput) => {
       return await shoppingCartApi.checkout(user!.id!, checkoutData);
     },
     onSuccess() {
+      queryClient.invalidateQueries({
+        queryKey: [`shoppingCart-${user!.id}`]
+      });
       toast({
         title: 'Products checked out!'
       });

@@ -17,9 +17,13 @@ export const shoppingCartApi = {
     return response.data;
   },
 
-  addProduct: async (userId: number, productId: number): Promise<void> => {
+  addProduct: async (
+    userId: number,
+    productId: number,
+    quantity: number
+  ): Promise<void> => {
     await apiAxios.put<void>(`/shopping-cart/${userId}/${productId}`, {
-      quantity: 1
+      quantity
     });
   },
 
