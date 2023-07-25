@@ -9,8 +9,7 @@ from src.tests.mocks import (
     mock_tag1,
     mock_tag2,
     mock_product1,
-    mock_product2
-
+    mock_product2,
 )
 import json
 
@@ -20,7 +19,7 @@ import json
 #         return mock_product_map1
 
 #     monkeypatch.setattr(ProductServiceImpl, "create_product", mock_create_product)
-    
+
 #     resp = test_client.post(
 #         "/products",
 #         data=json.dumps(
@@ -40,10 +39,10 @@ import json
 #     assert data['tags'][1]['name'] == mock_product_map_post['tags'][1]
 
 
-
 ## --------       GET PRODUCTS    --------
 
-def test_get_products(monkeypatch,test_client, test_database):
+
+def test_get_products(monkeypatch, test_client, test_database):
     tag1 = mock_tag1
     tag2 = mock_tag2
     test_database.session.add(tag1)
@@ -65,11 +64,7 @@ def test_get_products(monkeypatch,test_client, test_database):
         else:
             raise ValueError("Unknown URL in get method")
 
-    monkeypatch.setattr(
-        requests,
-        "get",
-        side_effect_get
-    )
+    monkeypatch.setattr(requests, "get", side_effect_get)
 
     resp = test_client.get(
         "/products",
@@ -85,11 +80,9 @@ def test_get_products(monkeypatch,test_client, test_database):
 # def test_get_product_by_id(monkeypatch,test_client, test_database):
 
 
-
 # ## --------       UPDATE PRODUCT     --------
 
 # def test_update_product(monkeypatch,test_client, test_database):
-
 
 
 # ## --------       DELETE PRODUCT     --------
@@ -100,7 +93,6 @@ def test_get_products(monkeypatch,test_client, test_database):
 # ## --------       UPDATE PRODUCT SCORE     --------
 
 # def test_update_product_score(monkeypatch,test_client, test_database):
-
 
 
 # ## --------       UPDATE PRODUCT STOCK    --------
